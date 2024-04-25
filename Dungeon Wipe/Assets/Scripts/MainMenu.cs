@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
@@ -24,50 +25,17 @@ public class MainMenu : MonoBehaviour
     private void LoadLevelButtons()
     {
         var levelFiles = Resources.LoadAll<TextAsset>("Levels");
-        if (levelFiles.Length == 0)
-        {
-            Debug.LogWarning("No level files found in Resources/Levels");
-            return;
-        }
-
-        if (levelButtonPrefab == null)
-        {
-            Debug.LogError("levelButtonPrefab is not assigned in the inspector");
-            return;
-        }
-
-        if (levelScrollViewContent == null)
-        {
-            Debug.LogError("levelScrollViewContent is not assigned in the inspector");
-            return;
-        }
 
         foreach (var file in levelFiles)
         {
             GameObject button = Instantiate(levelButtonPrefab, levelScrollViewContent.transform);
-            if (button == null)
-            {
-                Debug.LogError("Instantiation of levelButtonPrefab failed");
-                continue;
-            }
 
-            var textMeshComp = button.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (textMeshComp == null)
-            {
-                Debug.LogError("TextMeshProUGUI component not found on the instantiated button prefab");
-                continue;
-            }
+            var textMeshComp = button.GetComponentInChildren<TextMeshProUGUI>();
             textMeshComp.text = file.name;
 
             var buttonComp = button.GetComponent<Button>();
-            if (buttonComp == null)
-            {
-                Debug.LogError("Button component not found on the instantiated button prefab");
-                continue;
-            }
 
             buttonComp.onClick.AddListener(() => SelectLevel(file.name));
-            Debug.Log(file.name);
         }
     }
 
