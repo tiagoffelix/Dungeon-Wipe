@@ -23,19 +23,50 @@ public class MainMenu : MonoBehaviour
 
     private void LoadLevelButtons()
     {
-        var levelFiles = Resources.LoadAll<TextAsset>("Levels"); // Ensure all level files are in Resources/Levels
-        Debug.Log(levelFiles);
+        var levelFiles = Resources.LoadAll<TextAsset>("Levels");
+        if (levelFiles.Length == 0)
+        {
+            Debug.LogWarning("No level files found in Resources/Levels");
+            return;
+        }
+
+        if (levelButtonPrefab == null)
+        {
+            Debug.LogError("levelButtonPrefab is not assigned in the inspector");
+            return;
+        }
+
+        if (levelScrollViewContent == null)
+        {
+            Debug.LogError("levelScrollViewContent is not assigned in the inspector");
+            return;
+        }
+
         foreach (var file in levelFiles)
         {
             GameObject button = Instantiate(levelButtonPrefab, levelScrollViewContent.transform);
+            if (button == null)
+            {
+                Debug.LogError("Instantiation of levelButtonPrefab failed");
+                continue;
+            }
 
-            // Change from Text to TextMeshProUGUI
-            button.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = file.name;
+            var textMeshComp = button.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (textMeshComp == null)
+            {
+                Debug.LogError("TextMeshProUGUI component not found on the instantiated button prefab");
+                continue;
+            }
+            textMeshComp.text = file.name;
 
-            // Add listener for button click
-            button.GetComponent<Button>().onClick.AddListener(() => SelectLevel(file.name));
+            var buttonComp = button.GetComponent<Button>();
+            if (buttonComp == null)
+            {
+                Debug.LogError("Button component not found on the instantiated button prefab");
+                continue;
+            }
 
-            // Logging to the console
+            buttonComp.onClick.AddListener(() => SelectLevel(file.name));
             Debug.Log(file.name);
         }
     }

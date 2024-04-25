@@ -1712,8 +1712,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollViewContent: {fileID: 2070858639}
-  levelScrollViewContent: {fileID: 0}
-  levelButtonPrefab: {fileID: 0}
+  levelScrollViewContent: {fileID: 1825535699}
+  levelButtonPrefab: {fileID: 3738979212403266001, guid: 4ab3074454f72bc4597384e22516c9af, type: 3}
   stats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
 --- !u!4 &623509595
 Transform:
@@ -2468,7 +2468,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &964145079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4485,7 +4485,7 @@ GameObject:
   - component: {fileID: 1825535702}
   - component: {fileID: 1825535701}
   m_Layer: 5
-  m_Name: Content
+  m_Name: Content Level
   m_TagString: ScrollView
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5643,7 +5643,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: dd4059b14fb06054b9a278b5f8d682b0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 824b5ac9cd460064da41c18be4cfe7b4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
