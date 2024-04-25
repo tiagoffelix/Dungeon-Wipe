@@ -24,21 +24,26 @@ public class MainMenu : MonoBehaviour
     private void LoadLevelButtons()
     {
         var levelFiles = Resources.LoadAll<TextAsset>("Levels"); // Ensure all level files are in Resources/Levels
+        Debug.Log(levelFiles);
         foreach (var file in levelFiles)
         {
             GameObject button = Instantiate(levelButtonPrefab, levelScrollViewContent.transform);
-            button.GetComponentInChildren<Text>().text = file.name;
+
+            // Change from Text to TextMeshProUGUI
+            button.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = file.name;
+
+            // Add listener for button click
             button.GetComponent<Button>().onClick.AddListener(() => SelectLevel(file.name));
+
+            // Logging to the console
+            Debug.Log(file.name);
         }
     }
+
 
     private void SelectLevel(string levelName)
     {
         stats.SelectedLevelPath = "Assets/Resources/Levels/" + levelName + ".txt";
-    }
-
-    public void StartGame()
-    {
         SceneManager.LoadScene("Game");
     }
 
