@@ -7,7 +7,6 @@ public class PlayerMovement : MonoBehaviour
 {
     private Animator animator;
     private CharacterController controller;
-    private PauseMenu3D pauseMenu;
 
     [SerializeField] private Transform attackCenter;
     [SerializeField] float attackRange;
@@ -55,13 +54,15 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private ParticleSystem particles;
     private bool isSpawning;
+
+    private int blockCounter;
+
     public bool Danger {  get ; set; }
 
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        pauseMenu = GetComponent<PauseMenu3D>();
         attackRange = 1.5f;
         nextAttackTimer = 0f;
         jumpHeight = 1f;
@@ -76,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
         isSpawning = true;
         damage = playerStats.Damage;
         arrowDamage = playerStats.ArrowDamage;
+        blockCounter = 0;
     }
 
     void Update()
@@ -234,7 +236,7 @@ public class PlayerMovement : MonoBehaviour
                 isAttacking = false;
             }
 
-            if (Input.GetMouseButton(1) && !isAttacking && isGrounded)
+            if (Input.GetMouseButton(1) && !isAttacking)
             {
                 animator.SetBool("Block", true);
                 swordImage.gameObject.SetActive(false);
@@ -247,10 +249,11 @@ public class PlayerMovement : MonoBehaviour
                 blockingTime = 0f;
                 animator.SetBool("Block", false);
                 isBlocking = false;
+                blockCounter = 0;
             }
 
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Block") &&
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.1f)
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.2f)
             {
                 blockingTime += Time.deltaTime;
                 isBlocking = true;
@@ -282,11 +285,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 //shieldedSound.Play();
                 animator.SetBool("Block", false);
-
-                float damageShielded = damage / 4;
-
-                playerStats.TakeDamage(damageShielded);
-                isBlocking = false;
+                blockCounter++;
+                if(blockCounter == 4) 
+                {
+                    //breakShieldSound.Play();
+                    isBlocking = false;
+                    animator.SetTrigger("Hit");
+                    playerStats.TakeDamage(damage);
+                }
             }
             else
             {

@@ -61,7 +61,9 @@ public class Enemy : MonoBehaviour
             characterController.Move(moveVelocity * Time.deltaTime);
         }
 
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Death") && !animator.GetCurrentAnimatorStateInfo(0).IsName("DeathFall")) 
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Death")
+            && !animator.GetCurrentAnimatorStateInfo(0).IsName("DeathFall")
+            && !animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")) 
         {
             distance = Vector3.Distance(player.transform.position, transform.position);
 
@@ -149,7 +151,7 @@ public class Enemy : MonoBehaviour
         animator.SetTrigger("Hit");
         //enemyType.DeathSound.Play();
         health -= damage;
-        if (health < 0)
+        if (health <= 0)
         {
             Death();
         }
