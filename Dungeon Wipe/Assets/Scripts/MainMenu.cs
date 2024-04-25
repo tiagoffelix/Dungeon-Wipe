@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject scrollViewContent;
+    [SerializeField] private GameObject scrollViewContent; // For high scores
+    [SerializeField] private GameObject levelScrollViewContent; // For levels
+    [SerializeField] private GameObject levelButtonPrefab; // Assign a prefab for level buttons
+    [SerializeField] private Stats stats; // Reference to the Stats ScriptableObject
 
     private void Start()
     {
@@ -13,6 +17,24 @@ public class MainMenu : MonoBehaviour
         {
             PlayerPrefsManager.Instance.LoadScoresIntoScrollView(scrollViewContent);
         }
+
+        LoadLevelButtons();
+    }
+
+    private void LoadLevelButtons()
+    {
+        var levelFiles = Resources.LoadAll<TextAsset>("Levels"); // Ensure all level files are in Resources/Levels
+        foreach (var file in levelFiles)
+        {
+            GameObject button = Instantiate(levelButtonPrefab, levelScrollViewContent.transform);
+            button.GetComponentInChildren<Text>().text = file.name;
+            button.GetComponent<Button>().onClick.AddListener(() => SelectLevel(file.name));
+        }
+    }
+
+    private void SelectLevel(string levelName)
+    {
+        stats.SelectedLevelPath = "Assets/Resources/Levels/" + levelName + ".txt";
     }
 
     public void StartGame()
@@ -24,6 +46,7 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
     }
+
     public void ResetHighScores()
     {
         if (PlayerPrefsManager.Instance != null)

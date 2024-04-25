@@ -23,7 +23,7 @@ public class LevelManager : MonoBehaviour
         spawnedGrounds = new List<Vector3>();
         stats.Score = 0;
         stats.NumberOfSpawns = 0;
-        LoadLevel("Assets/Resources/Level.txt");
+        LoadLevel(stats.SelectedLevelPath);
         StartCoroutine(SpawnPotions());
         StartCoroutine(SpawnCoins());
     }

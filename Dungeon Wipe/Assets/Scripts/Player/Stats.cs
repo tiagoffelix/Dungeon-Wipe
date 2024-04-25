@@ -25,6 +25,14 @@ public class Stats : ScriptableObject
 
     [SerializeField] private int levelMinutes;
 
+    [SerializeField] private string selectedLevelPath;
+
+    public string SelectedLevelPath
+    {
+        get { return selectedLevelPath; }
+        set { selectedLevelPath = value; }
+    }
+
     public float Health 
     {
         get { return this.health; }

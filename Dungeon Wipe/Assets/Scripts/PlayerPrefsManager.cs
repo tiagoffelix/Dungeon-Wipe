@@ -100,7 +100,7 @@ public class PlayerPrefsManager : MonoBehaviour
             {
                 GameObject highScoreEntry = Instantiate(textPrefab, scrollViewContent.transform);
                 TextMeshProUGUI entryText = highScoreEntry.GetComponent<TextMeshProUGUI>();
-                entryText.text = $"HIGHSCORE: {entry.Value.score} - {entry.Key} SPAWNS - {(int)entry.Value.time} SECONDS - {entry.Value.name}";
+                entryText.text = $"Highscore: {entry.Value.score} - {entry.Key} Spawns - {(int)entry.Value.time} Seconds - {entry.Value.name}";
             }
         }
         else
