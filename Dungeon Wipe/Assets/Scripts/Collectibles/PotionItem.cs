@@ -31,7 +31,7 @@ public class PotionItem : MonoBehaviour
 
     // Variables for rotation and vertical movement
     private float rotationSpeed = 50f;
-    private float verticalSpeed = 5f;
+    private float verticalSpeed = 3f;
     private float baseHeight; // Base height above the initial position
 
     private void Start()
@@ -71,7 +71,7 @@ public class PotionItem : MonoBehaviour
         transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
 
         // Calculate new Y position within the range of [baseHeight+0.5, baseHeight+1]
-        float newY = baseHeight + 0.5f + 0.25f * Mathf.Sin(Time.time * verticalSpeed);
+        float newY = baseHeight + 0.05f * Mathf.Sin(Time.time * verticalSpeed);
         transform.position = new Vector3(transform.position.x, newY, transform.position.z);
 
         if (timeSinceSpawned >= timeToDespawn)

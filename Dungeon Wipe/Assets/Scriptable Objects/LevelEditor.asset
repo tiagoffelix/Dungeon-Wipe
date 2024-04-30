@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e002eb462ce92b1479c6a5300aa41d74, type: 3}
   m_Name: LevelEditor
   m_EditorClassIdentifier: 
-  gridSizeX: 0
-  gridSizeY: 0
-  selectedLevelPath: Assets/Resources/Levels/Level 4.txt
+  gridSizeX: 4
+  gridSizeY: 4
+  selectedLevelPath: Assets/Resources/Levels/Level 1.txt

@@ -12,7 +12,7 @@ public class Coins : MonoBehaviour
     public CoinsSO CoinsSO { get { return coinsSO; } }
 
     // Variables for vertical movement
-    private float verticalSpeed = 5f;
+    private float verticalSpeed = 3f;
     private float baseHeight; // Base height above the initial position
 
     private void Start()
@@ -30,7 +30,7 @@ public class Coins : MonoBehaviour
 
 
         // Calculate new Y position within the range of [baseHeight+0.5, baseHeight+1]
-        float newY = baseHeight + 0.5f + 0.25f * Mathf.Sin(Time.time * verticalSpeed);
+        float newY = baseHeight + 0.05f * Mathf.Sin(Time.time * verticalSpeed);
         transform.position = new Vector3(transform.position.x, newY, transform.position.z);
 
         // Check if the time since spawned is greater or equal to the time to despawn

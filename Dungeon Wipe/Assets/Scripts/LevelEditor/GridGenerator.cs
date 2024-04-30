@@ -21,7 +21,7 @@ public class GridGenerator : MonoBehaviour
         gridCubes = new List<GameObject>();
         sliderX.value = levelEditor.GridSizeX;
         sliderY.value = levelEditor.GridSizeY;
-        textX.text = "Grid Width: " + sliderY.value;
+        textX.text = "Grid Width: " + sliderX.value;
         textY.text = "Grid Height: " + sliderY.value;
         sliderX.onValueChanged.AddListener(UpdateGridSizeX);
         sliderY.onValueChanged.AddListener(UpdateGridSizeY);

@@ -93,9 +93,9 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         attackRange = 0.375f;
         nextAttackTimer = 0f;
-        jumpHeight = 0.25f;
+        jumpHeight = 0.2f;
         gravityValue = -2.5f;
-        speed = 1.2f;
+        speed = 1.5f;
         playerStats.Health = 100;
         playerStats.Dead = false;
         isBlocking = false;

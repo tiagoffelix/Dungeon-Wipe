@@ -10,7 +10,7 @@ public class EnemyBow : MonoBehaviour
 
     void Start()
     {
-        projectileSpeed = 30f; // Initialize the projectile speed
+        projectileSpeed = 10f; // Initialize the projectile speed
     }
 
     public void ShootProjectile(Vector3 targetPosition, int damage)

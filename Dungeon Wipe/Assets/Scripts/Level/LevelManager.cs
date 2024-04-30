@@ -96,12 +96,12 @@ public class LevelManager : MonoBehaviour
                         toInstantiate = prefabs[1]; // Ground Prefab
                         position = new Vector3(x * prefabSizes[1].x, 0, z * prefabSizes[1].z);
                         Vector3 changedPosition = position;
-                        changedPosition.y = 0.01f;
+                        changedPosition.y = 0.3f;
                         spawnedGrounds.Add(changedPosition);
                         break;
                     case 'D':
                         toInstantiate = prefabs[2]; // Door Prefab
-                        position = new Vector3(x * prefabSizes[0].x, 0, z * prefabSizes[0].x);
+                        position = new Vector3(x * prefabSizes[0].x, 0, z * prefabSizes[0].z);
                         stats.NumberOfSpawns++;
                         break;
                     case 'S':
@@ -110,23 +110,27 @@ public class LevelManager : MonoBehaviour
                         break;
                     case 'B':
                         toInstantiate = prefabs[4]; // Barrel Prefab
-                        position = new Vector3(x * prefabSizes[4].x, 0, z * prefabSizes[4].x);
+                        position = new Vector3(x * prefabSizes[4].x, 0, z * prefabSizes[4].z);
                         break;
                     case 'E':
                         toInstantiate = prefabs[5]; // Estante Prefab
-                        position = new Vector3(x * prefabSizes[5].x, 0, z * prefabSizes[5].x);
+                        position = new Vector3(x * prefabSizes[5].z, 0, z * prefabSizes[5].z);
                         break;
                     case 'P':
                         toInstantiate = prefabs[6]; // Parede com estante Prefab
-                        position = new Vector3(x * prefabSizes[6].x, 0, z * prefabSizes[6].x);
+                        position = new Vector3(x * prefabSizes[6].x, 0, z * prefabSizes[6].z);
                         break;
                     case 'R':
                         toInstantiate = prefabs[7]; // Rumble
-                        position = new Vector3(x * prefabSizes[7].x, 0, z * prefabSizes[7].x);
+                        position = new Vector3(x * prefabSizes[7].x, 0, z * prefabSizes[7].z);
                         break;
                     case 'K':
                         toInstantiate = prefabs[8]; // Character
-                        position = new Vector3(x * prefabSizes[8].x, 0, z * prefabSizes[8].x);
+                        position = new Vector3(x * prefabSizes[8].x, 0, z * prefabSizes[8].z);
+                        break;
+                    case 'C':
+                        toInstantiate = prefabs[9]; // Character
+                        position = new Vector3(x * prefabSizes[8].x, 0, z * prefabSizes[8].z);
                         break;
                 }
 
@@ -135,24 +139,19 @@ public class LevelManager : MonoBehaviour
                 {
                     if (z == 0) // First line
                     {
-                        rotation = Quaternion.Euler(0, 180, 0);
-                        //position.z += 2f;
+                        rotation = Quaternion.Euler(0, 0, 0);
                     }
                     else if (z == lines.Length - 1) // Last line
                     {
-                        rotation = Quaternion.Euler(0, 0, 0);
-                        //position.z -= 2f;
-
+                        rotation = Quaternion.Euler(0, 180, 0);
                     }
                     else if (x == 0) // First element of each line (after the first and before the last)
                     {
                         rotation = Quaternion.Euler(0, 90, 0);
-                       // position.x += 2f;
                     }
                     else if (x == lines[z].Length - 1) // Last element of each line (after the first and before the last)
                     {
                         rotation = Quaternion.Euler(0, -90, 0); // Default rotation or any specific adjustment
-                        //position.x -= 2f;
                     }
                 }
 

@@ -12,7 +12,7 @@ public class CrossBow : MonoBehaviour
 
     void Start()
     {
-        projectileSpeed = 60f; // Initialize the projectile speed
+        projectileSpeed = 10f; // Initialize the projectile speed
     }
 
     Camera GetActiveCamera()
