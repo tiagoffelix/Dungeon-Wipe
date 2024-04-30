@@ -96,7 +96,7 @@ public class LevelManager : MonoBehaviour
                         toInstantiate = prefabs[1]; // Ground Prefab
                         position = new Vector3(x * prefabSizes[1].x, 0, z * prefabSizes[1].z);
                         Vector3 changedPosition = position;
-                        changedPosition.y = 0.15f;
+                        changedPosition.y = 0.01f;
                         spawnedGrounds.Add(changedPosition);
                         break;
                     case 'D':
@@ -135,12 +135,12 @@ public class LevelManager : MonoBehaviour
                 {
                     if (z == 0) // First line
                     {
-                        rotation = Quaternion.Euler(0, 0, 0);
+                        rotation = Quaternion.Euler(0, 180, 0);
                         //position.z += 2f;
                     }
                     else if (z == lines.Length - 1) // Last line
                     {
-                        rotation = Quaternion.Euler(0, 180, 0);
+                        rotation = Quaternion.Euler(0, 0, 0);
                         //position.z -= 2f;
 
                     }

@@ -1222,8 +1222,8 @@ Transform:
   m_GameObject: {fileID: 3940224208166622048}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 22.175, y: 0, z: 18.788082}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 176902959099643889}
   - {fileID: 28887951197546104}
@@ -1275,7 +1275,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.2
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.08, z: 0}
+  m_Center: {x: 0, y: 1.23, z: 0}
 --- !u!95 &3632984782257967282
 Animator:
   serializedVersion: 5
@@ -2537,7 +2537,7 @@ Transform:
   m_GameObject: {fileID: 7900576253160266936}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0.038, y: 0, z: 0.702}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6991893587139884770}

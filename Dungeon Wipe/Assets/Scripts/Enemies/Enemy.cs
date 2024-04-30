@@ -41,8 +41,8 @@ public class Enemy : MonoBehaviour
         player = PlayerMovement.Instance;
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        speed = 3f; 
-        gravity = 5f;
+        speed = 0.75f; 
+        gravity = 1f;
         cooldownTimer = enemyType.AttackCooldown;
         isAttacking = false;
         moveVelocity = Vector3.zero;
