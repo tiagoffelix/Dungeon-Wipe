@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject[] prefabs;
 
     [SerializeField] private Stats stats;
+    [SerializeField] private LevelEditorSO levelEditor;
 
     [SerializeField] private GameObject[] potionPrefabs;
     [SerializeField] private SpawnCollectibles potionSpawnSettings;
@@ -23,7 +24,7 @@ public class LevelManager : MonoBehaviour
         spawnedGrounds = new List<Vector3>();
         stats.Score = 0;
         stats.NumberOfSpawns = 0;
-        LoadLevel(stats.SelectedLevelPath);
+        LoadLevel(levelEditor.SelectedLevelPath);
         StartCoroutine(SpawnPotions());
         StartCoroutine(SpawnCoins());
     }
@@ -95,7 +96,7 @@ public class LevelManager : MonoBehaviour
                         toInstantiate = prefabs[1]; // Ground Prefab
                         position = new Vector3(x * prefabSizes[1].x, 0, z * prefabSizes[1].z);
                         Vector3 changedPosition = position;
-                        changedPosition.y = 1;
+                        changedPosition.y = 0.15f;
                         spawnedGrounds.Add(changedPosition);
                         break;
                     case 'D':
@@ -135,26 +136,23 @@ public class LevelManager : MonoBehaviour
                     if (z == 0) // First line
                     {
                         rotation = Quaternion.Euler(0, 0, 0);
-                        position.z += 2f;
-                        position.y = 1f;
+                        //position.z += 2f;
                     }
                     else if (z == lines.Length - 1) // Last line
                     {
                         rotation = Quaternion.Euler(0, 180, 0);
-                        position.z -= 2f;
-                        position.y = 1f;
+                        //position.z -= 2f;
+
                     }
                     else if (x == 0) // First element of each line (after the first and before the last)
                     {
                         rotation = Quaternion.Euler(0, 90, 0);
-                        position.x += 2f;
-                        position.y = 1f;
+                       // position.x += 2f;
                     }
                     else if (x == lines[z].Length - 1) // Last element of each line (after the first and before the last)
                     {
                         rotation = Quaternion.Euler(0, -90, 0); // Default rotation or any specific adjustment
-                        position.x -= 2f;
-                        position.y = 1f;
+                        //position.x -= 2f;
                     }
                 }
 

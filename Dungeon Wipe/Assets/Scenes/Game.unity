@@ -340,6 +340,7 @@ MonoBehaviour:
   - {fileID: 3761524534090057585, guid: cea781fa979dc8c4581032df3cad11c5, type: 3}
   - {fileID: 3761524534090057585, guid: 7b317e0d62d8efd44bd0beeda3bbaf76, type: 3}
   stats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
+  levelEditor: {fileID: 11400000, guid: e036f55c5386b39409256ec03c100c85, type: 2}
   potionPrefabs:
   - {fileID: 3356991148050266300, guid: 8506bed1e16fb7247b775e61349d7c19, type: 3}
   - {fileID: 2108463348006575564, guid: 9405e9e3619c53845a4e334d7e58afc6, type: 3}

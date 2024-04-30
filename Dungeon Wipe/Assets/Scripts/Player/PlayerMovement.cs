@@ -91,11 +91,11 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        attackRange = 1.5f;
+        attackRange = 0.375f;
         nextAttackTimer = 0f;
-        jumpHeight = 1f;
-        gravityValue = -10f;
-        speed = 5f;
+        jumpHeight = 0.25f;
+        gravityValue = -2.5f;
+        speed = 1.2f;
         playerStats.Health = 100;
         playerStats.Dead = false;
         isBlocking = false;

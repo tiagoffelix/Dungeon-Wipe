@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   typeName: Mage
   attackCooldown: 7
-  attackRange: 17
+  attackRange: 4
   baseDamage: 50
   health: 30
   points: 500

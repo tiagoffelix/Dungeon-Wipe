@@ -10,7 +10,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject levelScrollViewContent; // For levels
     [SerializeField] private GameObject levelEditorScrollViewContent; // For levels
     [SerializeField] private GameObject levelButtonPrefab; // Assign a prefab for level buttons
-    [SerializeField] private Stats stats; // Reference to the Stats ScriptableObject
+    [SerializeField] private LevelEditorSO levelEditor;
 
     private void Start()
     {
@@ -42,7 +42,7 @@ public class MainMenu : MonoBehaviour
         GameObject buttonEmpty = Instantiate(levelButtonPrefab, content.transform);
 
         var textMeshCompEmpty = buttonEmpty.GetComponentInChildren<TextMeshProUGUI>();
-        textMeshCompEmpty.text = "Create New Level";
+        textMeshCompEmpty.text = "New Level";
 
         var buttonCompEmpty = buttonEmpty.GetComponent<Button>();
 
@@ -59,7 +59,7 @@ public class MainMenu : MonoBehaviour
         #elif UNITY_STANDALONE_WIN
                 filePath = Path.Combine(Application.dataPath, "Resources", "Levels", levelName + ".txt");
         #endif
-        stats.SelectedLevelPath = filePath;
+        levelEditor.SelectedLevelPath = filePath;
 
         SceneManager.LoadScene("Game");
     }

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1116663941097827340}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 1.818, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2378183174948841715}
@@ -4842,8 +4842,8 @@ Transform:
   m_GameObject: {fileID: 3047477156043207241}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 23.089806, y: 0.000000018937957, z: 31.28473}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6677945457828982101}
   m_Father: {fileID: 0}
@@ -4930,9 +4930,6 @@ MonoBehaviour:
   damagePotion: {fileID: 0}
   healthPotion: {fileID: 11400000, guid: 2583c17425292a649996716f58aa5253, type: 2}
   particles: {fileID: 5558221908753186564}
-  rotationSpeed: 50
-  verticalSpeed: 0.5
-  baseHeight: 0
 --- !u!54 &2994365571149405000
 Rigidbody:
   m_ObjectHideFlags: 0

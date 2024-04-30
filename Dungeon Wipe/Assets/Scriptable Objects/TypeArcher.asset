@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   typeName: Archer
   attackCooldown: 2
-  attackRange: 10
+  attackRange: 2.2
   baseDamage: 20
   health: 70
   points: 700

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   typeName: Warrior
   attackCooldown: 1
-  attackRange: 3
+  attackRange: 0.7
   baseDamage: 30
   health: 100
   points: 1200

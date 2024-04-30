@@ -1195,7 +1195,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 547, y: 0}
+  m_SizeDelta: {x: 547, y: 60}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &376358559
 MonoBehaviour:
@@ -2059,9 +2059,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollViewContent: {fileID: 2070858639}
   levelScrollViewContent: {fileID: 1825535699}
-  levelEditorScrollViewContent: {fileID: 0}
+  levelEditorScrollViewContent: {fileID: 376358557}
   levelButtonPrefab: {fileID: 1642697461323588458, guid: 8bc1e9b258f9a2742b309e4a5b96fe61, type: 3}
-  stats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
+  levelEditor: {fileID: 11400000, guid: e036f55c5386b39409256ec03c100c85, type: 2}
 --- !u!4 &623509595
 Transform:
   m_ObjectHideFlags: 0
@@ -3100,7 +3100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &964145079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4009,7 +4009,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1212363408
 MonoBehaviour:
   m_ObjectHideFlags: 0
