@@ -12,6 +12,10 @@ GameObject:
   - component: {fileID: 9093931358057461100}
   - component: {fileID: 6471907043494855078}
   - component: {fileID: 2899824185886846800}
+  - component: {fileID: 7488603058674788519}
+  - component: {fileID: 986451856916808915}
+  - component: {fileID: 6196269604542042084}
+  - component: {fileID: 8311711204577769708}
   m_Layer: 8
   m_Name: tileSpikes_large
   m_TagString: Spikes
@@ -99,3 +103,55 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.8232234, y: 0.8593122, z: 3.8533642}
   m_Center: {x: 0.027765155, y: -1.3413427, z: -0.0649544}
+--- !u!65 &7488603058674788519
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814393471076114547}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 2, z: 0.13273168}
+  m_Center: {x: 0, y: 0, z: 1.9336342}
+--- !u!65 &986451856916808915
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814393471076114547}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.09794927, y: 2, z: 4}
+  m_Center: {x: -1.9510254, y: 0, z: 0}
+--- !u!65 &6196269604542042084
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814393471076114547}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 2, z: 0.137429}
+  m_Center: {x: 0, y: 0, z: -1.9312855}
+--- !u!65 &8311711204577769708
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814393471076114547}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.10597873, y: 2, z: 4}
+  m_Center: {x: 1.9470106, y: 0, z: 0}

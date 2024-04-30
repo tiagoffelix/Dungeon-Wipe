@@ -9,9 +9,6 @@ public class CameraSwitch : MonoBehaviour
 
     [SerializeField] private Stats playerStats;
 
-    [SerializeField] private GameObject head;
-    [SerializeField] private GameObject body;
-
     private Animator animator;
 
     private void Start()
@@ -32,10 +29,8 @@ public class CameraSwitch : MonoBehaviour
         }
         else
         {
-            if (playerStats.Dead)
+            if (playerStats.Health <= 0)
             {
-                head.gameObject.SetActive(true);
-                body.gameObject.SetActive(true);
                 firstPersonCamera.gameObject.SetActive(false);
                 thirdPersonCamera.gameObject.SetActive(false);
                 deathCamera.gameObject.SetActive(true);
@@ -58,16 +53,12 @@ public class CameraSwitch : MonoBehaviour
 
     private void ActivateThirdPersonCamera()
     {
-        head.gameObject.SetActive(true);
-        body.gameObject.SetActive(true);
         firstPersonCamera.gameObject.SetActive(false);
         thirdPersonCamera.gameObject.SetActive(true);
     }
 
     private void ToggleToFirstPerson()
     {
-        head.gameObject.SetActive(false);
-        body.gameObject.SetActive(false);
         firstPersonCamera.gameObject.SetActive(true);
         thirdPersonCamera.gameObject.SetActive(false);
     }

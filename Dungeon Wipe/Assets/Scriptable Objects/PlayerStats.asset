@@ -15,12 +15,20 @@ MonoBehaviour:
   health: 0
   damage: 50
   arrowDamage: 30
-  dead: 1
+  attackCooldown: 0.4
+  dead: 0
   sensitivity: 200
-  walkingSound: {fileID: 0}
-  attackSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  bowSound: {fileID: 0}
-  score: 10190
-  numberOfSpawns: 2
-  levelMinutes: 3
+  walkingSound: {fileID: 8300000, guid: 772d96859e5c4b040bb533e720e19e33, type: 3}
+  swordSound: {fileID: 8300000, guid: 23ebd5e38845dff4e8642593fff7f275, type: 3}
+  slashSound: {fileID: 8300000, guid: d7654f716e151c741a8639792eca2b4c, type: 3}
+  hitSound: {fileID: 8300000, guid: fc7c80c924d4d5249834bb6ba0f36df0, type: 3}
+  bowSound: {fileID: 8300000, guid: 4d15635346e539f489dcdfed57e9520d, type: 3}
+  spikesSound: {fileID: 8300000, guid: a7b202495af2e4f418f12044c6600196, type: 3}
+  parrySound: {fileID: 8300000, guid: e873741900271f94cb306f9b33c85682, type: 3}
+  shieldedSound: {fileID: 8300000, guid: 0a2f5627b8ce2d948bdda3eb560f0109, type: 3}
+  shieldBreakSound: {fileID: 8300000, guid: e2b720ff214577b49a633b50d124b451, type: 3}
+  coinsSound: {fileID: 8300000, guid: 15ffbb7ea318b9041b10f06cb35473e7, type: 3}
+  score: 0
+  numberOfSpawns: 1
+  levelMinutes: 2
+  selectedLevelPath: Assets/Resources/Levels/Level 1.txt

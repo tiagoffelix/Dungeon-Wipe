@@ -103,9 +103,9 @@ public class PauseMenu3D : MonoBehaviour
 
     public void TogglePauseMenu()
     {
-        //buttonSound.Play();
         isPaused = !isPaused;
         pauseMenuCanvas.SetActive(isPaused);
+        buttonSound.Play();
     }
 
     public void SaveCurrentGame()

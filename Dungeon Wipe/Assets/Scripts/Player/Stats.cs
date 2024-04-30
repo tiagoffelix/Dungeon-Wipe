@@ -10,14 +10,23 @@ public class Stats : ScriptableObject
 
     [SerializeField] private float arrowDamage;
 
+    [SerializeField] private float attackCooldown;
+
     [SerializeField] private bool dead;
 
     [SerializeField] private int sensitivity;
 
-    [SerializeField] private AudioSource walkingSound;
-    [SerializeField] private AudioSource attackSound;
-    [SerializeField] private AudioSource hitSound;
-    [SerializeField] private AudioSource bowSound;
+    [SerializeField] private AudioClip walkingSound;
+    [SerializeField] private AudioClip swordSound;
+    [SerializeField] private AudioClip slashSound;
+    [SerializeField] private AudioClip hitSound;
+    [SerializeField] private AudioClip bowSound;
+    [SerializeField] private AudioClip spikesSound;
+    [SerializeField] private AudioClip parrySound;
+    [SerializeField] private AudioClip shieldedSound;
+    [SerializeField] private AudioClip shieldBreakSound;
+    [SerializeField] private AudioClip coinsSound;
+    [SerializeField] private AudioClip drawSwordSound; 
 
     [SerializeField] private int score;
 
@@ -51,6 +60,12 @@ public class Stats : ScriptableObject
         set { this.arrowDamage = value; }
     }
 
+    public float AttackCooldown
+    {
+        get { return this.attackCooldown; }
+        set { this.attackCooldown = value; }
+    }
+
     public int Sensitivity
     {
         get { return this.sensitivity; }
@@ -81,23 +96,52 @@ public class Stats : ScriptableObject
         set { this.dead = value; }
     }
 
-    public AudioSource WalkingSound
+    public AudioClip WalkingSound
     {
         get { return walkingSound; }
     }
 
-    public AudioSource AttackSound
+    public AudioClip SwordSound
     {
-        get { return attackSound; }
+        get { return swordSound; }
     }
 
-    public AudioSource HitSound
+    public AudioClip DrawSwordSound
+    {
+        get { return drawSwordSound; }
+    }
+    public AudioClip SlashSound
+    {
+        get { return slashSound; }
+    }
+
+    public AudioClip HitSound
     {
         get { return hitSound; }
     }
-    public AudioSource BowSound
+    public AudioClip BowSound
     {
         get { return bowSound; }
+    }
+    public AudioClip SpikesSound
+    {
+        get { return spikesSound; }
+    }
+    public AudioClip ParrySound
+    {
+        get { return parrySound; }
+    }
+    public AudioClip ShieldedSound
+    {
+        get { return shieldedSound; }
+    }
+    public AudioClip ShieldBreakSound
+    {
+        get { return shieldBreakSound; }
+    }
+    public AudioClip CoinsSound
+    {
+        get { return coinsSound; }
     }
 
 
@@ -118,7 +162,6 @@ public class Stats : ScriptableObject
         if (Health <= 0)
         {
             Health = 0;
-            Dead = true;
         }
     }
 }

@@ -26,10 +26,8 @@ public class EnemyBow : MonoBehaviour
             // Instantiate the projectile at the shooting point with corrected orientation
             GameObject projectile = Instantiate(projectilePrefab, shootingPoint.position, Quaternion.LookRotation(shootingDirection) * Quaternion.Euler(0, 180, 0));
 
-            // Assuming there is a component named 'Arrow' attached to the projectilePrefab that manages its damage
             projectile.GetComponent<Arrow>().Damage = damage;
 
-            // Apply the velocity to the projectile's Rigidbody component to move it in the shooting direction
             projectile.GetComponent<Rigidbody>().velocity = shootingDirection * projectileSpeed;
 
             // Destroy the projectile after 20 seconds to clean up

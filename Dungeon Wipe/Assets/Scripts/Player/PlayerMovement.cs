@@ -57,7 +57,35 @@ public class PlayerMovement : MonoBehaviour
 
     private int blockCounter;
 
-    public bool Danger {  get ; set; }
+    private bool deathFall;
+
+    public bool Danger { get; set; }
+
+    public static PlayerMovement Instance { get; private set; }
+
+    private AudioSource audioSource;
+
+    [SerializeField] private AudioSource walkingSound;
+
+    [SerializeField] private Image crackImage1;
+    [SerializeField] private Image crackImage2;
+    [SerializeField] private Image crackImage3;
+
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        audioSource = GetComponent<AudioSource>();
+        walkingSound.clip = playerStats.WalkingSound;
+    }
 
     private void Start()
     {
@@ -78,30 +106,26 @@ public class PlayerMovement : MonoBehaviour
         damage = playerStats.Damage;
         arrowDamage = playerStats.ArrowDamage;
         blockCounter = 0;
+        deathFall = false;
     }
 
     void Update()
     {
-        if (playerStats.Dead)
-        {
-            Death();
-        }
-
-        if(Danger) 
+        if (Danger)
         {
             dangerIcon.enabled = true;
         }
-        else 
+        else
         {
             dangerIcon.enabled = false;
         }
 
-        if (sword.activeSelf && !isBlocking) 
+        if (sword.activeSelf && !isBlocking)
         {
             crossbowImage.gameObject.SetActive(false);
             swordImage.gameObject.SetActive(true);
         }
-        else if (bow.activeSelf && !isBlocking) 
+        else if (bow.activeSelf && !isBlocking)
         {
             swordImage.gameObject.SetActive(false);
             crossbowImage.gameObject.SetActive(true);
@@ -111,14 +135,29 @@ public class PlayerMovement : MonoBehaviour
         {
             isSpawning = true;
         }
-        else 
+        else
         {
             isSpawning = false;
         }
 
-        if (!isSpawning) 
+        if (playerStats.Health <= 0)
         {
-            if(!canvas.isActiveAndEnabled) 
+            if(!deathFall) 
+            {
+                Death();
+            }
+
+            if ((animator.GetCurrentAnimatorStateInfo(0).IsName("DeathFall")
+                || animator.GetCurrentAnimatorStateInfo(0).IsName("Death")) &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+            {
+                playerStats.Dead = true;
+            }
+        }
+        else if (!isSpawning)
+        {
+            if (!canvas.isActiveAndEnabled)
             {
                 canvas.enabled = true;
             }
@@ -138,6 +177,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Alpha1) && !isAttacking)
             {
+                audioSource.PlayOneShot(playerStats.DrawSwordSound);
                 sword.SetActive(true);  // Activate the sword
                 bow.SetActive(false);    // Deactivate the bow
             }
@@ -157,6 +197,10 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 animator.SetBool("Grounded", false);
+                if (walkingSound.isPlaying)
+                {
+                    walkingSound.Stop();
+                }
             }
 
             float horizontalInput = Input.GetAxis("Horizontal");
@@ -175,26 +219,27 @@ public class PlayerMovement : MonoBehaviour
             if (movementDirection.magnitude > 0)
             {
                 animator.SetFloat("Speed", 1.0f); // Normalize Speed to 1.0 when moving
-                /*if(!walkingSound.isPlaying) 
+                if (!walkingSound.isPlaying && isGrounded)
                 {
                     walkingSound.Play();
-                }*/
+                }
             }
             else
             {
                 animator.SetFloat("Speed", 0);
-                /*if(walkingSound.isPlaying) 
+                if (walkingSound.isPlaying)
                 {
                     walkingSound.Stop();
-                }*/
+                }
             }
 
             if (Input.GetKey(KeyCode.C))
             {
                 crosshair.enabled = false;
             }
-            else 
+            else
             {
+                crosshair.enabled = true;
                 // Attack Logic
                 if (Time.time >= nextAttackTimer && Input.GetMouseButtonDown(0) && !isBlocking)
                 {
@@ -204,15 +249,11 @@ public class PlayerMovement : MonoBehaviour
                     }
                     else if (bow.activeSelf)
                     {
-                        /*if(!bowSound.isPlaying) 
-                        {
-                            bowSound.Play();
-                        }*/
                         shotArrow = false;
                         animator.SetTrigger("Shoot");
                     }
 
-                    nextAttackTimer = Time.time + 1f; // Cooldown time for next attack
+                    nextAttackTimer = Time.time + playerStats.AttackCooldown; // Cooldown time for next attack
                 }
             }
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Shoot") &&
@@ -221,11 +262,13 @@ public class PlayerMovement : MonoBehaviour
                 !shotArrow)
             {
                 shotArrow = true;
+                audioSource.PlayOneShot(playerStats.BowSound);
                 bow.GetComponent<CrossBow>().ShootProjectile(arrowDamage);
             }
 
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")
             || animator.GetCurrentAnimatorStateInfo(0).IsName("Death")
+            || animator.GetCurrentAnimatorStateInfo(0).IsName("DeathFall")
             || animator.GetCurrentAnimatorStateInfo(0).IsName("Shoot")
             || animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
             {
@@ -258,15 +301,39 @@ public class PlayerMovement : MonoBehaviour
                 blockingTime += Time.deltaTime;
                 isBlocking = true;
             }
-
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Death") &&
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f &&
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+            else 
             {
-                playerStats.Dead = true;
+                isBlocking = false;
+                blockCounter = 0;
+            }
+
+            switch (blockCounter)
+            {
+                case 0:
+                    crackImage1.gameObject.SetActive(false);
+                    crackImage2.gameObject.SetActive(false);
+                    crackImage3.gameObject.SetActive(false);
+                    break;
+                case 1:
+                    crackImage1.gameObject.SetActive(true);
+                    crackImage2.gameObject.SetActive(false);
+                    crackImage3.gameObject.SetActive(false);
+                    break;
+                case 2:
+                    crackImage1.gameObject.SetActive(true);
+                    crackImage2.gameObject.SetActive(true);
+                    crackImage3.gameObject.SetActive(false);
+                    break;
+                case 3:
+                    crackImage1.gameObject.SetActive(true);
+                    crackImage2.gameObject.SetActive(true);
+                    crackImage3.gameObject.SetActive(true);
+                    break;
+                default:
+                    break;
             }
         }
-        else 
+        else
         {
             canvas.enabled = false;
         }
@@ -274,21 +341,21 @@ public class PlayerMovement : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (blockingTime < 0.3 && blockingTime > 0)
+        if (blockingTime > 0 && blockingTime < 0.3)
         {
-            //parrySound.Play();
+            audioSource.PlayOneShot(playerStats.ParrySound);
             animator.SetTrigger("Blocked");
         }
         else
         {
             if (isBlocking)
             {
-                //shieldedSound.Play();
+                audioSource.PlayOneShot(playerStats.ShieldedSound);
                 animator.SetBool("Block", false);
                 blockCounter++;
-                if(blockCounter == 4) 
+                if (blockCounter == 4)
                 {
-                    //breakShieldSound.Play();
+                    audioSource.PlayOneShot(playerStats.ShieldBreakSound);
                     isBlocking = false;
                     animator.SetTrigger("Hit");
                     playerStats.TakeDamage(damage);
@@ -296,7 +363,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                //hitSound.Play();
+                audioSource.PlayOneShot(playerStats.HitSound);
                 animator.SetTrigger("Hit");
                 playerStats.TakeDamage(damage);
             }
@@ -312,27 +379,23 @@ public class PlayerMovement : MonoBehaviour
     {
         animator.SetBool("Dead", true);
         controller.enabled = false;
-        enabled = false;
         canvas.enabled = false;
     }
 
     private void DeathFall()
     {
+        audioSource.PlayOneShot(playerStats.HitSound);
+        deathFall = true;
         playerStats.TakeDamage(1000);
         healthBarImage.fillAmount = playerStats.Health / 100f;
         animator.SetBool("DeathFall", true);
         controller.enabled = false;
         canvas.enabled = false;
-        enabled = false;
     }
 
     private void Attack()
     {
         animator.SetTrigger("Attack");
-        /*if(!attackingSound.isPlaying) 
-            {
-                attackingSound.Play();
-            }*/
 
         Collider[] hitEnemies = Physics.OverlapSphere(attackCenter.position, attackRange, enemyLayers);
 
@@ -342,6 +405,8 @@ public class PlayerMovement : MonoBehaviour
 
             if (enemy != null)
             {
+                audioSource.Stop();
+                audioSource.PlayOneShot(playerStats.SwordSound);
                 particles.Play();
                 animator.SetFloat("Speed", 0);
                 enemy.TakeDamage(damage);
@@ -349,6 +414,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
             }
         }
+        if(hitEnemies.Length == 0) { audioSource.PlayOneShot(playerStats.SlashSound); }
     }
 
     private void OnDrawGizmosSelected()
@@ -360,6 +426,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Spikes"))
         {
+            audioSource.PlayOneShot(playerStats.SpikesSound);
             DeathFall();
         }
         if (other.gameObject.CompareTag("Potion"))
@@ -367,6 +434,7 @@ public class PlayerMovement : MonoBehaviour
             PotionItem potionItem = other.gameObject.GetComponent<PotionItem>();
             if (potionItem != null)
             {
+                audioSource.PlayOneShot(playerStats.CoinsSound);
                 // Check each potion type and apply effects accordingly
                 if (potionItem.SpeedPotion != null)
                 {
@@ -395,21 +463,19 @@ public class PlayerMovement : MonoBehaviour
                     }
                     Destroy(other.gameObject);
                 }
-                else
-                {
-                    Debug.LogWarning("No valid potion found on the object.");
-                }
             }
         }
         if (other.gameObject.CompareTag("Coins"))
         {
             Coins coins = other.gameObject.GetComponent<Coins>();
 
-            if (coins != null) 
+            audioSource.PlayOneShot(playerStats.CoinsSound);
+
+            if (coins != null)
             {
                 playerStats.Score += coins.CoinsSO.Score;
                 if (coins.CoinsSO.Sound != null)
-                { 
+                {
                     coins.CoinsSO.Sound.Play();
                 }
                 Destroy(other.gameObject);

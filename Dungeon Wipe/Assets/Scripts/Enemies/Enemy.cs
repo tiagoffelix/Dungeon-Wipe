@@ -1,7 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Enemy : MonoBehaviour
 {
@@ -25,7 +22,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private GameObject weapon;
 
-    private PlayerMovement player;
+    [SerializeField] private PlayerMovement player;
 
     [SerializeField] private EnemyType enemyType;
 
@@ -36,9 +33,12 @@ public class Enemy : MonoBehaviour
 
     private int points;
 
+    private AudioSource audioSource;
+
     void Start()
     {
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
+        audioSource = GetComponent<AudioSource>();
+        player = PlayerMovement.Instance;
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         speed = 3f; 
@@ -76,9 +76,8 @@ public class Enemy : MonoBehaviour
                 animator.SetFloat("Speed", 0);
 
                 if (cooldownTimer > 0) { cooldownTimer -= Time.deltaTime; }
-                if (cooldownTimer < 0) { cooldownTimer = 0; }
 
-                if (cooldownTimer == 0 && !isAttacking)
+                if (cooldownTimer <= 0 && !isAttacking)
                 {
                     player.Danger = true;
                     ResetCooldown();
@@ -89,13 +88,15 @@ public class Enemy : MonoBehaviour
                     }
                     else if (enemyType.TypeName == "Archer")
                     {
-                        particles.Play();
                         animator.SetTrigger("Attack");
+                        particles.Play();
+                        audioSource.PlayOneShot(enemyType.AttackSound);
                         weapon.GetComponent<EnemyBow>().ShootProjectile(player.transform.position, enemyType.BaseDamage);
                     }
                     else if (enemyType.TypeName == "Mage")
                     {
                         particles.Play();
+                        audioSource.PlayOneShot(enemyType.AttackSound);
                         animator.SetTrigger("Attack");
                     }
                 }
@@ -115,6 +116,7 @@ public class Enemy : MonoBehaviour
                     && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.8f
                     && distance <= enemyType.AttackRange)
                 {
+                    audioSource.PlayOneShot(enemyType.AttackSound);
                     player.TakeDamage(enemyType.BaseDamage);
                     bloodParticles.Play();
                     animator.Play("Idle");
@@ -149,7 +151,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage) 
     {
         animator.SetTrigger("Hit");
-        //enemyType.DeathSound.Play();
+        audioSource.PlayOneShot(enemyType.DeathSound);
         health -= damage;
         if (health <= 0)
         {
@@ -206,7 +208,6 @@ public class Enemy : MonoBehaviour
             {
                 isAttacking = true;
                 animator.SetTrigger("Attack");
-                //enemyType.AttackSound.Play();
                 animator.SetFloat("Speed", 0);
                 particles.Play();
                 break;

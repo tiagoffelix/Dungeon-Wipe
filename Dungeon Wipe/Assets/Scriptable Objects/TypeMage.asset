@@ -18,5 +18,5 @@ MonoBehaviour:
   baseDamage: 50
   health: 30
   points: 500
-  attackSound: {fileID: 0}
-  deathSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 61e4bb3ccf501094f93f2c956b0e4446, type: 3}
+  deathSound: {fileID: 8300000, guid: 66603d16707b59c4ab207d4539bcf87c, type: 3}

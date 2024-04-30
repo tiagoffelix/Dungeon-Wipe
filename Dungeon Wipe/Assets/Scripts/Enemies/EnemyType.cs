@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewEnemyType", menuName = "Enemy Type")]
@@ -13,8 +9,8 @@ public class EnemyType : ScriptableObject
     [SerializeField] private int baseDamage;
     [SerializeField] private int health;
     [SerializeField] private int points;
-    [SerializeField] private AudioSource attackSound;
-    [SerializeField] private AudioSource deathSound;
+    [SerializeField] private AudioClip attackSound;
+    [SerializeField] private AudioClip deathSound;
 
     // Encapsulated properties
     public string TypeName
@@ -47,11 +43,11 @@ public class EnemyType : ScriptableObject
         get { return points; }
     }
 
-    public AudioSource AttackSound
+    public AudioClip AttackSound
     {
         get { return attackSound; }
     }
-    public AudioSource DeathSound
+    public AudioClip DeathSound
     {
         get { return deathSound; }
     }

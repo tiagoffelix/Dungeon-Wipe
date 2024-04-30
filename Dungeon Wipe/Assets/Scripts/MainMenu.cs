@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.IO;
 
 public class MainMenu : MonoBehaviour
 {
@@ -42,7 +41,15 @@ public class MainMenu : MonoBehaviour
 
     private void SelectLevel(string levelName)
     {
-        stats.SelectedLevelPath = "Assets/Resources/Levels/" + levelName + ".txt";
+        string filePath;
+
+        #if UNITY_EDITOR
+                filePath = "Assets/Resources/Levels/" + levelName + ".txt";
+        #elif UNITY_STANDALONE_WIN
+                filePath = Path.Combine(Application.dataPath, "Resources", "Levels", levelName + ".txt");
+        #endif
+        stats.SelectedLevelPath = filePath;
+
         SceneManager.LoadScene("Game");
     }
 
