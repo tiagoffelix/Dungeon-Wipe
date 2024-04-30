@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject scrollViewContent; // For high scores
     [SerializeField] private GameObject levelScrollViewContent; // For levels
+    [SerializeField] private GameObject levelEditorScrollViewContent; // For levels
     [SerializeField] private GameObject levelButtonPrefab; // Assign a prefab for level buttons
     [SerializeField] private Stats stats; // Reference to the Stats ScriptableObject
 
@@ -18,16 +19,17 @@ public class MainMenu : MonoBehaviour
             PlayerPrefsManager.Instance.LoadScoresIntoScrollView(scrollViewContent);
         }
 
-        LoadLevelButtons();
+        LoadLevelButtons(levelScrollViewContent);
+        LoadLevelButtons(levelEditorScrollViewContent);
     }
 
-    private void LoadLevelButtons()
+    private void LoadLevelButtons(GameObject content)
     {
         var levelFiles = Resources.LoadAll<TextAsset>("Levels");
 
         foreach (var file in levelFiles)
         {
-            GameObject button = Instantiate(levelButtonPrefab, levelScrollViewContent.transform);
+            GameObject button = Instantiate(levelButtonPrefab, content.transform);
 
             var textMeshComp = button.GetComponentInChildren<TextMeshProUGUI>();
             textMeshComp.text = file.name;
@@ -36,6 +38,15 @@ public class MainMenu : MonoBehaviour
 
             buttonComp.onClick.AddListener(() => SelectLevel(file.name));
         }
+
+        GameObject buttonEmpty = Instantiate(levelButtonPrefab, content.transform);
+
+        var textMeshCompEmpty = buttonEmpty.GetComponentInChildren<TextMeshProUGUI>();
+        textMeshCompEmpty.text = "Create New Level";
+
+        var buttonCompEmpty = buttonEmpty.GetComponent<Button>();
+
+        buttonCompEmpty.onClick.AddListener(() => OpenEditor());
     }
 
 
@@ -51,6 +62,11 @@ public class MainMenu : MonoBehaviour
         stats.SelectedLevelPath = filePath;
 
         SceneManager.LoadScene("Game");
+    }
+
+    public void OpenEditor() 
+    {
+        SceneManager.LoadScene("Editor");
     }
 
     public void QuitGame()

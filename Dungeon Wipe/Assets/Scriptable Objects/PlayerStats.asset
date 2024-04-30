@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fefa07e16b6aa64f98c367e44f3aed4, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  health: 0
+  health: 100
   damage: 50
   arrowDamage: 30
   attackCooldown: 0.4
@@ -28,6 +28,7 @@ MonoBehaviour:
   shieldedSound: {fileID: 8300000, guid: 0a2f5627b8ce2d948bdda3eb560f0109, type: 3}
   shieldBreakSound: {fileID: 8300000, guid: e2b720ff214577b49a633b50d124b451, type: 3}
   coinsSound: {fileID: 8300000, guid: 15ffbb7ea318b9041b10f06cb35473e7, type: 3}
+  drawSwordSound: {fileID: 8300000, guid: 9569a04da8e55764da63df6704b06d50, type: 3}
   score: 0
   numberOfSpawns: 1
   levelMinutes: 2
