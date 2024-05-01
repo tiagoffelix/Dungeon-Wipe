@@ -10,10 +10,10 @@ public class CubeScript : MonoBehaviour
     public int GridX { get { return gridX; } set { gridX = value; } }
     public int GridY { get { return gridY; } set { gridY = value; } }
 
-    private Renderer renderer;
+    private new Renderer renderer;
     [SerializeField] private Color hoverColorFree;
     [SerializeField] private Color hoverColorOccupied;
-    [SerializeField] private Color defaultColor = Color.black;
+    [SerializeField] private Color defaultColor;
 
     private Collider cubeCollider;
 

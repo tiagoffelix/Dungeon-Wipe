@@ -12,6 +12,8 @@ TagManager:
   - Coins
   - Environment
   - ScrollView
+  - Cube
+  - Prefab
   layers:
   - Default
   - TransparentFX

@@ -11,6 +11,8 @@ public class PrefabManager : MonoBehaviour
     [SerializeField] private Transform scrollViewContent;
     [SerializeField] private GameObject buttonPrefab;
 
+    [SerializeField] private ObjectManager objectManager;
+
     private GameObject currentPrefab;
 
     public GameObject CurrentPrefab { get => currentPrefab; }
@@ -34,6 +36,7 @@ public class PrefabManager : MonoBehaviour
             GameObject btn = Instantiate(buttonPrefab, scrollViewContent);
             btn.GetComponentInChildren<TextMeshProUGUI>().text = prefab.name;
             btn.GetComponent<Button>().onClick.AddListener(() => SetCurrentPrefab(prefab));
+            btn.GetComponent<Button>().onClick.AddListener(() => objectManager.SetDeletingFalse());
         }
     }
 
