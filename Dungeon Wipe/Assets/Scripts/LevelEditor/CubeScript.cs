@@ -4,50 +4,73 @@ using UnityEngine;
 
 public class CubeScript : MonoBehaviour
 {
-    private int gridX; // Coordenada X do cubo na grade
-    private int gridY; // Coordenada Y do cubo na grade
+    private int gridX; // Coordinate X of the cube on the grid
+    private int gridY; // Coordinate Y of the cube on the grid
 
     public int GridX { get { return gridX; } set { gridX = value; } }
-
     public int GridY { get { return gridY; } set { gridY = value; } }
 
     private Renderer renderer;
-
     [SerializeField] private Color hoverColorFree;
     [SerializeField] private Color hoverColorOccupied;
+    [SerializeField] private Color defaultColor = Color.black;
+
+    private Collider cubeCollider;
 
     void Start()
     {
         renderer = GetComponent<Renderer>();
+        renderer.material.color = defaultColor; // Initialize with the default color
+        cubeCollider = GetComponent<Collider>(); // Cache the collider
     }
 
-    void OnMouseEnter()
+    void Update()
     {
-        if(transform.childCount == 5) 
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        // Check if the ray intersects this specific cube's collider
+        if (cubeCollider.Raycast(ray, out hit, Mathf.Infinity))
         {
-            renderer.material.color = hoverColorOccupied;
+            // Mouse Enter logic
+            if (transform.childCount == 5)
+            {
+                renderer.material.color = hoverColorOccupied;
+            }
+            else
+            {
+                renderer.material.color = hoverColorFree;
+            }
+
+            if (PrefabManager.Instance.CurrentPrefab != null && transform.childCount == 4)
+            {
+                PrefabManager.Instance.CurrentPrefab.transform.position = transform.position;
+                PrefabManager.Instance.CurrentPrefab.GetComponent<PrefabFollower>().enabled = false;
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    PrefabManager.Instance.CurrentPrefab.transform.Rotate(0, 90, 0); // Rotate 90 degrees around the Y axis
+                }
+            }
+
+            // Handle OnMouseDown
+            if (Input.GetMouseButtonDown(0))
+            {
+                HandleMouseDown();
+            }
         }
-        else 
+        else
         {
-            renderer.material.color = hoverColorFree;
-        }
-        if (PrefabManager.Instance.CurrentPrefab != null)
-        {
-            PrefabManager.Instance.CurrentPrefab.transform.position = transform.position;
-            PrefabManager.Instance.CurrentPrefab.GetComponent<PrefabFollower>().enabled = false;
+            // Mouse Exit logic
+            renderer.material.color = defaultColor;
+            if (PrefabManager.Instance.CurrentPrefab != null)
+            {
+                PrefabManager.Instance.CurrentPrefab.GetComponent<PrefabFollower>().enabled = true;
+            }
         }
     }
 
-    void OnMouseExit()
-    {
-        renderer.material.color = Color.black; // Revert to original color
-        if (PrefabManager.Instance.CurrentPrefab != null)
-        {
-            PrefabManager.Instance.CurrentPrefab.GetComponent<PrefabFollower>().enabled = true;
-        }
-    }
-
-    void OnMouseDown()
+    // Your original OnMouseDown logic here
+    private void HandleMouseDown()
     {
         if (PrefabManager.Instance.CurrentPrefab != null)
         {

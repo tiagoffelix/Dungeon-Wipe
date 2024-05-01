@@ -8,6 +8,16 @@ public class EditorCameraController : MonoBehaviour
     private float yaw = 0f;
     private float pitch = 0f;
 
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+
+    void Start()
+    {
+        // Store the original position and rotation
+        originalPosition = transform.position;
+        originalRotation = transform.rotation;
+    }
+
     void Update()
     {
         // Handle rotation
@@ -35,5 +45,19 @@ public class EditorCameraController : MonoBehaviour
 
         Vector3 move = transform.right * xMovement + transform.up * yMovement + transform.forward * zMovement;
         transform.position += move;
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            ResetCameraPosition();
+        }
+    }
+
+    public void ResetCameraPosition()
+    {
+        transform.position = originalPosition;
+        transform.rotation = originalRotation;
+
+        yaw = originalRotation.eulerAngles.y;
+        pitch = originalRotation.eulerAngles.x;
     }
 }
