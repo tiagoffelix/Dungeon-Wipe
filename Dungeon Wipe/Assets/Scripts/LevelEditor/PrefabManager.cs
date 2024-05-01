@@ -45,6 +45,7 @@ public class PrefabManager : MonoBehaviour
         }
 
         currentPrefab = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
+        currentPrefab.AddComponent<PrefabFollower>();
     }
 
     public void DestroyCurrentPrefab()

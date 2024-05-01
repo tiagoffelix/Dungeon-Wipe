@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -2530176917762719774}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Cube
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,8 +100,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.9109043, y: 1, z: 0.9330145}
+  m_Center: {x: -0.0031741261, y: 0, z: 0.005078256}
 --- !u!114 &-2530176917762719774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,8 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d188f7eda53d24a41be8a3f9b340a76a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverColor: {r: 0.14811116, g: 0.4811321, b: 0.13389997, a: 0}
-  levelEditor: {fileID: 11400000, guid: e036f55c5386b39409256ec03c100c85, type: 2}
+  hoverColorFree: {r: 0, g: 0.8396226, b: 0.09548644, a: 0}
+  hoverColorOccupied: {r: 1, g: 0.018452026, b: 0, a: 0}
 --- !u!1 &1953740807016457274
 GameObject:
   m_ObjectHideFlags: 0

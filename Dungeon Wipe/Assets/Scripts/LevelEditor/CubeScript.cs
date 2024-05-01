@@ -13,7 +13,8 @@ public class CubeScript : MonoBehaviour
 
     private Renderer renderer;
 
-    [SerializeField] private Color hoverColor;
+    [SerializeField] private Color hoverColorFree;
+    [SerializeField] private Color hoverColorOccupied;
 
     void Start()
     {
@@ -22,12 +23,28 @@ public class CubeScript : MonoBehaviour
 
     void OnMouseEnter()
     {
-        renderer.material.color = hoverColor; // Change to hover color
+        if(transform.childCount == 5) 
+        {
+            renderer.material.color = hoverColorOccupied;
+        }
+        else 
+        {
+            renderer.material.color = hoverColorFree;
+        }
+        if (PrefabManager.Instance.CurrentPrefab != null)
+        {
+            PrefabManager.Instance.CurrentPrefab.transform.position = transform.position;
+            PrefabManager.Instance.CurrentPrefab.GetComponent<PrefabFollower>().enabled = false;
+        }
     }
 
     void OnMouseExit()
     {
         renderer.material.color = Color.black; // Revert to original color
+        if (PrefabManager.Instance.CurrentPrefab != null)
+        {
+            PrefabManager.Instance.CurrentPrefab.GetComponent<PrefabFollower>().enabled = true;
+        }
     }
 
     void OnMouseDown()
@@ -37,9 +54,8 @@ public class CubeScript : MonoBehaviour
             // Check if a prefab is already instantiated on this cube
             if (transform.childCount == 4) // No children, safe to instantiate
             {
-                GameObject prefab = PrefabManager.Instance.CurrentPrefab;
-                prefab.transform.position = Vector3.zero;
-                GameObject newPrefab = Instantiate(prefab, transform.position, Quaternion.identity);
+                GameObject newPrefab = Instantiate(PrefabManager.Instance.CurrentPrefab, transform.position, PrefabManager.Instance.CurrentPrefab.transform.rotation);
+                newPrefab.GetComponent<PrefabFollower>().enabled = false;
                 newPrefab.transform.SetParent(transform); // Set the cube as the parent of the new prefab
             }
         }
