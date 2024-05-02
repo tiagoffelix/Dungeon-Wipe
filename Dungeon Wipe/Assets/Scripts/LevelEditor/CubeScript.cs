@@ -17,6 +17,8 @@ public class CubeScript : MonoBehaviour
 
     private Collider cubeCollider;
 
+    // Public property to track if a player prefab has been placed
+
     void Start()
     {
         renderer = GetComponent<Renderer>();
@@ -69,17 +71,29 @@ public class CubeScript : MonoBehaviour
         }
     }
 
-    // Your original OnMouseDown logic here
+    // Method to handle prefab placement
     private void HandleMouseDown()
     {
         if (PrefabManager.Instance.CurrentPrefab != null)
         {
-            // Check if a prefab is already instantiated on this cube
-            if (transform.childCount == 4) // No children, safe to instantiate
+            // Check if a player prefab has already been placed
+            if (PrefabManager.Instance.CurrentPrefab.layer == LayerMask.NameToLayer("Player") && PrefabManager.Instance.PlayerPlaced)
             {
-                GameObject newPrefab = Instantiate(PrefabManager.Instance.CurrentPrefab, transform.position, PrefabManager.Instance.CurrentPrefab.transform.rotation);
-                newPrefab.GetComponent<PrefabFollower>().enabled = false;
-                newPrefab.transform.SetParent(transform); // Set the cube as the parent of the new prefab
+                return; // Exit if a player prefab is already placed
+            }
+
+            // Check if a prefab is already instantiated on this cube
+            if (PrefabManager.Instance.CurrentPrefab != null && transform.childCount == 4)
+            {
+                GameObject newPrefab = PrefabManager.Instance.InstantiatePrefab(
+                    PrefabManager.Instance.CurrentPrefab, transform.position,
+                    PrefabManager.Instance.CurrentPrefab.transform.rotation);
+
+                if (newPrefab.layer == LayerMask.NameToLayer("Player"))
+                {
+                    PrefabManager.Instance.PlayerPlaced = true;
+                    PrefabManager.Instance.DestroyCurrentPrefab();
+                }
             }
         }
     }

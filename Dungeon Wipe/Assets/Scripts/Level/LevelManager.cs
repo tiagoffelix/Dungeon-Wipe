@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -16,32 +15,33 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject[] coinPrefabs;
     [SerializeField] private SpawnCollectibles coinSpawnSettings;
 
-    private List<Vector3> spawnedGrounds;
+    private List<Vector3> spawnedGrounds = new List<Vector3>();
 
-    // Start is called before the first frame update
     void Start()
     {
-        spawnedGrounds = new List<Vector3>();
         stats.Score = 0;
         stats.NumberOfSpawns = 0;
         LoadLevel(levelEditor.SelectedLevelPath);
+        print(spawnedGrounds.Count);
         StartCoroutine(SpawnPotions());
         StartCoroutine(SpawnCoins());
+        print(stats.NumberOfSpawns);
     }
-
 
     IEnumerator SpawnPotions()
     {
         while (true)
         {
-            // Calculate random time variation
             float timeDelay = potionSpawnSettings.SpawnInterval + Random.Range(0, potionSpawnSettings.SpawnTimeVariation);
             yield return new WaitForSeconds(timeDelay);
 
             if (spawnedGrounds.Count > 0)
             {
                 int randomIndex = Random.Range(0, spawnedGrounds.Count);
-                Instantiate(potionPrefabs[Random.Range(0, potionPrefabs.Length)], spawnedGrounds[randomIndex], Quaternion.identity);
+                Vector3 spawnPosition = spawnedGrounds[randomIndex];
+                spawnPosition.y += 0.4f;
+
+                Instantiate(potionPrefabs[Random.Range(0, potionPrefabs.Length)], spawnPosition, Quaternion.identity);
             }
         }
     }
@@ -50,116 +50,81 @@ public class LevelManager : MonoBehaviour
     {
         while (true)
         {
-            // Calculate random time variation
             float timeDelay = coinSpawnSettings.SpawnInterval + Random.Range(0, coinSpawnSettings.SpawnTimeVariation);
             yield return new WaitForSeconds(timeDelay);
 
             if (spawnedGrounds.Count > 0)
             {
                 int randomIndex = Random.Range(0, spawnedGrounds.Count);
-                Instantiate(coinPrefabs[Random.Range(0, coinPrefabs.Length)], spawnedGrounds[randomIndex], Quaternion.identity);
+                Vector3 spawnPosition = spawnedGrounds[randomIndex];
+                spawnPosition.y += 0.4f; 
+
+                Instantiate(coinPrefabs[Random.Range(0, coinPrefabs.Length)], spawnPosition, Quaternion.identity);
             }
         }
     }
 
     void LoadLevel(string path)
     {
-        string[] lines = File.ReadAllLines(path);
-        Vector3[] prefabSizes = new Vector3[prefabs.Length];
-
-        // Calculate sizes for each type of prefab
-        for (int i = 0; i < prefabs.Length; i++)
+        if (string.IsNullOrEmpty(path) || !File.Exists(path))
         {
-            if (prefabs[i].GetComponent<Renderer>())
+            Debug.LogError("Invalid or missing JSON file path.");
+            return;
+        }
+
+        string jsonContent = File.ReadAllText(path);
+
+        PrefabManager.PrefabDataList prefabDataWrapper = JsonUtility.FromJson<PrefabManager.PrefabDataList>(jsonContent);
+        if (prefabDataWrapper == null || prefabDataWrapper.prefabData == null)
+        {
+            Debug.LogError("Failed to parse the JSON file.");
+            return;
+        }
+
+        foreach (PrefabManager.PrefabData prefabData in prefabDataWrapper.prefabData)
+        {
+            GameObject toInstantiate = FindPrefabByName(prefabData.Name);
+
+            if (toInstantiate != null)
             {
-                prefabSizes[i] = prefabs[i].GetComponent<Renderer>().bounds.size;
+                Instantiate(toInstantiate, prefabData.Position, prefabData.Rotation);
+
+                // If it's a ground tile, add its position to spawnedGrounds
+                if (prefabData.Name == "Floor")
+                {
+                    spawnedGrounds.Add(prefabData.Position);
+                }
+                if (prefabData.Name == "Spawn")
+                {
+                    stats.NumberOfSpawns ++;
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"Prefab '{prefabData.Name}' not found.");
+            }
+        }
+    }
+
+    GameObject FindPrefabByName(string prefabName)
+    {
+        if (prefabName == "Player")
+        {
+            prefabName = "Player 1";
+        }
+        else if (prefabName == "Spawn")
+        {
+            prefabName = "Spawn 1";
+        }
+
+        foreach (GameObject prefab in prefabs)
+        {
+            if (prefab.name == prefabName)
+            {
+                return prefab;
             }
         }
 
-        // Load the level
-        for (int z = 0; z < lines.Length; z++)
-        {
-            for (int x = 0; x < lines[z].Length; x++)
-            {
-                char tileType = lines[z][x];
-                Vector3 position = new Vector3(x * prefabSizes[0].x, 0, z * prefabSizes[0].z);
-                GameObject toInstantiate = null;
-                Quaternion rotation = Quaternion.identity;
-
-                switch (tileType)
-                {
-                    case '#':
-                        toInstantiate = prefabs[0]; // Wall Prefab
-                        position = new Vector3(x * prefabSizes[0].x, 0, z * prefabSizes[0].x);
-                        break;
-                    case '.':
-                        toInstantiate = prefabs[1]; // Ground Prefab
-                        position = new Vector3(x * prefabSizes[1].x, 0, z * prefabSizes[1].z);
-                        Vector3 changedPosition = position;
-                        changedPosition.y = 0.3f;
-                        spawnedGrounds.Add(changedPosition);
-                        break;
-                    case 'D':
-                        toInstantiate = prefabs[2]; // Door Prefab
-                        position = new Vector3(x * prefabSizes[0].x, 0, z * prefabSizes[0].z);
-                        stats.NumberOfSpawns++;
-                        break;
-                    case 'S':
-                        toInstantiate = prefabs[3]; // Spikes Prefab
-                        position = new Vector3(x * prefabSizes[3].x, 0, z * prefabSizes[3].z);
-                        break;
-                    case 'B':
-                        toInstantiate = prefabs[4]; // Barrel Prefab
-                        position = new Vector3(x * prefabSizes[4].x, 0, z * prefabSizes[4].z);
-                        break;
-                    case 'E':
-                        toInstantiate = prefabs[5]; // Estante Prefab
-                        position = new Vector3(x * prefabSizes[5].z, 0, z * prefabSizes[5].z);
-                        break;
-                    case 'P':
-                        toInstantiate = prefabs[6]; // Parede com estante Prefab
-                        position = new Vector3(x * prefabSizes[6].x, 0, z * prefabSizes[6].z);
-                        break;
-                    case 'R':
-                        toInstantiate = prefabs[7]; // Rumble
-                        position = new Vector3(x * prefabSizes[7].x, 0, z * prefabSizes[7].z);
-                        break;
-                    case 'K':
-                        toInstantiate = prefabs[8]; // Character
-                        position = new Vector3(x * prefabSizes[8].x, 0, z * prefabSizes[8].z);
-                        break;
-                    case 'C':
-                        toInstantiate = prefabs[9]; // Character
-                        position = new Vector3(x * prefabSizes[8].x, 0, z * prefabSizes[8].z);
-                        break;
-                }
-
-                // Determine rotation based on specified rules
-                if (toInstantiate) // Adjust rotation for walls
-                {
-                    if (z == 0) // First line
-                    {
-                        rotation = Quaternion.Euler(0, 0, 0);
-                    }
-                    else if (z == lines.Length - 1) // Last line
-                    {
-                        rotation = Quaternion.Euler(0, 180, 0);
-                    }
-                    else if (x == 0) // First element of each line (after the first and before the last)
-                    {
-                        rotation = Quaternion.Euler(0, 90, 0);
-                    }
-                    else if (x == lines[z].Length - 1) // Last element of each line (after the first and before the last)
-                    {
-                        rotation = Quaternion.Euler(0, -90, 0); // Default rotation or any specific adjustment
-                    }
-                }
-
-                if (toInstantiate != null)
-                {
-                    Instantiate(toInstantiate, position, rotation);
-                }
-            }
-        }
+        return null;
     }
 }

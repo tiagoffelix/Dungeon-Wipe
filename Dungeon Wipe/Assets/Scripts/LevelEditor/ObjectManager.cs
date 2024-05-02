@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; // Add this for the Button component
+using UnityEngine.UI;
 
 public class ObjectManager : MonoBehaviour
 {
@@ -18,6 +18,7 @@ public class ObjectManager : MonoBehaviour
         UpdateButtonAlpha();
     }
 
+    // In ObjectManager.cs
     void Update()
     {
         if (deleting)
@@ -50,7 +51,15 @@ public class ObjectManager : MonoBehaviour
                     // Check for mouse click and delete the object if `deleting` is true
                     if (Input.GetMouseButtonDown(0) && deleting)
                     {
-                        Destroy(hoveredObject);
+                        // Check if the object has "Prefab" tag and "Player" layer
+                        if (hoveredObject.CompareTag("Prefab") && hoveredObject.layer == LayerMask.NameToLayer("Player"))
+                        {
+                            // Reset PlayerPlaced in PrefabManager
+                            PrefabManager.Instance.PlayerPlaced = false;
+                        }
+
+                        // Use PrefabManager to remove the prefab instead of Destroy
+                        PrefabManager.Instance.RemovePrefab(hoveredObject);
                         lastHoveredObject = null; // Reset the last hovered object
                     }
                 }
@@ -75,6 +84,7 @@ public class ObjectManager : MonoBehaviour
             }
         }
     }
+
 
     public void ChangeDeleting()
     {

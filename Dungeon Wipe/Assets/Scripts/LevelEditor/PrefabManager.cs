@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,9 +15,15 @@ public class PrefabManager : MonoBehaviour
 
     [SerializeField] private ObjectManager objectManager;
 
-    private GameObject currentPrefab;
+    [SerializeField] private LevelEditorSO levelEditor;
 
+    private GameObject currentPrefab;
     public GameObject CurrentPrefab { get => currentPrefab; }
+
+    public bool PlayerPlaced { get; set; }
+    private List<GameObject> instantiatedPrefabs = new List<GameObject>();
+
+    [SerializeField] private GameObject warningPlayer;
 
     void Awake()
     {
@@ -31,6 +39,7 @@ public class PrefabManager : MonoBehaviour
 
     void Start()
     {
+        PlayerPlaced = false; // Initialize the player placed flag
         foreach (var prefab in prefabs)
         {
             GameObject btn = Instantiate(buttonPrefab, scrollViewContent);
@@ -38,6 +47,7 @@ public class PrefabManager : MonoBehaviour
             btn.GetComponent<Button>().onClick.AddListener(() => SetCurrentPrefab(prefab));
             btn.GetComponent<Button>().onClick.AddListener(() => objectManager.SetDeletingFalse());
         }
+        LoadPrefabsFromJson();
     }
 
     void SetCurrentPrefab(GameObject prefab)
@@ -57,5 +67,119 @@ public class PrefabManager : MonoBehaviour
         {
             Destroy(currentPrefab);
         }
+    }
+
+    public GameObject InstantiatePrefab(GameObject prefab, Vector3 position, Quaternion rotation)
+    {
+        GameObject newPrefab = Instantiate(prefab, position, rotation);
+        if(prefab.GetComponent<PrefabFollower>() != null) { newPrefab.GetComponent<PrefabFollower>().enabled = false; }   
+        instantiatedPrefabs.Add(newPrefab);
+        return newPrefab;
+    }
+
+    public void SerializePrefabs()
+    {
+        bool playerExists = instantiatedPrefabs.Exists(prefab => prefab.name.Replace("(Clone)", "").Trim() == "Player");
+
+        // If the Player prefab is not found, log a message and skip saving
+        if (!playerExists)
+        {
+            warningPlayer.SetActive(true);
+        }
+
+        List<PrefabData> prefabDataList = new List<PrefabData>();
+        foreach (GameObject prefab in instantiatedPrefabs)
+        {
+            string prefabName = prefab.name.Replace("(Clone)", "").Trim();
+            prefabDataList.Add(new PrefabData
+            {
+                Name = prefabName,
+                Position = prefab.transform.position,
+                Rotation = prefab.transform.rotation
+            });
+        }
+
+        PrefabDataList wrapper = new PrefabDataList();
+        wrapper.prefabData = prefabDataList;
+
+        string json = JsonUtility.ToJson(wrapper);
+        File.WriteAllText(levelEditor.SelectedLevelPath, json);
+        #if UNITY_EDITOR
+                UnityEditor.AssetDatabase.Refresh();
+        #endif
+    }
+
+    private void LoadPrefabsFromJson()
+    {
+        if (!string.IsNullOrEmpty(levelEditor.SelectedLevelPath) && File.Exists(levelEditor.SelectedLevelPath))
+        {
+            string jsonContent = File.ReadAllText(levelEditor.SelectedLevelPath);
+
+            // Deserialize the JSON content into the wrapper class
+            PrefabDataList prefabDataWrapper = JsonUtility.FromJson<PrefabDataList>(jsonContent);
+
+            // Make sure the deserialized wrapper is not null before proceeding
+            if (prefabDataWrapper != null && prefabDataWrapper.prefabData != null)
+            {
+                foreach (PrefabData prefabData in prefabDataWrapper.prefabData)
+                {
+                    GameObject prefab = prefabs.Find(p => p.name == prefabData.Name);
+                    if (prefab != null)
+                    {
+                        InstantiatePrefab(prefab, prefabData.Position, prefabData.Rotation);
+                    }
+                }
+            }
+        }
+    }
+
+    public void RemovePrefab(GameObject prefab)
+    {
+        if (instantiatedPrefabs.Contains(prefab))
+        {
+            instantiatedPrefabs.Remove(prefab);
+            Destroy(prefab);
+        }
+    }
+
+    public void DeleteAllPrefabs()
+    {
+        // Loop through the instantiated prefabs and destroy them
+        foreach (var prefab in instantiatedPrefabs)
+        {
+            Destroy(prefab);
+        }
+
+        // Clear the instantiatedPrefabs list
+        instantiatedPrefabs.Clear();
+
+        // Also clear the currentPrefab reference if it exists
+        if (currentPrefab != null)
+        {
+            Destroy(currentPrefab);
+            currentPrefab = null;
+        }
+
+        // Reset the PlayerPlaced flag
+        PlayerPlaced = false;
+    }
+
+    public void ClosePopup() 
+    {
+        warningPlayer.SetActive(false);
+    }
+
+    [System.Serializable]
+    public class PrefabData
+    {
+        public string Name;
+        public Vector3 Position;
+        public Quaternion Rotation;
+    }
+
+    [System.Serializable]
+    public class PrefabDataList
+    {
+        public List<PrefabData> prefabData;
     }
 }

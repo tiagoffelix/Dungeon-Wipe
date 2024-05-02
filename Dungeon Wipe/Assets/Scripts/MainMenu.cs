@@ -11,42 +11,63 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject levelEditorScrollViewContent; // For levels
     [SerializeField] private GameObject levelButtonPrefab; // Assign a prefab for level buttons
     [SerializeField] private LevelEditorSO levelEditor;
+    private TextAsset[] levelFiles;
 
     private void Start()
     {
+        
+
         if (PlayerPrefsManager.Instance != null)
         {
             PlayerPrefsManager.Instance.LoadScoresIntoScrollView(scrollViewContent);
         }
 
         LoadLevelButtons(levelScrollViewContent);
-        LoadLevelButtons(levelEditorScrollViewContent);
+        LoadEditorButtons(levelEditorScrollViewContent);
+    }
+
+    private void CreateButton(GameObject content, string buttonText, UnityEngine.Events.UnityAction action)
+    {
+        GameObject button = Instantiate(levelButtonPrefab, content.transform);
+
+        var textMeshComp = button.GetComponentInChildren<TextMeshProUGUI>();
+        textMeshComp.text = buttonText;
+
+        var buttonComp = button.GetComponent<Button>();
+        buttonComp.onClick.AddListener(action);
     }
 
     private void LoadLevelButtons(GameObject content)
     {
-        var levelFiles = Resources.LoadAll<TextAsset>("Levels");
+        string levelsFolderPath = Path.Combine(Application.dataPath, "Resources", "Levels");
 
-        foreach (var file in levelFiles)
+        // Get all .json files in the directory
+        var levelFiles = Directory.GetFiles(levelsFolderPath, "*.json");
+
+        foreach (var filePath in levelFiles)
         {
-            GameObject button = Instantiate(levelButtonPrefab, content.transform);
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            CreateButton(content, fileName, () => SelectLevel(fileName));
+        }
+    }
 
-            var textMeshComp = button.GetComponentInChildren<TextMeshProUGUI>();
-            textMeshComp.text = file.name;
+    private void LoadEditorButtons(GameObject content)
+    {
 
-            var buttonComp = button.GetComponent<Button>();
+        string levelsFolderPath = Path.Combine(Application.dataPath, "Resources", "Levels");
 
-            buttonComp.onClick.AddListener(() => SelectLevel(file.name));
+        // Get all .json files in the directory
+        var levelFiles = Directory.GetFiles(levelsFolderPath, "*.json");
+
+        foreach (var filePath in levelFiles)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            CreateButton(content, fileName, () => OpenEditor(fileName));
         }
 
-        GameObject buttonEmpty = Instantiate(levelButtonPrefab, content.transform);
-
-        var textMeshCompEmpty = buttonEmpty.GetComponentInChildren<TextMeshProUGUI>();
-        textMeshCompEmpty.text = "New Level";
-
-        var buttonCompEmpty = buttonEmpty.GetComponent<Button>();
-
-        buttonCompEmpty.onClick.AddListener(() => OpenEditor());
+        // Instantiate button for new level
+        int totalLevels = levelFiles.Length;
+        CreateButton(content, $"New Level", () => OpenEditor($"Level {totalLevels + 1}"));
     }
 
 
@@ -55,17 +76,25 @@ public class MainMenu : MonoBehaviour
         string filePath;
 
         #if UNITY_EDITOR
-                filePath = "Assets/Resources/Levels/" + levelName + ".txt";
+                filePath = "Assets/Resources/Levels/" + levelName + ".json";
         #elif UNITY_STANDALONE_WIN
-                filePath = Path.Combine(Application.dataPath, "Resources", "Levels", levelName + ".txt");
+                        filePath = Path.Combine(Application.dataPath, "Resources", "Levels", levelName + ".json");
         #endif
         levelEditor.SelectedLevelPath = filePath;
 
         SceneManager.LoadScene("Game");
     }
 
-    public void OpenEditor() 
+    public void OpenEditor(string levelName) 
     {
+        string filePath;
+
+        #if UNITY_EDITOR
+                filePath = "Assets/Resources/Levels/" + levelName + ".json";
+        #elif UNITY_STANDALONE_WIN
+                        filePath = Path.Combine(Application.dataPath, "Resources", "Levels", levelName + ".json");
+        #endif
+        levelEditor.SelectedLevelPath = filePath;
         SceneManager.LoadScene("Editor");
     }
 
