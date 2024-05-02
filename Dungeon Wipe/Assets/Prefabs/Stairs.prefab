@@ -134,6 +134,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5527244377598074670}
     m_Modifications:
+    - target: {fileID: 1121550060205270638, guid: 17edf207eff54af44a867dca8df85caf, type: 3}
+      propertyPath: m_Size.y
+      value: 0.91244674
+      objectReference: {fileID: 0}
+    - target: {fileID: 1121550060205270638, guid: 17edf207eff54af44a867dca8df85caf, type: 3}
+      propertyPath: m_Center.y
+      value: 0.54377663
+      objectReference: {fileID: 0}
     - target: {fileID: 3761524534090057585, guid: 17edf207eff54af44a867dca8df85caf, type: 3}
       propertyPath: m_Name
       value: Floor

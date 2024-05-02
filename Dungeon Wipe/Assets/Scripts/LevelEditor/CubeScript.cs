@@ -110,12 +110,14 @@ public class CubeScript : MonoBehaviour
     // Method to check if there is an object on top of the cube
     private bool HasObjectOnTop()
     {
-        Collider[] colliders = Physics.OverlapBox(transform.position, transform.localScale / 2, Quaternion.identity);
+        // Set the size to a fraction of the cube size to check only at the center
+        Vector3 boxSize = new Vector3(transform.localScale.x * 0.25f, transform.localScale.y * 0.25f, transform.localScale.z * 0.25f);
+        Collider[] colliders = Physics.OverlapBox(transform.position, boxSize / 2, Quaternion.identity);
         foreach (Collider collider in colliders)
         {
             if (collider.gameObject != gameObject && collider.gameObject != PrefabManager.Instance.CurrentPrefab)
             {
-                return true;
+                return true; // Another object is present in the center
             }
         }
         return false;
