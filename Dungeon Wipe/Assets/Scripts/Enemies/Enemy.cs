@@ -91,7 +91,9 @@ public class Enemy : MonoBehaviour
                         animator.SetTrigger("Attack");
                         particles.Play();
                         audioSource.PlayOneShot(enemyType.AttackSound);
-                        weapon.GetComponent<EnemyBow>().ShootProjectile(player.transform.position, enemyType.BaseDamage);
+                        Vector3 shootingPosition = player.transform.position;
+                        shootingPosition.y -= 0.5f;
+                        weapon.GetComponent<EnemyBow>().ShootProjectile(shootingPosition, enemyType.BaseDamage);
                     }
                     else if (enemyType.TypeName == "Mage")
                     {

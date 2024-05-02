@@ -127,17 +127,6 @@ public class PlayerMovement : MonoBehaviour
             dangerIcon.enabled = false;
         }
 
-        if (sword.activeSelf && !isBlocking)
-        {
-            crossbowImage.gameObject.SetActive(false);
-            swordImage.gameObject.SetActive(true);
-        }
-        else if (bow.activeSelf && !isBlocking)
-        {
-            swordImage.gameObject.SetActive(false);
-            crossbowImage.gameObject.SetActive(true);
-        }
-
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
         {
             isSpawning = true;
@@ -174,19 +163,6 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.P))
             {
                 playerStats.Health = 100;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha2) && !isAttacking)
-            {
-                bow.SetActive(true);   // Activate the bow
-                sword.SetActive(false); // Deactivate the sword
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha1) && !isAttacking)
-            {
-                audioSource.PlayOneShot(playerStats.DrawSwordSound);
-                sword.SetActive(true);  // Activate the sword
-                bow.SetActive(false);    // Deactivate the bow
             }
 
             bool isGrounded = controller.isGrounded;
@@ -271,6 +247,25 @@ public class PlayerMovement : MonoBehaviour
                     // Reset block counter and attack handling
                     blockCounter = 0;
 
+                    if (Input.GetKeyDown(KeyCode.Alpha2) && !isAttacking && !isBlocking)
+                    {
+                        ActivateWeapon(false);
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.Alpha1) && !isAttacking && !isBlocking)
+                    {
+                        ActivateWeapon(true);
+                    }
+
+                    if (Input.GetAxis("Mouse ScrollWheel") > 0f && !isBlocking && !sword.activeSelf) // Scroll up
+                    {
+                        ActivateWeapon(true); // true for sword
+                    }
+                    else if (Input.GetAxis("Mouse ScrollWheel") < 0f && !isBlocking && !bow.activeSelf) // Scroll down
+                    {
+                        ActivateWeapon(false); // false for bow
+                    }
+
                     if (Input.GetMouseButtonDown(0) && !isBlocking && Time.time >= nextAttackTimer)
                     {
                         if (sword.activeSelf)
@@ -350,6 +345,20 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             canvas.enabled = false;
+        }
+    }
+
+    private void ActivateWeapon(bool activateSword)
+    {
+        sword.SetActive(activateSword);
+        bow.SetActive(!activateSword);
+
+        crossbowImage.gameObject.SetActive(!activateSword);
+        swordImage.gameObject.SetActive(activateSword);
+
+        if (activateSword)
+        {
+            audioSource.PlayOneShot(playerStats.DrawSwordSound);
         }
     }
 

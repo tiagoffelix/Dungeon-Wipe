@@ -12,7 +12,9 @@ public class GridGenerator : MonoBehaviour
 
     [SerializeField] private Slider sliderX;
     [SerializeField] private Slider sliderY;
+    [SerializeField] private Slider sliderGrids;
 
+    [SerializeField] private TextMeshProUGUI textGrids;
     [SerializeField] private TextMeshProUGUI textX;
     [SerializeField] private TextMeshProUGUI textY;
 
@@ -21,30 +23,29 @@ public class GridGenerator : MonoBehaviour
         gridCubes = new List<GameObject>();
         sliderX.value = levelEditor.GridSizeX;
         sliderY.value = levelEditor.GridSizeY;
+        sliderGrids.value = levelEditor.Grids;
+        textGrids.text = "Grid Size: " + sliderGrids.value;
         textX.text = "Grid Width: " + sliderX.value;
         textY.text = "Grid Height: " + sliderY.value;
         sliderX.onValueChanged.AddListener(UpdateGridSizeX);
         sliderY.onValueChanged.AddListener(UpdateGridSizeY);
+        sliderGrids.onValueChanged.AddListener(UpdateGridSize);
         GenerateGrid();
     }
 
     private void GenerateGrid()
     {
-        Vector3 startPos = new Vector3(-levelEditor.GridSizeX / 2 + 0.5f, 0, -levelEditor.GridSizeY / 2 + 0.5f);
-
-        for (int x = 0; x < levelEditor.GridSizeX; x++)
+        for (int grid = 0; grid < levelEditor.Grids; grid++)
         {
-            for (int y = 0; y < levelEditor.GridSizeY; y++)
-            {
-                Vector3 spawnPos = new Vector3(startPos.x + x, 0, startPos.z + y);
-                GameObject cube = Instantiate(cubePrefab, spawnPos, Quaternion.identity);
-                gridCubes.Add(cube);
+            Vector3 startPos = new Vector3(-levelEditor.GridSizeX / 2 + 0.5f, grid, -levelEditor.GridSizeY / 2 + 0.5f);
 
-                CubeScript cubeScript = cube.GetComponent<CubeScript>();
-                if (cubeScript != null)
+            for (int x = 0; x < levelEditor.GridSizeX; x++)
+            {
+                for (int y = 0; y < levelEditor.GridSizeY; y++)
                 {
-                    cubeScript.GridX = x;
-                    cubeScript.GridY = y;
+                    Vector3 spawnPos = new Vector3(startPos.x + x, grid, startPos.z + y);
+                    GameObject cube = Instantiate(cubePrefab, spawnPos, Quaternion.identity);
+                    gridCubes.Add(cube);
                 }
             }
         }
@@ -75,10 +76,17 @@ public class GridGenerator : MonoBehaviour
         textY.text = "Grid Height: " + levelEditor.GridSizeY;
     }
 
+    public void UpdateGridSize(float value)
+    {
+        levelEditor.Grids = (int)value;
+        textGrids.text = "Grid Size: " + levelEditor.Grids;
+    }
+
     private void OnDestroy()
     {
         // Remove listener to avoid memory leaks
         sliderX.onValueChanged.RemoveListener(UpdateGridSizeX);
         sliderY.onValueChanged.RemoveListener(UpdateGridSizeY);
+        sliderGrids.onValueChanged.RemoveListener(UpdateGridSize);
     }
 }

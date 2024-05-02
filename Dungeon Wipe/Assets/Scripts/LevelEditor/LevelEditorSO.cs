@@ -8,6 +8,8 @@ public class LevelEditorSO : ScriptableObject
 
     [SerializeField] private int gridSizeY;
 
+    [SerializeField] private int grids;
+
     [SerializeField] private string selectedLevelPath;
 
     public string SelectedLevelPath
@@ -26,5 +28,10 @@ public class LevelEditorSO : ScriptableObject
     {
         get { return this.gridSizeY; }
         set { this.gridSizeY = value; }
+    }
+    public int Grids
+    {
+        get { return this.grids; }
+        set { this.grids = value; }
     }
 }

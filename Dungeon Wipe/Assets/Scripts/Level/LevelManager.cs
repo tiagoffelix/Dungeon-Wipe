@@ -114,6 +114,10 @@ public class LevelManager : MonoBehaviour
         {
             prefabName = "Spawn 1";
         }
+        else if (prefabName == "Spikes")
+        {
+            prefabName = "Spikes 1";
+        }
 
         foreach (GameObject prefab in prefabs)
         {

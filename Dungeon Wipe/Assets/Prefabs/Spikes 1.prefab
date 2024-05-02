@@ -17,8 +17,8 @@ GameObject:
   - component: {fileID: 6196269604542042084}
   - component: {fileID: 8311711204577769708}
   m_Layer: 8
-  m_Name: Spikes
-  m_TagString: Prefab
+  m_Name: Spikes 1
+  m_TagString: Spikes
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,8 +101,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.8232234, y: 2.0007637, z: 3.8533642}
-  m_Center: {x: 0.027765155, y: 0.014683574, z: -0.0649544}
+  m_Size: {x: 3.8232234, y: 0.85888493, z: 3.8533642}
+  m_Center: {x: 0.027765155, y: -1.3415563, z: -0.0649544}
 --- !u!65 &7488603058674788519
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -114,8 +114,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4, y: 2, z: 3.8989637}
-  m_Center: {x: 0, y: 0, z: 0.050518155}
+  m_Size: {x: 4, y: 2, z: 0.13273168}
+  m_Center: {x: 0, y: 0, z: 1.9336342}
 --- !u!65 &986451856916808915
 BoxCollider:
   m_ObjectHideFlags: 0

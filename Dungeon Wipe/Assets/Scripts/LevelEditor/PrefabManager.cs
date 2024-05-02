@@ -52,6 +52,13 @@ public class PrefabManager : MonoBehaviour
         LoadPrefabsFromJson();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R) && currentPrefab != null)
+        {
+            currentPrefab.transform.Rotate(0, 90, 0); // Rotate 90 degrees around the Y axis
+        }
+    }
     void SetCurrentPrefab(GameObject prefab)
     {
         if (currentPrefab != null)

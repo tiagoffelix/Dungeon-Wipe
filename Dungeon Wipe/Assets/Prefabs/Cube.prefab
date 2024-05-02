@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6879686281186314655}
   - component: {fileID: 820750696589722623}
   - component: {fileID: -2530176917762719774}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Cube
   m_Icon: {fileID: 0}
@@ -116,6 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverColorFree: {r: 0, g: 0.8396226, b: 0.09548644, a: 0}
   hoverColorOccupied: {r: 1, g: 0.018452026, b: 0, a: 0}
+  defaultColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &1953740807016457274
 GameObject:
   m_ObjectHideFlags: 0
