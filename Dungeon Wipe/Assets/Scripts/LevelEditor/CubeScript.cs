@@ -30,10 +30,8 @@ public class CubeScript : MonoBehaviour
 
     void Update()
     {
-        if (!hasObjectOnTop) 
-        {
-            hasObjectOnTop = HasObjectOnTop();
-        }
+
+        hasObjectOnTop = HasObjectOnTop();
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -111,7 +109,7 @@ public class CubeScript : MonoBehaviour
     private bool HasObjectOnTop()
     {
         // Set the size to a fraction of the cube size to check only at the center
-        Vector3 boxSize = new Vector3(transform.localScale.x * 0.25f, transform.localScale.y * 0.25f, transform.localScale.z * 0.25f);
+        Vector3 boxSize = new Vector3(transform.localScale.x * 0.15f, transform.localScale.y * 0.15f, transform.localScale.z * 0.15f);
         Collider[] colliders = Physics.OverlapBox(transform.position, boxSize / 2, Quaternion.identity);
         foreach (Collider collider in colliders)
         {
