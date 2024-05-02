@@ -4,10 +4,14 @@ public class CameraSwitch : MonoBehaviour
 {
     [SerializeField] private Camera firstPersonCamera;
     [SerializeField] private Camera thirdPersonCamera;
-
     [SerializeField] private Camera deathCamera;
 
     [SerializeField] private Stats playerStats;
+
+    // New serialized fields for player body and head
+    [SerializeField] private GameObject playerBody;
+    [SerializeField] private GameObject playerScarf;
+    [SerializeField] private GameObject playerHead;
 
     private Animator animator;
 
@@ -34,6 +38,11 @@ public class CameraSwitch : MonoBehaviour
                 firstPersonCamera.gameObject.SetActive(false);
                 thirdPersonCamera.gameObject.SetActive(false);
                 deathCamera.gameObject.SetActive(true);
+
+                // Ensure player body and head are visible upon death
+                playerBody.SetActive(true);
+                playerScarf.SetActive(true);
+                playerHead.SetActive(true);
             }
             else
             {
@@ -55,11 +64,21 @@ public class CameraSwitch : MonoBehaviour
     {
         firstPersonCamera.gameObject.SetActive(false);
         thirdPersonCamera.gameObject.SetActive(true);
+
+        // Ensure player body and head are visible in third-person
+        playerBody.SetActive(true);
+        playerScarf.SetActive(true);
+        playerHead.SetActive(true);
     }
 
     private void ToggleToFirstPerson()
     {
         firstPersonCamera.gameObject.SetActive(true);
         thirdPersonCamera.gameObject.SetActive(false);
+
+        // Hide player body and head in first-person
+        playerBody.SetActive(false);
+        playerScarf.SetActive(false);
+        playerHead.SetActive(false);
     }
 }

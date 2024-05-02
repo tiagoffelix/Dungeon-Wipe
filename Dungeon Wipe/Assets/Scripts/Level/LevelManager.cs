@@ -22,11 +22,8 @@ public class LevelManager : MonoBehaviour
         stats.Score = 0;
         stats.NumberOfSpawns = 0;
         LoadLevel(levelEditor.SelectedLevelPath);
-        print(spawnedGrounds.Count);
         StartCoroutine(SpawnPotions());
         StartCoroutine(SpawnCoins());
-        print(stats.NumberOfSpawns);
-        print(spawnedGrounds.Count);
     }
 
     IEnumerator SpawnPotions()

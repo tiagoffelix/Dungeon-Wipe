@@ -7398,6 +7398,9 @@ MonoBehaviour:
   thirdPersonCamera: {fileID: 793187169266113719}
   deathCamera: {fileID: 8937683974111841480}
   playerStats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
+  playerBody: {fileID: 7789215735679705746}
+  playerScarf: {fileID: 1448411118540351786}
+  playerHead: {fileID: 5487344247691553164}
 --- !u!54 &-6512842871868767739
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11891,7 +11894,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9056558613075134867}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.54, z: 0.81}
+  m_LocalPosition: {x: 0, y: 1.432, z: 0.425}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []

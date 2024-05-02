@@ -111,6 +111,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (transform.position.y < -2)
+        {
+            if (!deathFall)
+            {
+                DeathFall();
+            }
+        }
         if (Danger)
         {
             dangerIcon.enabled = true;
@@ -240,20 +247,44 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 crosshair.enabled = true;
-                // Attack Logic
-                if (Time.time >= nextAttackTimer && Input.GetMouseButtonDown(0) && !isBlocking)
+                if (Input.GetMouseButton(1) && !isAttacking)
                 {
-                    if (sword.activeSelf)
-                    {
-                        Attack();
-                    }
-                    else if (bow.activeSelf)
-                    {
-                        shotArrow = false;
-                        animator.SetTrigger("Shoot");
-                    }
+                    isBlocking = true;
+                    blockingTime += Time.deltaTime;
+                    animator.SetBool("Block", true);
+                    swordImage.gameObject.SetActive(false);
+                    crossbowImage.gameObject.SetActive(false);
+                    shieldImage.gameObject.SetActive(true);
 
-                    nextAttackTimer = Time.time + playerStats.AttackCooldown; // Cooldown time for next attack
+                    // Reset attack-related states
+                    isAttacking = false;
+                    crosshair.enabled = false;
+                }
+                else
+                {
+                    blockingTime = 0f;
+                    isBlocking = false;
+                    animator.SetBool("Block", false);
+                    shieldImage.gameObject.SetActive(false);
+                    crosshair.enabled = true;
+
+                    // Reset block counter and attack handling
+                    blockCounter = 0;
+
+                    if (Input.GetMouseButtonDown(0) && !isBlocking && Time.time >= nextAttackTimer)
+                    {
+                        if (sword.activeSelf)
+                        {
+                            Attack();
+                        }
+                        else if (bow.activeSelf)
+                        {
+                            shotArrow = false;
+                            animator.SetTrigger("Shoot");
+                        }
+
+                        nextAttackTimer = Time.time + playerStats.AttackCooldown;
+                    }
                 }
             }
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Shoot") &&
@@ -278,23 +309,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 isAttacking = false;
             }
-
-            if (Input.GetMouseButton(1) && !isAttacking)
-            {
-                animator.SetBool("Block", true);
-                swordImage.gameObject.SetActive(false);
-                crossbowImage.gameObject.SetActive(false);
-                shieldImage.gameObject.SetActive(true);
-            }
-            else
-            {
-                shieldImage.gameObject.SetActive(false);
-                blockingTime = 0f;
-                animator.SetBool("Block", false);
-                isBlocking = false;
-                blockCounter = 0;
-            }
-
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Block") &&
                 animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.2f)
             {
@@ -351,12 +365,13 @@ public class PlayerMovement : MonoBehaviour
             if (isBlocking)
             {
                 audioSource.PlayOneShot(playerStats.ShieldedSound);
-                animator.SetBool("Block", false);
                 blockCounter++;
-                if (blockCounter == 4)
+                if (blockCounter >= 3)
                 {
                     audioSource.PlayOneShot(playerStats.ShieldBreakSound);
+                    animator.SetBool("Block", false);
                     isBlocking = false;
+                    blockCounter = 0;
                     animator.SetTrigger("Hit");
                     playerStats.TakeDamage(damage);
                 }
