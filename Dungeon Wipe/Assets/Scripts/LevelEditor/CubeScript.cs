@@ -16,11 +16,13 @@ public class CubeScript : MonoBehaviour
     [SerializeField] private Color defaultColor;
 
     private Collider cubeCollider;
+    private bool hasObjectOnTop;
 
     // Public property to track if a player prefab has been placed
 
     void Start()
     {
+        hasObjectOnTop = false;
         renderer = GetComponent<Renderer>();
         renderer.material.color = defaultColor; // Initialize with the default color
         cubeCollider = GetComponent<Collider>(); // Cache the collider
@@ -28,6 +30,11 @@ public class CubeScript : MonoBehaviour
 
     void Update()
     {
+        if (!hasObjectOnTop) 
+        {
+            hasObjectOnTop = HasObjectOnTop();
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -35,7 +42,7 @@ public class CubeScript : MonoBehaviour
         if (cubeCollider.Raycast(ray, out hit, Mathf.Infinity))
         {
             // Mouse Enter logic
-            if (transform.childCount == 5)
+            if (hasObjectOnTop)
             {
                 renderer.material.color = hoverColorOccupied;
             }
@@ -44,7 +51,7 @@ public class CubeScript : MonoBehaviour
                 renderer.material.color = hoverColorFree;
             }
 
-            if (PrefabManager.Instance.CurrentPrefab != null && transform.childCount == 4)
+            if (PrefabManager.Instance.CurrentPrefab != null && !hasObjectOnTop)
             {
                 PrefabManager.Instance.CurrentPrefab.transform.position = transform.position;
                 PrefabManager.Instance.CurrentPrefab.GetComponent<PrefabFollower>().enabled = false;
@@ -82,12 +89,14 @@ public class CubeScript : MonoBehaviour
                 return; // Exit if a player prefab is already placed
             }
 
-            // Check if a prefab is already instantiated on this cube
-            if (PrefabManager.Instance.CurrentPrefab != null && transform.childCount == 4)
+            // Check if there is no object on top
+            if (!hasObjectOnTop)
             {
                 GameObject newPrefab = PrefabManager.Instance.InstantiatePrefab(
                     PrefabManager.Instance.CurrentPrefab, transform.position,
                     PrefabManager.Instance.CurrentPrefab.transform.rotation);
+
+                hasObjectOnTop = true;
 
                 if (newPrefab.layer == LayerMask.NameToLayer("Player"))
                 {
@@ -96,5 +105,19 @@ public class CubeScript : MonoBehaviour
                 }
             }
         }
+    }
+
+    // Method to check if there is an object on top of the cube
+    private bool HasObjectOnTop()
+    {
+        Collider[] colliders = Physics.OverlapBox(transform.position, transform.localScale / 2, Quaternion.identity);
+        foreach (Collider collider in colliders)
+        {
+            if (collider.gameObject != gameObject && collider.gameObject != PrefabManager.Instance.CurrentPrefab)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
