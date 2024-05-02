@@ -11,11 +11,14 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject levelEditorScrollViewContent; // For levels
     [SerializeField] private GameObject levelButtonPrefab; // Assign a prefab for level buttons
     [SerializeField] private LevelEditorSO levelEditor;
-    private TextAsset[] levelFiles;
+    private string levelsFolderPath;
+    private string[] levelFiles;
 
     private void Start()
     {
-        
+        levelsFolderPath = Path.Combine(Application.dataPath, "Resources", "Levels");
+
+        levelFiles = Directory.GetFiles(levelsFolderPath, "*.json");
 
         if (PlayerPrefsManager.Instance != null)
         {
@@ -39,61 +42,34 @@ public class MainMenu : MonoBehaviour
 
     private void LoadLevelButtons(GameObject content)
     {
-        string levelsFolderPath = Path.Combine(Application.dataPath, "Resources", "Levels");
-
-        // Get all .json files in the directory
-        var levelFiles = Directory.GetFiles(levelsFolderPath, "*.json");
-
         foreach (var filePath in levelFiles)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
-            CreateButton(content, fileName, () => SelectLevel(fileName));
+            CreateButton(content, fileName, () => SelectLevel(filePath));
         }
     }
 
     private void LoadEditorButtons(GameObject content)
     {
-
-        string levelsFolderPath = Path.Combine(Application.dataPath, "Resources", "Levels");
-
-        // Get all .json files in the directory
-        var levelFiles = Directory.GetFiles(levelsFolderPath, "*.json");
-
         foreach (var filePath in levelFiles)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
-            CreateButton(content, fileName, () => OpenEditor(fileName));
+            CreateButton(content, fileName, () => OpenEditor(filePath));
         }
 
         // Instantiate button for new level
         int totalLevels = levelFiles.Length;
-        CreateButton(content, $"New Level", () => OpenEditor($"Level {totalLevels + 1}"));
+        CreateButton(content, $"New Level", () => OpenEditor(Path.Combine(levelsFolderPath, $"Level {totalLevels + 1}.json")));
     }
 
-
-    private void SelectLevel(string levelName)
+    private void SelectLevel(string filePath)
     {
-        string filePath;
-
-        #if UNITY_EDITOR
-                filePath = "Assets/Resources/Levels/" + levelName + ".json";
-        #elif UNITY_STANDALONE_WIN
-                        filePath = Path.Combine(Application.dataPath, "Resources", "Levels", levelName + ".json");
-        #endif
         levelEditor.SelectedLevelPath = filePath;
-
         SceneManager.LoadScene("Game");
     }
 
-    public void OpenEditor(string levelName) 
+    public void OpenEditor(string filePath)
     {
-        string filePath;
-
-        #if UNITY_EDITOR
-                filePath = "Assets/Resources/Levels/" + levelName + ".json";
-        #elif UNITY_STANDALONE_WIN
-                        filePath = Path.Combine(Application.dataPath, "Resources", "Levels", levelName + ".json");
-        #endif
         levelEditor.SelectedLevelPath = filePath;
         SceneManager.LoadScene("Editor");
     }

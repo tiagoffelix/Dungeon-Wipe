@@ -1056,18 +1056,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1500855565}
-        m_TargetAssemblyTypeName: EditorMenu, Assembly-CSharp
-        m_MethodName: MainMenu
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &351866360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3115,7 +3103,6 @@ MonoBehaviour:
   - {fileID: 3761524534090057585, guid: c1d93ce7d2627a642a78a708ea12ccb2, type: 3}
   - {fileID: 3761524534090057585, guid: 6a99f7f442a557d43bbd6de4b7425eb1, type: 3}
   - {fileID: 3761524534090057585, guid: 0ee61b6b047e1804e9148188c3ea3353, type: 3}
-  - {fileID: 562971549361090306, guid: 691a5adc9ac336b4ca8888e083edb4b0, type: 3}
   - {fileID: 5187979466910090644, guid: 1a9148b0d96b8464fa76779b45744050, type: 3}
   scrollViewContent: {fileID: 659249179}
   buttonPrefab: {fileID: 1642697461323588458, guid: 00e23a17d0d8565409c88c84b92d0a28, type: 3}

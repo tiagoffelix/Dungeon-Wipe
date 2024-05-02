@@ -25,6 +25,8 @@ public class PrefabManager : MonoBehaviour
 
     [SerializeField] private GameObject warningPlayer;
 
+    [SerializeField] private GameObject savedButton;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -79,12 +81,13 @@ public class PrefabManager : MonoBehaviour
 
     public void SerializePrefabs()
     {
-        bool playerExists = instantiatedPrefabs.Exists(prefab => prefab.name.Replace("(Clone)", "").Trim() == "Player");
+        PlayerPlaced = instantiatedPrefabs.Exists(prefab => prefab.name.Replace("(Clone)", "").Trim() == "Player");
 
         // If the Player prefab is not found, log a message and skip saving
-        if (!playerExists)
+        if (!PlayerPlaced)
         {
             warningPlayer.SetActive(true);
+            return;
         }
 
         List<PrefabData> prefabDataList = new List<PrefabData>();
@@ -107,6 +110,7 @@ public class PrefabManager : MonoBehaviour
         #if UNITY_EDITOR
                 UnityEditor.AssetDatabase.Refresh();
         #endif
+        savedButton.SetActive(true);
     }
 
     private void LoadPrefabsFromJson()
@@ -127,6 +131,10 @@ public class PrefabManager : MonoBehaviour
                     if (prefab != null)
                     {
                         InstantiatePrefab(prefab, prefabData.Position, prefabData.Rotation);
+                        if (prefabData.Name == "Player")
+                        {
+                            PlayerPlaced = true;
+                        }
                     }
                 }
             }
@@ -164,9 +172,13 @@ public class PrefabManager : MonoBehaviour
         PlayerPlaced = false;
     }
 
-    public void ClosePopup() 
+    public void CloseWarningPlayer() 
     {
         warningPlayer.SetActive(false);
+    }
+    public void CloseSavedWarning()
+    {
+        savedButton.SetActive(false);
     }
 
     [System.Serializable]
