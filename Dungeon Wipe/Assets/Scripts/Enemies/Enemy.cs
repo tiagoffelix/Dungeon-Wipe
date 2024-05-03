@@ -61,6 +61,11 @@ public class Enemy : MonoBehaviour
             characterController.Move(moveVelocity * Time.deltaTime);
         }
 
+        if (transform.position.y < -2)
+        {
+            DeathFall();
+        }
+
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Death")
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("DeathFall")
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")) 
