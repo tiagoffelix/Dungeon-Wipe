@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RaycastManager : MonoBehaviour
 {
-    public LayerMask cubeLayerMask; // Set this to the layer used by the cubes in Unity's Inspector
+    [SerializeField] private LayerMask cubeLayerMask;
     private CubeScript currentCube;
 
     void Update()
@@ -11,10 +10,8 @@ public class RaycastManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        LayerMask combinedMask = cubeLayerMask & LayerMask.NameToLayer("DeactivatedLayer");
-
         // Perform the raycast using the cube layer mask
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, combinedMask))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, cubeLayerMask))
         {
             CubeScript cubeScript = hit.collider.GetComponent<CubeScript>();
 

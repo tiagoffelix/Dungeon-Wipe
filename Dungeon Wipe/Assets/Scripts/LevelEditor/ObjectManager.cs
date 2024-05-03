@@ -12,13 +12,18 @@ public class ObjectManager : MonoBehaviour
     // Dictionary to store original colors
     private Dictionary<GameObject, Color> originalColors = new Dictionary<GameObject, Color>();
 
+    // Variable to store the index of DeactivatedLayer
+    private int deactivatedLayer;
+
     private void Start()
     {
         deleting = false;
         UpdateButtonAlpha();
+
+        // Initialize the deactivatedLayer index
+        deactivatedLayer = LayerMask.NameToLayer("DeactivatedLayer");
     }
 
-    // In ObjectManager.cs
     void Update()
     {
         if (deleting)
@@ -27,7 +32,8 @@ public class ObjectManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            int combinedMask = Physics.DefaultRaycastLayers & ~(1 << LayerMask.NameToLayer("DeactivatedLayer"));
+            // Create a mask that excludes the DeactivatedLayer
+            int combinedMask = Physics.DefaultRaycastLayers & ~(1 << deactivatedLayer);
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, combinedMask))
             {
@@ -86,7 +92,6 @@ public class ObjectManager : MonoBehaviour
             }
         }
     }
-
 
     public void ChangeDeleting()
     {

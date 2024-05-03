@@ -254,18 +254,7 @@ public class PrefabManager : MonoBehaviour
                     GameObject prefab = prefabs.Find(p => p.name == prefabData.Name);
                     if (prefab != null)
                     {
-                        GameObject instantiatedPrefab = InstantiatePrefab(prefab, prefabData.Position, prefabData.Rotation);
-
-                        int gridLayer = Mathf.RoundToInt(instantiatedPrefab.transform.position.y);
-                        if (levelEditor.GridsDeactivated.Contains(gridLayer))
-                        {
-                            SetLayerRecursively(instantiatedPrefab, LayerMask.NameToLayer("DeactivatedLayer"));
-                        }
-                        else
-                        {
- 
-                            SetLayerRecursively(instantiatedPrefab, LayerMask.NameToLayer(instantiatedPrefab.tag));
-                        }
+                        InstantiatePrefab(prefab, prefabData.Position, prefabData.Rotation);
 
                         if (prefabData.Name == "Player")
                         {
