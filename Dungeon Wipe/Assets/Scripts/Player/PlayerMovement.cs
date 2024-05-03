@@ -107,6 +107,7 @@ public class PlayerMovement : MonoBehaviour
         arrowDamage = playerStats.ArrowDamage;
         blockCounter = 0;
         deathFall = false;
+        ActivateWeapon(true);
     }
 
     void Update()
