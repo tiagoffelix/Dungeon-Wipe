@@ -57,7 +57,7 @@ public class ObjectManager : MonoBehaviour
                     }
 
                     // Check for mouse click and delete the object if `deleting` is true
-                    if (Input.GetMouseButtonDown(0) && deleting)
+                    if (Input.GetMouseButton(0) && deleting)
                     {
                         // Check if the object has "Prefab" tag and "Player" layer
                         if (hoveredObject.CompareTag("Prefab") && hoveredObject.layer == LayerMask.NameToLayer("Player"))

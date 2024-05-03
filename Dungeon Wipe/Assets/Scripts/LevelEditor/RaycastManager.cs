@@ -20,7 +20,7 @@ public class RaycastManager : MonoBehaviour
                 // Handle the cube that is currently hovered over
                 HandleHoveredCube(cubeScript);
 
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButton(0))
                 {
                     cubeScript.HandleMouseDown();
                 }

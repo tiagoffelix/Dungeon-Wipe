@@ -110,7 +110,7 @@ public class GridGenerator : MonoBehaviour
     public void UpdateGridSize(float value)
     {
         levelEditor.Grids = (int)value;
-        textGrids.text = "Grid Size: " + levelEditor.Grids;
+        textGrids.text = "Number of Grids: " + levelEditor.Grids;
     }
 
     private void OnDestroy()
