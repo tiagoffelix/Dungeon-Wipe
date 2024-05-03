@@ -27,6 +27,13 @@ public class PrefabManager : MonoBehaviour
 
     [SerializeField] private GameObject savedButton;
 
+    [SerializeField] private Transform ScrollViewGridsContent;
+    [SerializeField] private GameObject buttonGridPrefab;
+
+    private Dictionary<GameObject, string> originalTags = new Dictionary<GameObject, string>();
+
+    [SerializeField] private GridGenerator gridGenerator;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,6 +44,7 @@ public class PrefabManager : MonoBehaviour
         {
             Instance = this;
         }
+        levelEditor.GridsDeactivated.Clear();
     }
 
     void Start()
@@ -59,6 +67,115 @@ public class PrefabManager : MonoBehaviour
             currentPrefab.transform.Rotate(0, 90, 0); // Rotate 90 degrees around the Y axis
         }
     }
+
+    public void GenerateGridButtons()
+    {
+        foreach (Transform child in ScrollViewGridsContent)
+        {
+            Destroy(child.gameObject); // Clear existing buttons
+        }
+
+        for (int i = 0; i < levelEditor.Grids; i++)
+        {
+            GameObject btn = Instantiate(buttonGridPrefab, ScrollViewGridsContent);
+            string gridName = $"Grid {i}";
+            btn.GetComponentInChildren<TextMeshProUGUI>().text = gridName;
+
+            // Check if this grid is active or inactive
+            bool isActive = !levelEditor.GridsDeactivated.Contains(i);
+
+            // Assuming an Image is used as an indicator on the button
+            Image indicatorImage = btn.transform.Find("Indicator").GetComponent<Image>();
+            indicatorImage.gameObject.SetActive(isActive); // Show indicator if inactive
+
+            btn.GetComponent<Button>().onClick.AddListener(() => ToggleGridActivation(gridName, indicatorImage));
+        }
+    }
+
+    private void ToggleGridActivation(string gridName, Image indicatorImage)
+    {
+        if (int.TryParse(gridName.Replace("Grid ", ""), out int gridNumber))
+        {
+            // Check if grid is currently deactivated
+            bool isDeactivated = levelEditor.GridsDeactivated.Contains(gridNumber);
+
+            if (isDeactivated)
+            {
+                // Activate the grid
+                levelEditor.GridsDeactivated.Remove(gridNumber);
+                SetObjectsToOriginalTags(gridNumber);
+                indicatorImage.gameObject.SetActive(true); // Hide indicator when active
+            }
+            else
+            {
+                // Deactivate the grid
+                levelEditor.GridsDeactivated.Add(gridNumber);
+                SetObjectsToDeactivatedLayer(gridNumber);
+                indicatorImage.gameObject.SetActive(false); // Show indicator when inactive
+            }
+        }
+    }
+
+    private void SetObjectsToDeactivatedLayer(int gridLayer)
+    {
+        foreach (GameObject cube in gridGenerator.GridCubes)
+        {
+            if (Mathf.RoundToInt(cube.transform.position.y) == gridLayer)
+            {
+                SetLayerRecursively(cube, LayerMask.NameToLayer("DeactivatedLayer"));
+            }
+        }
+
+        foreach (GameObject prefab in instantiatedPrefabs)
+        {
+            if (Mathf.RoundToInt(prefab.transform.position.y) == gridLayer)
+            {
+                SetLayerRecursively(prefab, LayerMask.NameToLayer("DeactivatedLayer"));
+            }
+        }
+    }
+
+    // Helper method to set the layer recursively for an object and its children
+    private void SetLayerRecursively(GameObject obj, int layer)
+    {
+        if (obj == null) return;
+
+        // Check if the layer is valid
+        if (layer < 0 || layer > 31)
+        {
+            Debug.LogWarning($"Invalid layer index {layer}. Object '{obj.name}' could not be assigned to this layer.");
+            return;
+        }
+
+        obj.layer = layer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, layer);
+        }
+    }
+
+
+    private void SetObjectsToOriginalTags(int gridLayer)
+    {
+        foreach (GameObject cube in gridGenerator.GridCubes)
+        {
+            if (Mathf.RoundToInt(cube.transform.position.y) == gridLayer)
+            {
+                SetLayerRecursively(cube, LayerMask.NameToLayer(cube.tag));
+            }
+        }
+
+        foreach (GameObject prefab in instantiatedPrefabs)
+        {
+            if (Mathf.RoundToInt(prefab.transform.position.y) == gridLayer)
+            {
+                SetLayerRecursively(prefab, LayerMask.NameToLayer(prefab.tag));
+            }
+        }
+    }
+
+
     void SetCurrentPrefab(GameObject prefab)
     {
         if (currentPrefab != null)
@@ -137,7 +254,19 @@ public class PrefabManager : MonoBehaviour
                     GameObject prefab = prefabs.Find(p => p.name == prefabData.Name);
                     if (prefab != null)
                     {
-                        InstantiatePrefab(prefab, prefabData.Position, prefabData.Rotation);
+                        GameObject instantiatedPrefab = InstantiatePrefab(prefab, prefabData.Position, prefabData.Rotation);
+
+                        int gridLayer = Mathf.RoundToInt(instantiatedPrefab.transform.position.y);
+                        if (levelEditor.GridsDeactivated.Contains(gridLayer))
+                        {
+                            SetLayerRecursively(instantiatedPrefab, LayerMask.NameToLayer("DeactivatedLayer"));
+                        }
+                        else
+                        {
+ 
+                            SetLayerRecursively(instantiatedPrefab, LayerMask.NameToLayer(instantiatedPrefab.tag));
+                        }
+
                         if (prefabData.Name == "Player")
                         {
                             PlayerPlaced = true;

@@ -10,6 +10,8 @@ public class GridGenerator : MonoBehaviour
 
     private List<GameObject> gridCubes;
 
+    public List<GameObject> GridCubes { get => gridCubes; set => gridCubes = value; }
+
     [SerializeField] private Slider sliderX;
     [SerializeField] private Slider sliderY;
     [SerializeField] private Slider sliderGrids;
@@ -45,10 +47,39 @@ public class GridGenerator : MonoBehaviour
                 {
                     Vector3 spawnPos = new Vector3(startPos.x + x, grid, startPos.z + y);
                     GameObject cube = Instantiate(cubePrefab, spawnPos, Quaternion.identity);
+                    if (IsGridDisabled(grid))
+                    {
+                        SetLayerRecursively(cube, LayerMask.NameToLayer("DeactivatedLayer"));
+                    }
                     gridCubes.Add(cube);
                 }
             }
         }
+    }
+
+    private void SetLayerRecursively(GameObject obj, int layer)
+    {
+        if (obj == null) return;
+
+        // Check if the layer is valid
+        if (layer < 0 || layer > 31)
+        {
+            Debug.LogWarning($"Invalid layer index {layer}. Object '{obj.name}' could not be assigned to this layer.");
+            return;
+        }
+
+        obj.layer = layer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, layer);
+        }
+    }
+
+    private bool IsGridDisabled(int gridNumber)
+    {
+        List<int> disabledGrids = levelEditor.GridsDeactivated;
+        return disabledGrids != null && disabledGrids.Contains(gridNumber);
     }
 
     public void RegenerateGrid()

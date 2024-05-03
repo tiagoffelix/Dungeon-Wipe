@@ -27,7 +27,9 @@ public class ObjectManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
+            int combinedMask = Physics.DefaultRaycastLayers & ~(1 << LayerMask.NameToLayer("DeactivatedLayer"));
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, combinedMask))
             {
                 GameObject hoveredObject = hit.collider.gameObject;
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewLevelEditor", menuName = "LevelEditor")]
@@ -9,6 +10,8 @@ public class LevelEditorSO : ScriptableObject
     [SerializeField] private int gridSizeY;
 
     [SerializeField] private int grids;
+
+    [SerializeField] private List<int> gridsDeactivated;
 
     [SerializeField] private string selectedLevelPath;
 
@@ -33,5 +36,10 @@ public class LevelEditorSO : ScriptableObject
     {
         get { return this.grids; }
         set { this.grids = value; }
+    }
+    public List<int> GridsDeactivated
+    {
+        get { return this.gridsDeactivated; }
+        set { this.gridsDeactivated = value; }
     }
 }

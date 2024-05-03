@@ -11,8 +11,10 @@ public class RaycastManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
+        LayerMask combinedMask = cubeLayerMask & LayerMask.NameToLayer("DeactivatedLayer");
+
         // Perform the raycast using the cube layer mask
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, cubeLayerMask))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, combinedMask))
         {
             CubeScript cubeScript = hit.collider.GetComponent<CubeScript>();
 
