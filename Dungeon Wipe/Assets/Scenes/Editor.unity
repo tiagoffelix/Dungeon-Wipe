@@ -5602,10 +5602,7 @@ MonoBehaviour:
   m_text: 'Hold Right Mouse Button and move mouse to rotate the camera
 
     Move
-    the camera with WASD, Shift and Control
-
-
-'
+    the camera with WASD, and zoom on the scroll wheel'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c4cdf80f5bb6834c871d4d35aaaa2c6, type: 2}
   m_sharedMaterial: {fileID: 712177168751008820, guid: 6c4cdf80f5bb6834c871d4d35aaaa2c6, type: 2}
