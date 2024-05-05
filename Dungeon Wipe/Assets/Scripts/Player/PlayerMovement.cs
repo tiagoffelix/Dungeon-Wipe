@@ -113,7 +113,6 @@ public class PlayerMovement : MonoBehaviour
         arrowDamage = playerStats.ArrowDamage;
         blockCounter = 0;
         deathFall = false;
-        ActivateWeapon(true);
     }
 
     /// <summary>
@@ -130,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
         }
         dangerIcon.enabled = Danger;
 
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn") && isSpawning)
         {
             isSpawning = true;
         }

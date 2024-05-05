@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fefa07e16b6aa64f98c367e44f3aed4, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  health: 100
+  health: 0
   damage: 50
   arrowDamage: 30
-  attackCooldown: 0.4
-  dead: 0
+  attackCooldown: 0.8
+  dead: 1
   sensitivity: 200
   walkingSound: {fileID: 8300000, guid: 772d96859e5c4b040bb533e720e19e33, type: 3}
   swordSound: {fileID: 8300000, guid: 23ebd5e38845dff4e8642593fff7f275, type: 3}
@@ -29,7 +29,6 @@ MonoBehaviour:
   shieldBreakSound: {fileID: 8300000, guid: e2b720ff214577b49a633b50d124b451, type: 3}
   coinsSound: {fileID: 8300000, guid: 15ffbb7ea318b9041b10f06cb35473e7, type: 3}
   drawSwordSound: {fileID: 8300000, guid: 9569a04da8e55764da63df6704b06d50, type: 3}
-  score: 0
+  score: 5150
   numberOfSpawns: 1
   levelMinutes: 2
-  selectedLevelPath: Assets/Resources/Levels/Level 1.txt

@@ -1206,6 +1206,7 @@ GameObject:
   - component: {fileID: 3632984782257967282}
   - component: {fileID: 3137245737969157951}
   - component: {fileID: -6455946664739239343}
+  - component: {fileID: 1874413396425999082}
   m_Layer: 3
   m_Name: Archer
   m_TagString: Enemy
@@ -1406,6 +1407,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!195 &1874413396425999082
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3940224208166622048}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &3948463781052992022
 GameObject:
   m_ObjectHideFlags: 0

@@ -1493,6 +1493,7 @@ GameObject:
   - component: {fileID: -8416578083087585313}
   - component: {fileID: 2653015765955603352}
   - component: {fileID: 5634891233550809585}
+  - component: {fileID: 6820263654010710590}
   m_Layer: 3
   m_Name: Mage
   m_TagString: Enemy
@@ -1693,6 +1694,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!195 &6820263654010710590
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6029684447867280373}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6037077388243878531
 GameObject:
   m_ObjectHideFlags: 0
