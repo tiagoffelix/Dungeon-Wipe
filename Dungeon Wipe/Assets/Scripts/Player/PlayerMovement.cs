@@ -3,75 +3,78 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the player's movement, attacks, and various interactions.
+/// </summary>
 public class PlayerMovement : MonoBehaviour
 {
-    private Animator animator;
-    private CharacterController controller;
+    private Animator animator; // Reference to the Animator component
+    private CharacterController controller; // Reference to the CharacterController component
 
-    [SerializeField] private Transform attackCenter;
-    [SerializeField] float attackRange;
-    [SerializeField] LayerMask enemyLayers;
+    [SerializeField] private Transform attackCenter; // Center position for attack range
+    [SerializeField] float attackRange; // Range of the attack
+    [SerializeField] LayerMask enemyLayers; // Layer mask for enemies
 
-    [SerializeField] private Stats playerStats;
+    [SerializeField] private Stats playerStats; // Reference to the player's stats
 
     public Stats PlayerStats { get { return playerStats; } }
 
-    private float nextAttackTimer;
+    private float nextAttackTimer; // Timer for attack cooldown
+    private float jumpHeight; // Height of the player's jump
+    private float gravityValue; // Gravity applied to the player
+    private Vector3 playerVelocity; // Velocity of the player
 
-    private float jumpHeight;
-    private float gravityValue;
-    private Vector3 playerVelocity;
+    [SerializeField] private GameObject sword; // Sword GameObject for melee attacks
+    [SerializeField] private GameObject bow; // Bow GameObject for ranged attacks
 
-    [SerializeField] private GameObject sword;
-    [SerializeField] private GameObject bow;
+    [SerializeField] private Image healthBarImage; // UI Image for the health bar
+    [SerializeField] private Canvas canvas; // UI Canvas for game HUD
 
-    [SerializeField] private Image healthBarImage;
-    [SerializeField] private Canvas canvas;
+    [SerializeField] private Image dangerIcon; // UI Image for danger indication
 
-    [SerializeField] private Image dangerIcon;
+    private bool isBlocking; // Flag to indicate if the player is blocking
+    private float blockingTime; // Timer for the duration of blocking
+    private bool isAttacking; // Flag to indicate if the player is attacking
+    private bool shotArrow; // Flag to indicate if an arrow has been shot
 
-    private bool isBlocking;
-    private float blockingTime;
-    private bool isAttacking;
-    private bool shotArrow;
+    private Coroutine currentSpeedBoostCoroutine; // Coroutine for speed boost
+    private Coroutine currentDamageBoostCoroutine; // Coroutine for damage boost
 
-    private Coroutine currentSpeedBoostCoroutine;
-    private Coroutine currentDamageBoostCoroutine;
+    private float speed; // Movement speed of the player
+    private float originalSpeed; // Original movement speed for resetting
+    private float damage; // Damage amount for melee attacks
+    private float arrowDamage; // Damage amount for ranged attacks
 
-    private float speed;
-    private float originalSpeed;
-    private float damage;
-    private float arrowDamage;
+    [SerializeField] private Image crosshair; // UI Image for crosshair
+    [SerializeField] private Image swordImage; // UI Image for sword indicator
+    [SerializeField] private Image crossbowImage; // UI Image for crossbow indicator
+    [SerializeField] private Image shieldImage; // UI Image for shield indicator
+    [SerializeField] private Image strengthBoostImage; // UI Image for strength boost indicator
+    [SerializeField] private Image speedBoostImage; // UI Image for speed boost indicator
 
-    [SerializeField] private Image crosshair;
-    [SerializeField] private Image swordImage;
-    [SerializeField] private Image crossbowImage;
-    [SerializeField] private Image shieldImage;
-    [SerializeField] private Image strengthBoostImage;
-    [SerializeField] private Image speedBoostImage;
+    [SerializeField] private TextMeshProUGUI boostText; // UI Text for displaying boost effects
 
-    [SerializeField] private TextMeshProUGUI boostText;
+    [SerializeField] private ParticleSystem particles; // Particle system for effects
+    private bool isSpawning; // Flag to indicate if the player is spawning
 
-    [SerializeField] private ParticleSystem particles;
-    private bool isSpawning;
-
-    private int blockCounter;
-
-    private bool deathFall;
+    private int blockCounter; // Counter for blocking attempts
+    private bool deathFall; // Flag to indicate if the player has fallen to death
 
     public bool Danger { get; set; }
 
     public static PlayerMovement Instance { get; private set; }
 
-    private AudioSource audioSource;
+    private AudioSource audioSource; // Reference to the AudioSource component
 
-    [SerializeField] private AudioSource walkingSound;
+    [SerializeField] private AudioSource walkingSound; // AudioSource for walking sound effects
 
-    [SerializeField] private Image crackImage1;
-    [SerializeField] private Image crackImage2;
-    [SerializeField] private Image crackImage3;
+    [SerializeField] private Image crackImage1; // UI Image for the first crack indicator
+    [SerializeField] private Image crackImage2; // UI Image for the second crack indicator
+    [SerializeField] private Image crackImage3; // UI Image for the third crack indicator
 
-
+    /// <summary>
+    /// Initializes the singleton instance and other components.
+    /// </summary>
     void Awake()
     {
         if (Instance == null)
@@ -87,6 +90,9 @@ public class PlayerMovement : MonoBehaviour
         walkingSound.clip = playerStats.WalkingSound;
     }
 
+    /// <summary>
+    /// Initializes player stats, movement properties, and equipment.
+    /// </summary>
     private void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -110,6 +116,9 @@ public class PlayerMovement : MonoBehaviour
         ActivateWeapon(true);
     }
 
+    /// <summary>
+    /// Handles player movement, attacks, and interactions based on input and conditions.
+    /// </summary>
     void Update()
     {
         if (transform.position.y < -2)
@@ -119,14 +128,7 @@ public class PlayerMovement : MonoBehaviour
                 DeathFall();
             }
         }
-        if (Danger)
-        {
-            dangerIcon.enabled = true;
-        }
-        else
-        {
-            dangerIcon.enabled = false;
-        }
+        dangerIcon.enabled = Danger;
 
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
         {
@@ -139,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerStats.Health <= 0)
         {
-            if(!deathFall) 
+            if (!deathFall)
             {
                 Death();
             }
@@ -311,7 +313,7 @@ public class PlayerMovement : MonoBehaviour
                 blockingTime += Time.deltaTime;
                 isBlocking = true;
             }
-            else 
+            else
             {
                 isBlocking = false;
                 blockCounter = 0;
@@ -349,6 +351,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Switches between sword and bow weapons.
+    /// </summary>
+    /// <param name="activateSword">If true, the sword will be activated, otherwise the bow will be activated.</param>
     private void ActivateWeapon(bool activateSword)
     {
         sword.SetActive(activateSword);
@@ -363,6 +369,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Reduces the player's health based on the given damage, handling blocking and other effects.
+    /// </summary>
+    /// <param name="damage">Amount of damage to take.</param>
     public void TakeDamage(float damage)
     {
         if (blockingTime > 0 && blockingTime < 0.3)
@@ -395,11 +405,18 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Reduces the player's health by a specific amount, regardless of blocking.
+    /// </summary>
+    /// <param name="damage">Amount of damage to take.</param>
     public void TakeDamageMage(int damage)
     {
         playerStats.TakeDamage(damage);
     }
 
+    /// <summary>
+    /// Handles the player's death.
+    /// </summary>
     private void Death()
     {
         animator.SetBool("Dead", true);
@@ -407,6 +424,9 @@ public class PlayerMovement : MonoBehaviour
         canvas.enabled = false;
     }
 
+    /// <summary>
+    /// Handles the player's death due to falling, or falling into spikes.
+    /// </summary>
     private void DeathFall()
     {
         audioSource.PlayOneShot(playerStats.HitSound);
@@ -418,6 +438,9 @@ public class PlayerMovement : MonoBehaviour
         canvas.enabled = false;
     }
 
+    /// <summary>
+    /// Handles the player's melee attack.
+    /// </summary>
     private void Attack()
     {
         animator.SetTrigger("Attack");
@@ -439,14 +462,21 @@ public class PlayerMovement : MonoBehaviour
                 break;
             }
         }
-        if(hitEnemies.Length == 0) { audioSource.PlayOneShot(playerStats.SlashSound); }
+        if (hitEnemies.Length == 0) { audioSource.PlayOneShot(playerStats.SlashSound); }
     }
 
+    /// <summary>
+    /// Draws the attack range gizmo in the editor for visualization.
+    /// </summary>
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(attackCenter.position, attackRange);
     }
 
+    /// <summary>
+    /// Handles collisions with various in-game objects, such as spikes, potions, and coins.
+    /// </summary>
+    /// <param name="other">The collider of the object collided with.</param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Spikes"))
@@ -508,6 +538,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Applies a damage boost to the player for a specified duration.
+    /// </summary>
+    /// <param name="multiplier">The multiplier to apply to the player's damage.</param>
+    /// <param name="duration">The duration of the boost in seconds.</param>
+    /// <returns>An IEnumerator for coroutine management.</returns>
     IEnumerator ApplyDamageBoost(float multiplier, float duration)
     {
         if (currentDamageBoostCoroutine != null)
@@ -531,6 +567,12 @@ public class PlayerMovement : MonoBehaviour
         yield return currentDamageBoostCoroutine;
     }
 
+    /// <summary>
+    /// Applies a speed boost to the player for a specified duration.
+    /// </summary>
+    /// <param name="multiplier">The multiplier to apply to the player's speed.</param>
+    /// <param name="duration">The duration of the boost in seconds.</param>
+    /// <returns>An IEnumerator for coroutine management.</returns>
     IEnumerator ApplySpeedBoost(float multiplier, float duration)
     {
         if (currentSpeedBoostCoroutine != null)
@@ -554,19 +596,31 @@ public class PlayerMovement : MonoBehaviour
         yield return currentSpeedBoostCoroutine;
     }
 
+    /// <summary>
+    /// Coroutine to handle applying a speed boost.
+    /// </summary>
+    /// <param name="multiplier">The multiplier to apply to the player's speed.</param>
+    /// <param name="duration">The duration of the boost in seconds.</param>
+    /// <returns>An IEnumerator for coroutine management.</returns>
     IEnumerator ApplySpeedBoostCoroutine(float multiplier, float duration)
     {
         boostText.gameObject.SetActive(true);
         boostText.text = "Speed " + multiplier + "x";
         speedBoostImage.gameObject.SetActive(true);
         originalSpeed = speed;
-        speed *= multiplier;  // Increase speed
-        yield return new WaitForSeconds(duration);  // Wait for the duration of the boost
+        speed *= multiplier; // Increase speed
+        yield return new WaitForSeconds(duration); // Wait for the duration of the boost
         boostText.gameObject.SetActive(false);
-        speed = originalSpeed;  // Reset speed to normal after duration ends
+        speed = originalSpeed; // Reset speed to normal after duration ends
         speedBoostImage.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Coroutine to handle applying a damage boost.
+    /// </summary>
+    /// <param name="multiplier">The multiplier to apply to the player's damage.</param>
+    /// <param name="duration">The duration of the boost in seconds.</param>
+    /// <returns>An IEnumerator for coroutine management.</returns>
     IEnumerator ApplyDamageBoostCoroutine(float multiplier, float duration)
     {
         boostText.gameObject.SetActive(true);
@@ -574,7 +628,7 @@ public class PlayerMovement : MonoBehaviour
         strengthBoostImage.gameObject.SetActive(true);
         damage *= multiplier; // Increase damage
         arrowDamage *= multiplier; // Increase damage
-        yield return new WaitForSeconds(duration);  // Wait for the duration of the boost
+        yield return new WaitForSeconds(duration); // Wait for the duration of the boost
         boostText.gameObject.SetActive(false);
         strengthBoostImage.gameObject.SetActive(false);
         damage = playerStats.Damage;

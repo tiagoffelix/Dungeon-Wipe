@@ -5,35 +5,40 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages the instantiation, manipulation, and serialization of prefabs in the scene.
+/// </summary>
 public class PrefabManager : MonoBehaviour
 {
-    public static PrefabManager Instance { get; private set; } // Singleton pattern
+    /// <summary>
+    /// Singleton instance of the PrefabManager.
+    /// </summary>
+    public static PrefabManager Instance { get; private set; }
 
-    [SerializeField] private List<GameObject> prefabs;
-    [SerializeField] private Transform scrollViewContent;
-    [SerializeField] private GameObject buttonPrefab;
+    [SerializeField] private List<GameObject> prefabs; // List of prefabs available for instantiation
+    [SerializeField] private Transform scrollViewContent; // Content transform of the scroll view for prefab buttons
+    [SerializeField] private GameObject buttonPrefab; // Prefab for the buttons in the scroll view
 
-    [SerializeField] private ObjectManager objectManager;
+    [SerializeField] private ObjectManager objectManager; // Reference to the ObjectManager script
+    [SerializeField] private LevelEditorSO levelEditor; // Reference to the LevelEditorSO scriptable object
 
-    [SerializeField] private LevelEditorSO levelEditor;
+    private GameObject currentPrefab; // Currently selected prefab
+    public GameObject CurrentPrefab { get => currentPrefab; } // Property to access the current prefab
 
-    private GameObject currentPrefab;
-    public GameObject CurrentPrefab { get => currentPrefab; }
+    public bool PlayerPlaced { get; set; } // Flag indicating if the player prefab is placed
+    private List<GameObject> instantiatedPrefabs = new List<GameObject>(); // List of instantiated prefabs
 
-    public bool PlayerPlaced { get; set; }
-    private List<GameObject> instantiatedPrefabs = new List<GameObject>();
+    [SerializeField] private GameObject warningPlayer; // Warning message for missing player prefab
+    [SerializeField] private GameObject savedButton; // Button to indicate saving completion
 
-    [SerializeField] private GameObject warningPlayer;
+    [SerializeField] private Transform ScrollViewGridsContent; // Content transform of the scroll view for grid buttons
+    [SerializeField] private GameObject buttonGridPrefab; // Prefab for the grid buttons
 
-    [SerializeField] private GameObject savedButton;
+    [SerializeField] private GridGenerator gridGenerator; // Reference to the GridGenerator script
 
-    [SerializeField] private Transform ScrollViewGridsContent;
-    [SerializeField] private GameObject buttonGridPrefab;
-
-    private Dictionary<GameObject, string> originalTags = new Dictionary<GameObject, string>();
-
-    [SerializeField] private GridGenerator gridGenerator;
-
+    /// <summary>
+    /// Initializes the singleton instance and clears deactivated grids list on awake.
+    /// </summary>
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -47,6 +52,9 @@ public class PrefabManager : MonoBehaviour
         levelEditor.GridsDeactivated.Clear();
     }
 
+    /// <summary>
+    /// Populates the prefab selection UI and loads prefabs from JSON on start.
+    /// </summary>
     void Start()
     {
         PlayerPlaced = false; // Initialize the player placed flag
@@ -60,6 +68,9 @@ public class PrefabManager : MonoBehaviour
         LoadPrefabsFromJson();
     }
 
+    /// <summary>
+    /// Rotates the current prefab when 'R' key is pressed.
+    /// </summary>
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R) && currentPrefab != null)
@@ -68,6 +79,9 @@ public class PrefabManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Generates grid buttons in the UI for toggling grid activation.
+    /// </summary>
     public void GenerateGridButtons()
     {
         foreach (Transform child in ScrollViewGridsContent)
@@ -92,6 +106,11 @@ public class PrefabManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Toggles the activation state of a grid.
+    /// </summary>
+    /// <param name="gridName">Name of the grid.</param>
+    /// <param name="indicatorImage">Indicator image to be toggled.</param>
     private void ToggleGridActivation(string gridName, Image indicatorImage)
     {
         if (int.TryParse(gridName.Replace("Grid ", ""), out int gridNumber))
@@ -116,6 +135,9 @@ public class PrefabManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets objects in the specified grid layer to a deactivated layer.
+    /// </summary>
     private void SetObjectsToDeactivatedLayer(int gridLayer)
     {
         foreach (GameObject cube in gridGenerator.GridCubes)
@@ -155,7 +177,9 @@ public class PrefabManager : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Sets objects in the specified grid layer back to their original tags.
+    /// </summary>
     private void SetObjectsToOriginalTags(int gridLayer)
     {
         foreach (GameObject cube in gridGenerator.GridCubes)
@@ -175,7 +199,10 @@ public class PrefabManager : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Sets the current prefab to the specified prefab.
+    /// </summary>
+    /// <param name="prefab">Prefab to set as current.</param>
     void SetCurrentPrefab(GameObject prefab)
     {
         if (currentPrefab != null)
@@ -187,6 +214,9 @@ public class PrefabManager : MonoBehaviour
         currentPrefab.AddComponent<PrefabFollower>();
     }
 
+    /// <summary>
+    /// Destroys the current prefab.
+    /// </summary>
     public void DestroyCurrentPrefab()
     {
         if (currentPrefab != null)
@@ -195,14 +225,24 @@ public class PrefabManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Instantiates a prefab at the specified position and rotation.
+    /// </summary>
+    /// <param name="prefab">Prefab to instantiate.</param>
+    /// <param name="position">Position to instantiate at.</param>
+    /// <param name="rotation">Rotation to instantiate with.</param>
+    /// <returns>The instantiated prefab GameObject.</returns>
     public GameObject InstantiatePrefab(GameObject prefab, Vector3 position, Quaternion rotation)
     {
         GameObject newPrefab = Instantiate(prefab, position, rotation);
-        if(prefab.GetComponent<PrefabFollower>() != null) { newPrefab.GetComponent<PrefabFollower>().enabled = false; }   
+        if (prefab.GetComponent<PrefabFollower>() != null) { newPrefab.GetComponent<PrefabFollower>().enabled = false; }
         instantiatedPrefabs.Add(newPrefab);
         return newPrefab;
     }
 
+    /// <summary>
+    /// Serializes the instantiated prefabs to JSON.
+    /// </summary>
     public void SerializePrefabs()
     {
         PlayerPlaced = instantiatedPrefabs.Exists(prefab => prefab.name.Replace("(Clone)", "").Trim() == "Player");
@@ -231,12 +271,15 @@ public class PrefabManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(wrapper);
         File.WriteAllText(levelEditor.SelectedLevelPath, json);
-        #if UNITY_EDITOR
-                UnityEditor.AssetDatabase.Refresh();
-        #endif
+#if UNITY_EDITOR
+        UnityEditor.AssetDatabase.Refresh();
+#endif
         savedButton.SetActive(true);
     }
 
+    /// <summary>
+    /// Loads prefabs from JSON file.
+    /// </summary>
     private void LoadPrefabsFromJson()
     {
         if (!string.IsNullOrEmpty(levelEditor.SelectedLevelPath) && File.Exists(levelEditor.SelectedLevelPath))
@@ -266,6 +309,10 @@ public class PrefabManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Removes the specified prefab from the instantiated prefabs list and destroys it.
+    /// </summary>
+    /// <param name="prefab">Prefab to remove.</param>
     public void RemovePrefab(GameObject prefab)
     {
         if (instantiatedPrefabs.Contains(prefab))
@@ -275,6 +322,9 @@ public class PrefabManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Deletes all instantiated prefabs and resets related flags and references.
+    /// </summary>
     public void DeleteAllPrefabs()
     {
         // Loop through the instantiated prefabs and destroy them
@@ -297,26 +347,39 @@ public class PrefabManager : MonoBehaviour
         PlayerPlaced = false;
     }
 
-    public void CloseWarningPlayer() 
+    /// <summary>
+    /// Closes the warning message for missing player prefab.
+    /// </summary>
+    public void CloseWarningPlayer()
     {
         warningPlayer.SetActive(false);
     }
+
+    /// <summary>
+    /// Closes the saved warning message.
+    /// </summary>
     public void CloseSavedWarning()
     {
         savedButton.SetActive(false);
     }
 
+    /// <summary>
+    /// Data structure for storing prefab data.
+    /// </summary>
     [System.Serializable]
     public class PrefabData
     {
-        public string Name;
-        public Vector3 Position;
-        public Quaternion Rotation;
+        public string Name; // Name of the prefab
+        public Vector3 Position; // Position of the prefab
+        public Quaternion Rotation; // Rotation of the prefab
     }
 
+    /// <summary>
+    /// Data structure for storing a list of prefab data.
+    /// </summary>
     [System.Serializable]
     public class PrefabDataList
     {
-        public List<PrefabData> prefabData;
+        public List<PrefabData> prefabData; // List of prefab data
     }
 }

@@ -3,20 +3,27 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+/// <summary>
+/// Manages the spawning of game objects in a level.
+/// </summary>
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] prefabs;
+    [SerializeField] private GameObject[] prefabs; // Array of prefabs used in the level.
 
-    [SerializeField] private Stats stats;
-    [SerializeField] private LevelEditorSO levelEditor;
+    [SerializeField] private Stats stats; // Reference to the Stats scriptable object.
+    [SerializeField] private LevelEditorSO levelEditor; // Reference to the LevelEditorSO scriptable object.
 
-    [SerializeField] private GameObject[] potionPrefabs;
-    [SerializeField] private SpawnCollectibles potionSpawnSettings;
-    [SerializeField] private GameObject[] coinPrefabs;
-    [SerializeField] private SpawnCollectibles coinSpawnSettings;
+    [SerializeField] private GameObject[] potionPrefabs; // Array of potion prefabs.
+    [SerializeField] private SpawnCollectibles potionSpawnSettings; // Settings for spawning potions.
+    [SerializeField] private GameObject[] coinPrefabs; // Array of coin prefabs.
+    [SerializeField] private SpawnCollectibles coinSpawnSettings; // Settings for spawning coins.
 
-    private List<Vector3> spawnedGrounds = new List<Vector3>();
+    // Store ground objects instead of positions
+    private List<GameObject> spawnedGrounds = new List<GameObject>(); // List of spawned ground objects.
 
+    /// <summary>
+    /// Initializes the level with default values and spawns collectibles.
+    /// </summary>
     void Start()
     {
         stats.Score = 0;
@@ -26,6 +33,9 @@ public class LevelManager : MonoBehaviour
         StartCoroutine(SpawnCoins());
     }
 
+    /// <summary>
+    /// Coroutine to spawn potions at regular intervals.
+    /// </summary>
     IEnumerator SpawnPotions()
     {
         while (true)
@@ -36,14 +46,24 @@ public class LevelManager : MonoBehaviour
             if (spawnedGrounds.Count > 0)
             {
                 int randomIndex = Random.Range(0, spawnedGrounds.Count);
-                Vector3 spawnPosition = spawnedGrounds[randomIndex];
-                spawnPosition.y += 0.4f;
+                GameObject groundObject = spawnedGrounds[randomIndex];
+                FloorScript floorScript = groundObject.GetComponent<FloorScript>();
+                if (!floorScript.HasCollectible && floorScript.PlayerInRange)
+                {
+                    Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
 
-                Instantiate(potionPrefabs[Random.Range(0, potionPrefabs.Length)], spawnPosition, Quaternion.identity);
+                    GameObject potion = Instantiate(potionPrefabs[Random.Range(0, potionPrefabs.Length)], spawnPosition, Quaternion.identity);
+                    potion.transform.SetParent(groundObject.transform); // Set as child of the ground
+
+                    floorScript.HasCollectible = true;
+                }
             }
         }
     }
 
+    /// <summary>
+    /// Coroutine to spawn coins at regular intervals.
+    /// </summary>
     IEnumerator SpawnCoins()
     {
         while (true)
@@ -54,14 +74,25 @@ public class LevelManager : MonoBehaviour
             if (spawnedGrounds.Count > 0)
             {
                 int randomIndex = Random.Range(0, spawnedGrounds.Count);
-                Vector3 spawnPosition = spawnedGrounds[randomIndex];
-                spawnPosition.y += 0.4f; 
+                GameObject groundObject = spawnedGrounds[randomIndex];
+                FloorScript floorScript = groundObject.GetComponent<FloorScript>();
+                if (!floorScript.HasCollectible && floorScript.PlayerInRange)
+                {
+                    Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
 
-                Instantiate(coinPrefabs[Random.Range(0, coinPrefabs.Length)], spawnPosition, Quaternion.identity);
+                    GameObject coin = Instantiate(coinPrefabs[Random.Range(0, coinPrefabs.Length)], spawnPosition, Quaternion.identity);
+                    coin.transform.SetParent(groundObject.transform); // Set as child of the ground
+
+                    floorScript.HasCollectible = true;
+                }
             }
         }
     }
 
+    /// <summary>
+    /// Loads a level from a JSON file.
+    /// </summary>
+    /// <param name="path">The path to the JSON file.</param>
     void LoadLevel(string path)
     {
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
@@ -85,16 +116,16 @@ public class LevelManager : MonoBehaviour
 
             if (toInstantiate != null)
             {
-                Instantiate(toInstantiate, prefabData.Position, prefabData.Rotation);
+                GameObject instance = Instantiate(toInstantiate, prefabData.Position, prefabData.Rotation);
 
-                // If it's a ground tile, add its position to spawnedGrounds
+                // If it's a ground tile, add the GameObject to spawnedGrounds
                 if (prefabData.Name == "Floor")
                 {
-                    spawnedGrounds.Add(prefabData.Position);
+                    spawnedGrounds.Add(instance);
                 }
                 if (prefabData.Name == "Spawn")
                 {
-                    stats.NumberOfSpawns ++;
+                    stats.NumberOfSpawns++;
                 }
             }
             else
@@ -104,6 +135,11 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Finds a prefab by its name.
+    /// </summary>
+    /// <param name="prefabName">The name of the prefab to find.</param>
+    /// <returns>The prefab GameObject if found, otherwise null.</returns>
     GameObject FindPrefabByName(string prefabName)
     {
         if (prefabName == "Player")
@@ -117,6 +153,10 @@ public class LevelManager : MonoBehaviour
         else if (prefabName == "Spikes")
         {
             prefabName = "Spikes 1";
+        }
+        else if (prefabName == "Floor")
+        {
+            prefabName = "Floor 1";
         }
 
         foreach (GameObject prefab in prefabs)

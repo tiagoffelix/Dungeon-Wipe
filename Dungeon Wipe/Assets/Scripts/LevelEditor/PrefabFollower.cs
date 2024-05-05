@@ -2,15 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Moves a prefab to follow the mouse cursor on the screen.
+/// </summary>
 public class PrefabFollower : MonoBehaviour
 {
-    private float distanceFromCamera = 10f;  // Distance from the camera to the prefab
+    /// <summary>
+    /// The distance from the camera to the prefab.
+    /// </summary>
+    private float distanceFromCamera = 10f;
 
+    /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
     void Update()
     {
-        Vector3 mousePosition = Input.mousePosition; // Get the mouse position in screen coordinates
-        mousePosition.z = distanceFromCamera; // Set how far from the camera the object should be placed
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition); // Convert to world position
-        transform.position = worldPosition; // Move the prefab to this position
+        // Get the mouse position in screen coordinates
+        Vector3 mousePosition = Input.mousePosition;
+
+        // Set the z-coordinate of the mouse position to the desired distance from the camera
+        mousePosition.z = distanceFromCamera;
+
+        // Convert the screen position to world position
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+        // Move the prefab to the calculated world position
+        transform.position = worldPosition;
     }
 }

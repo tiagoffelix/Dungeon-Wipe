@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Represents an enemy in the game, handling its behaviors like movement, attacking, and death.
+/// </summary>
 public class Enemy : MonoBehaviour
 {
     private CharacterController characterController;
@@ -7,7 +10,14 @@ public class Enemy : MonoBehaviour
 
     private bool isAttacking;
 
+    /// <summary>
+    /// The center of the attack range for the enemy.
+    /// </summary>
     [SerializeField] private Transform attackCenter;
+
+    /// <summary>
+    /// The layer mask used to detect enemies.
+    /// </summary>
     [SerializeField] private LayerMask enemyLayers;
 
     private float speed;
@@ -20,13 +30,29 @@ public class Enemy : MonoBehaviour
 
     private float distance;
 
+    /// <summary>
+    /// The weapon used by the enemy.
+    /// </summary>
     [SerializeField] private GameObject weapon;
 
+    /// <summary>
+    /// The player movement script.
+    /// </summary>
     [SerializeField] private PlayerMovement player;
 
+    /// <summary>
+    /// The type of enemy, which defines its attributes.
+    /// </summary>
     [SerializeField] private EnemyType enemyType;
 
+    /// <summary>
+    /// The particle system for visual effects.
+    /// </summary>
     [SerializeField] private ParticleSystem particles;
+
+    /// <summary>
+    /// The particle system used for blood effects.
+    /// </summary>
     [SerializeField] private ParticleSystem bloodParticles;
 
     private float health;
@@ -35,13 +61,16 @@ public class Enemy : MonoBehaviour
 
     private AudioSource audioSource;
 
+    /// <summary>
+    /// Initializes the enemy properties.
+    /// </summary>
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
         player = PlayerMovement.Instance;
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        speed = 0.75f; 
+        speed = 0.75f;
         gravity = 1f;
         cooldownTimer = enemyType.AttackCooldown;
         isAttacking = false;
@@ -51,11 +80,14 @@ public class Enemy : MonoBehaviour
         points = enemyType.Points;
     }
 
+    /// <summary>
+    /// Updates the enemy behavior every frame.
+    /// </summary>
     private void Update()
     {
         isGrounded = characterController.isGrounded;
 
-        if(!isGrounded) 
+        if (!isGrounded)
         {
             moveVelocity.y -= gravity * Time.deltaTime;
             characterController.Move(moveVelocity * Time.deltaTime);
@@ -68,7 +100,7 @@ public class Enemy : MonoBehaviour
 
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Death")
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("DeathFall")
-            && !animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")) 
+            && !animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
         {
             distance = Vector3.Distance(player.transform.position, transform.position);
 
@@ -155,7 +187,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage) 
+    /// <summary>
+    /// Reduces the enemy's health by the specified damage amount.
+    /// </summary>
+    /// <param name="damage">The amount of damage to deal to the enemy.</param>
+    public void TakeDamage(float damage)
     {
         animator.SetTrigger("Hit");
         audioSource.PlayOneShot(enemyType.DeathSound);
@@ -166,6 +202,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles the death of the enemy, triggering animations and disabling components.
+    /// </summary>
     private void Death()
     {
         player.Danger = false;
@@ -182,6 +221,9 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject, 15);
     }
 
+    /// <summary>
+    /// Handles the enemy's death when falling off the map.
+    /// </summary>
     private void DeathFall()
     {
         player.Danger = false;
@@ -198,11 +240,17 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject, 15);
     }
 
-    private void ResetCooldown() 
+    /// <summary>
+    /// Resets the cooldown timer for the enemy's attack.
+    /// </summary>
+    private void ResetCooldown()
     {
         cooldownTimer = enemyType.AttackCooldown;
     }
 
+    /// <summary>
+    /// Performs a melee attack, detecting players within the attack range.
+    /// </summary>
     private void Attack()
     {
         Collider[] hitPlayers = Physics.OverlapSphere(attackCenter.position, enemyType.AttackRange, enemyLayers);
@@ -222,11 +270,18 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Draws the attack range in the Unity editor for debugging.
+    /// </summary>
     private void OnDrawGizmosSelected()
     {
         if (attackCenter) { Gizmos.DrawWireSphere(attackCenter.position, enemyType.AttackRange); }
     }
 
+    /// <summary>
+    /// Handles collision with spike traps, triggering death.
+    /// </summary>
+    /// <param name="other">The collider of the other object that was hit.</param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Spikes"))
@@ -235,4 +290,3 @@ public class Enemy : MonoBehaviour
         }
     }
 }
-

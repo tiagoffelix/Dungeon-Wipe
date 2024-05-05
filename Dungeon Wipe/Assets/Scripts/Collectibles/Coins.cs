@@ -1,20 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles coin behavior in the game world, including vertical movement and despawn timing.
+/// </summary>
 public class Coins : MonoBehaviour
 {
+    /// <summary>
+    /// Reference to the coin's scriptable object.
+    /// </summary>
     [SerializeField] private CoinsSO coinsSO;
     private float timeSinceSpawned;
 
+    /// <summary>
+    /// Reference to the particle system associated with the coin.
+    /// </summary>
     [SerializeField] private ParticleSystem particles;
 
+    /// <summary>
+    /// Gets the coin's scriptable object instance.
+    /// </summary>
     public CoinsSO CoinsSO { get { return coinsSO; } }
+
+    /// <summary>
+    /// Gets the time (in seconds) after which the coin will despawn.
+    /// </summary>
+    public float TimeToDespawn => coinsSO.TimeToDespawn;
 
     // Variables for vertical movement
     private float verticalSpeed = 3f;
     private float baseHeight; // Base height above the initial position
 
+    /// <summary>
+    /// Initializes the coin on spawn.
+    /// </summary>
     private void Start()
     {
         timeSinceSpawned = 0f;
@@ -24,35 +42,28 @@ public class Coins : MonoBehaviour
         baseHeight = transform.position.y;
     }
 
+    /// <summary>
+    /// Updates the coin behavior every frame.
+    /// </summary>
     private void Update()
     {
-        timeSinceSpawned += Time.deltaTime; // Increment the timer by the time between frames
+        timeSinceSpawned += Time.deltaTime;
 
-
-        // Calculate new Y position within the range of [baseHeight+0.5, baseHeight+1]
         float newY = baseHeight + 0.05f * Mathf.Sin(Time.time * verticalSpeed);
         transform.position = new Vector3(transform.position.x, newY, transform.position.z);
 
-        // Check if the time since spawned is greater or equal to the time to despawn
         if (timeSinceSpawned >= coinsSO.TimeToDespawn)
         {
-            Destroy(gameObject); // Destroy the coin object
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Coins") || other.gameObject.CompareTag("Potion") || other.gameObject.CompareTag("Environment"))
-        {
+            GetComponentInParent<FloorScript>().HasCollectible = false;
             Destroy(gameObject);
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    /// <summary>
+    /// Performs cleanup when the coin is destroyed.
+    /// </summary>
+    public void OnDestroy()
     {
-        if (other.gameObject.CompareTag("Coins") || other.gameObject.CompareTag("Potion") || other.gameObject.CompareTag("Environment"))
-        {
-            Destroy(gameObject);
-        }
+        GetComponentInParent<FloorScript>().HasCollectible = false;
     }
 }

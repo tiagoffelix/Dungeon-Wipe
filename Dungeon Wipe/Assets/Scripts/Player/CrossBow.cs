@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles the shooting mechanics of the crossbow.
+/// </summary>
 public class CrossBow : MonoBehaviour
 {
     [SerializeField] private GameObject projectilePrefab; // The projectile prefab
@@ -10,11 +13,18 @@ public class CrossBow : MonoBehaviour
     [SerializeField] private Camera secondaryCamera; // A secondary camera, could be used for aiming or special views
     private float projectileSpeed; // Speed at which the projectile will move
 
+    /// <summary>
+    /// Initializes the projectile speed.
+    /// </summary>
     void Start()
     {
-        projectileSpeed = 10f; // Initialize the projectile speed
+        projectileSpeed = 10f;
     }
 
+    /// <summary>
+    /// Gets the active camera, either main or secondary.
+    /// </summary>
+    /// <returns>The active camera or null if none are active.</returns>
     Camera GetActiveCamera()
     {
         // Checks which camera is currently active by comparing their enabled state
@@ -29,6 +39,10 @@ public class CrossBow : MonoBehaviour
         return null; // Return null if no camera is active
     }
 
+    /// <summary>
+    /// Shoots a projectile towards the direction of the crossbow.
+    /// </summary>
+    /// <param name="damage">The damage value the projectile will inflict.</param>
     public void ShootProjectile(float damage)
     {
         Camera activeCamera = GetActiveCamera(); // Get the currently active camera
@@ -58,10 +72,11 @@ public class CrossBow : MonoBehaviour
 
             projectile.GetComponent<Arrow>().Damage = damage;
 
-            // Apply the velocity to the projectile's Rigidbody component to move it in the shooting direction
+            // Apply velocity to the projectile's Rigidbody component to move it in the shooting direction
             projectile.GetComponent<Rigidbody>().velocity = shootingDirection * projectileSpeed;
 
-            Destroy(projectile, 20.0f); // Optionally adjust the time after which the projectile is destroyed
+            // Optionally adjust the time after which the projectile is destroyed
+            Destroy(projectile, 20.0f);
         }
     }
 }

@@ -1,25 +1,34 @@
 using UnityEngine;
 
+/// <summary>
+/// Manages switching between first-person, third-person, and death cameras.
+/// </summary>
 public class CameraSwitch : MonoBehaviour
 {
-    [SerializeField] private Camera firstPersonCamera;
-    [SerializeField] private Camera thirdPersonCamera;
-    [SerializeField] private Camera deathCamera;
+    [SerializeField] private Camera firstPersonCamera; // Camera for first-person view
+    [SerializeField] private Camera thirdPersonCamera; // Camera for third-person view
+    [SerializeField] private Camera deathCamera; // Camera used when the player dies
 
-    [SerializeField] private Stats playerStats;
+    [SerializeField] private Stats playerStats; // Player statistics
 
-    // New serialized fields for player body and head
+    // Player's body and head parts for enabling/disabling based on camera view
     [SerializeField] private GameObject playerBody;
     [SerializeField] private GameObject playerScarf;
     [SerializeField] private GameObject playerHead;
 
     private Animator animator;
 
+    /// <summary>
+    /// Initializes the Animator component.
+    /// </summary>
     private void Start()
     {
         animator = gameObject.GetComponent<Animator>();
     }
 
+    /// <summary>
+    /// Handles camera switching based on player status and input.
+    /// </summary>
     private void Update()
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
@@ -39,19 +48,19 @@ public class CameraSwitch : MonoBehaviour
                 thirdPersonCamera.gameObject.SetActive(false);
                 deathCamera.gameObject.SetActive(true);
 
-                // Ensure player body and head are visible upon death
+                // Show the player's body and head in death camera view
                 playerBody.SetActive(true);
                 playerScarf.SetActive(true);
                 playerHead.SetActive(true);
             }
             else
             {
-                // Check if the 'C' key is being held down
+                // Check if the 'C' key is held down to switch to third-person
                 if (Input.GetKey(KeyCode.C))
                 {
                     ActivateThirdPersonCamera();
                 }
-                // Check if the 'C' key has been released
+                // Check if the 'C' key is released to switch back to first-person
                 else if (Input.GetKeyUp(KeyCode.C))
                 {
                     ToggleToFirstPerson();
@@ -60,23 +69,27 @@ public class CameraSwitch : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Activates the third-person camera and makes the player's body and head visible.
+    /// </summary>
     private void ActivateThirdPersonCamera()
     {
         firstPersonCamera.gameObject.SetActive(false);
         thirdPersonCamera.gameObject.SetActive(true);
 
-        // Ensure player body and head are visible in third-person
         playerBody.SetActive(true);
         playerScarf.SetActive(true);
         playerHead.SetActive(true);
     }
 
+    /// <summary>
+    /// Activates the first-person camera and hides the player's body and head.
+    /// </summary>
     private void ToggleToFirstPerson()
     {
         firstPersonCamera.gameObject.SetActive(true);
         thirdPersonCamera.gameObject.SetActive(false);
 
-        // Hide player body and head in first-person
         playerBody.SetActive(false);
         playerScarf.SetActive(false);
         playerHead.SetActive(false);

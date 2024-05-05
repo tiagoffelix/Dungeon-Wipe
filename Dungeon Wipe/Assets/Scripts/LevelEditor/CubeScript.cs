@@ -2,15 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls the behavior of a cube in the game world.
+/// </summary>
 public class CubeScript : MonoBehaviour
 {
-    private new Renderer renderer;
-    [SerializeField] private Color hoverColorFree;
-    [SerializeField] private Color hoverColorOccupied;
-    [SerializeField] private Color defaultColor;
+    private new Renderer renderer; // The renderer component of the cube.
+    [SerializeField] private Color hoverColorFree; // The color to display when the cube is hovered and unoccupied.
+    [SerializeField] private Color hoverColorOccupied; // The color to display when the cube is hovered and occupied.
+    [SerializeField] private Color defaultColor; // The default color of the cube.
 
-    private bool hasObjectOnTop;
+    private bool hasObjectOnTop; // Indicates whether there is an object on top of the cube.
 
+    /// <summary>
+    /// Initializes the cube's state and color.
+    /// </summary>
     void Start()
     {
         hasObjectOnTop = false;
@@ -18,6 +24,9 @@ public class CubeScript : MonoBehaviour
         renderer.material.color = defaultColor;
     }
 
+    /// <summary>
+    /// Updates the hover state of the cube based on whether an object is on top.
+    /// </summary>
     public void UpdateHoverState()
     {
         hasObjectOnTop = HasObjectOnTop();
@@ -38,6 +47,9 @@ public class CubeScript : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets the color of the cube to its default color.
+    /// </summary>
     public void ResetCubeColor()
     {
         renderer.material.color = defaultColor;
@@ -47,6 +59,9 @@ public class CubeScript : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles the mouse down event on the cube.
+    /// </summary>
     public void HandleMouseDown()
     {
         if (PrefabManager.Instance.CurrentPrefab != null)
@@ -73,6 +88,10 @@ public class CubeScript : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks if there is any object on top of the cube.
+    /// </summary>
+    /// <returns>True if an object is on top, false otherwise.</returns>
     private bool HasObjectOnTop()
     {
         Vector3 boxSize = new Vector3(transform.localScale.x * 0.15f, transform.localScale.y * 0.15f, transform.localScale.z * 0.15f);

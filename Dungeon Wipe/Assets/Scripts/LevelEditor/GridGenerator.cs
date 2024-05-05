@@ -3,30 +3,36 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Generates a grid of cubes based on editor settings.
+/// </summary>
 public class GridGenerator : MonoBehaviour
 {
-    [SerializeField] private LevelEditorSO levelEditor;
-    [SerializeField] private GameObject cubePrefab; // Prefab do cubo
+    [SerializeField] private LevelEditorSO levelEditor; // Reference to the LevelEditorSO scriptable object.
+    [SerializeField] private GameObject cubePrefab; // The prefab for the cube.
 
-    private List<GameObject> gridCubes;
+    private List<GameObject> gridCubes; // List to store the generated grid cubes.
 
-    public List<GameObject> GridCubes { get => gridCubes; set => gridCubes = value; }
+    public List<GameObject> GridCubes { get => gridCubes; set => gridCubes = value; } // Property to access the grid cubes list.
 
-    [SerializeField] private Slider sliderX;
-    [SerializeField] private Slider sliderY;
-    [SerializeField] private Slider sliderGrids;
+    [SerializeField] private Slider sliderX; // Slider for adjusting the grid width.
+    [SerializeField] private Slider sliderY; // Slider for adjusting the grid height.
+    [SerializeField] private Slider sliderGrids; // Slider for adjusting the number of grids.
 
-    [SerializeField] private TextMeshProUGUI textGrids;
-    [SerializeField] private TextMeshProUGUI textX;
-    [SerializeField] private TextMeshProUGUI textY;
+    [SerializeField] private TextMeshProUGUI textGrids; // Text displaying the number of grids.
+    [SerializeField] private TextMeshProUGUI textX; // Text displaying the grid width.
+    [SerializeField] private TextMeshProUGUI textY; // Text displaying the grid height.
 
+    /// <summary>
+    /// Initializes the grid generator and generates the grid.
+    /// </summary>
     void Start()
     {
         gridCubes = new List<GameObject>();
         sliderX.value = levelEditor.GridSizeX;
         sliderY.value = levelEditor.GridSizeY;
         sliderGrids.value = levelEditor.Grids;
-        textGrids.text = "Grid Size: " + sliderGrids.value;
+        textGrids.text = "Number of Grids: " + sliderGrids.value;
         textX.text = "Grid Width: " + sliderX.value;
         textY.text = "Grid Height: " + sliderY.value;
         sliderX.onValueChanged.AddListener(UpdateGridSizeX);
@@ -35,6 +41,9 @@ public class GridGenerator : MonoBehaviour
         GenerateGrid();
     }
 
+    /// <summary>
+    /// Generates the grid of cubes based on editor settings.
+    /// </summary>
     private void GenerateGrid()
     {
         for (int grid = 0; grid < levelEditor.Grids; grid++)
@@ -57,6 +66,9 @@ public class GridGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Recursively sets the layer of a GameObject and its children.
+    /// </summary>
     private void SetLayerRecursively(GameObject obj, int layer)
     {
         if (obj == null) return;
@@ -76,12 +88,18 @@ public class GridGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks if a grid is disabled based on editor settings.
+    /// </summary>
     private bool IsGridDisabled(int gridNumber)
     {
         List<int> disabledGrids = levelEditor.GridsDeactivated;
         return disabledGrids != null && disabledGrids.Contains(gridNumber);
     }
 
+    /// <summary>
+    /// Regenerates the grid based on updated editor settings.
+    /// </summary>
     public void RegenerateGrid()
     {
         // Destroy all previous cubes
@@ -95,24 +113,36 @@ public class GridGenerator : MonoBehaviour
         GenerateGrid();
     }
 
+    /// <summary>
+    /// Updates the grid width based on slider value.
+    /// </summary>
     public void UpdateGridSizeX(float value)
     {
         levelEditor.GridSizeX = (int)value;
         textX.text = "Grid Width: " + levelEditor.GridSizeX;
     }
 
+    /// <summary>
+    /// Updates the grid height based on slider value.
+    /// </summary>
     public void UpdateGridSizeY(float value)
     {
         levelEditor.GridSizeY = (int)value;
         textY.text = "Grid Height: " + levelEditor.GridSizeY;
     }
 
+    /// <summary>
+    /// Updates the number of grids based on slider value.
+    /// </summary>
     public void UpdateGridSize(float value)
     {
         levelEditor.Grids = (int)value;
         textGrids.text = "Number of Grids: " + levelEditor.Grids;
     }
 
+    /// <summary>
+    /// Removes event listeners to prevent memory leaks when the object is destroyed.
+    /// </summary>
     private void OnDestroy()
     {
         // Remove listener to avoid memory leaks

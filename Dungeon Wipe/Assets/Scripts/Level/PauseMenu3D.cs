@@ -4,34 +4,36 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages the pause menu and game over screen in a 3D game.
+/// </summary>
 public class PauseMenu3D : MonoBehaviour
 {
-    [SerializeField] private GameObject pauseMenuCanvas;
+    [SerializeField] private GameObject pauseMenuCanvas; // The canvas containing the pause menu UI.
 
-    [SerializeField] private GameObject playerCanvas;
+    [SerializeField] private GameObject playerCanvas; // The canvas containing the player UI.
 
-    private bool isPaused;
-    private float elapsedTime;
+    private bool isPaused; // Indicates whether the game is currently paused.
+    private float elapsedTime; // The elapsed time since the start of the game.
 
-    [SerializeField] private GameObject gameOverCanvas;
-    [SerializeField] private TextMeshProUGUI gameOverText;
+    [SerializeField] private GameObject gameOverCanvas; // The canvas containing the game over UI.
+    [SerializeField] private TextMeshProUGUI gameOverText; // The text displaying game over information.
 
-    [SerializeField] private GameObject inputObject;
-    [SerializeField] private GameObject saveGameObject;
+    [SerializeField] private GameObject inputObject; // The input field object for saving high scores.
+    [SerializeField] private GameObject saveGameObject; // The save button object for saving high scores.
 
-    [SerializeField] private PlayerMovement player;
+    [SerializeField] private PlayerMovement player; // Reference to the PlayerMovement script.
 
-    [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private Image timerImage;
+    [SerializeField] private TextMeshProUGUI scoreText; // The text displaying the player's score.
+    [SerializeField] private Image timerImage; // The image displaying the timer bar.
 
-    [SerializeField] private AudioSource buttonSound;
+    [SerializeField] private AudioSource buttonSound; // Sound played when buttons are clicked.
+    [SerializeField] private AudioSource endingSound; // Sound played when the game ends.
 
-    [SerializeField] private AudioSource endingSound;
+    [SerializeField] private TMP_InputField inputField; // The input field for entering player name.
 
-    [SerializeField] private TMP_InputField inputField;
-
-    private float totalDuration;
-    private bool end;
+    private float totalDuration; // The total duration of the game.
+    private bool end; // Indicates whether the game has ended.
 
     private void Start()
     {
@@ -45,7 +47,7 @@ public class PauseMenu3D : MonoBehaviour
 
     void Update()
     {
-        if (!end) 
+        if (!end)
         {
             scoreText.text = "Score: " + player.PlayerStats.Score;
 
@@ -65,13 +67,13 @@ public class PauseMenu3D : MonoBehaviour
                     Debug.LogError("PlayerPrefsManager not found on the scene!");
                     return;
                 }
-                if (!PlayerPrefsManager.Instance.IsCurrentScoreHighScore()) 
+                if (!PlayerPrefsManager.Instance.IsCurrentScoreHighScore())
                 {
                     inputObject.SetActive(false);
                     saveGameObject.SetActive(false);
                 }
             }
-            else 
+            else
             {
                 if (isPaused)
                 {
@@ -97,10 +99,13 @@ public class PauseMenu3D : MonoBehaviour
                 {
                     TogglePauseMenu();
                 }
-            } 
+            }
         }
     }
 
+    /// <summary>
+    /// Toggles the visibility of the pause menu.
+    /// </summary>
     public void TogglePauseMenu()
     {
         isPaused = !isPaused;
@@ -108,6 +113,9 @@ public class PauseMenu3D : MonoBehaviour
         buttonSound.Play();
     }
 
+    /// <summary>
+    /// Saves the current game's high score.
+    /// </summary>
     public void SaveCurrentGame()
     {
         if (!PlayerPrefsManager.Instance)
@@ -118,12 +126,18 @@ public class PauseMenu3D : MonoBehaviour
         PlayerPrefsManager.Instance.SaveHighScore(inputField.text, elapsedTime);
     }
 
+    /// <summary>
+    /// Restarts the game.
+    /// </summary>
     public void RestartGame()
     {
         isPaused = false;
         SceneManager.LoadScene("Game");
     }
 
+    /// <summary>
+    /// Returns to the main menu.
+    /// </summary>
     public void MainMenu()
     {
         isPaused = false;

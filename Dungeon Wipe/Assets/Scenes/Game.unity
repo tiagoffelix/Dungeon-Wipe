@@ -331,7 +331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabs:
   - {fileID: 3761524534090057585, guid: 632ce9565ed9c6a499dd627aa733b903, type: 3}
-  - {fileID: 3761524534090057585, guid: 17edf207eff54af44a867dca8df85caf, type: 3}
+  - {fileID: 3761524534090057585, guid: b7afb5e850a13ff49bf5ff8714dc3116, type: 3}
   - {fileID: 3761524534090057585, guid: a072ea19def589a4b932a3a866c2b55c, type: 3}
   - {fileID: 4814393471076114547, guid: 17ce9e056a46fb8468162eaa75482710, type: 3}
   - {fileID: 3761524534090057585, guid: 0ee61b6b047e1804e9148188c3ea3353, type: 3}

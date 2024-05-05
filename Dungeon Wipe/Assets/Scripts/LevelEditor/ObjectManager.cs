@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages object deletion and hover effects.
+/// </summary>
 public class ObjectManager : MonoBehaviour
 {
     [SerializeField] private Button toggleButton; // Serialized field for the button
@@ -93,18 +96,28 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Toggles the deleting mode.
+    /// </summary>
     public void ChangeDeleting()
     {
         deleting = !deleting;
         UpdateButtonAlpha();
     }
 
+    /// <summary>
+    /// Sets deleting mode to false.
+    /// </summary>
     public void SetDeletingFalse()
     {
         deleting = false;
         UpdateButtonAlpha();
     }
 
+    /// <summary>
+    /// Applies hover color to the specified object.
+    /// </summary>
+    /// <param name="obj">The object to apply hover color to.</param>
     void ApplyHoverColor(GameObject obj)
     {
         Renderer renderer = obj.GetComponent<Renderer>();
@@ -120,6 +133,10 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets the color of the specified object.
+    /// </summary>
+    /// <param name="obj">The object to reset color for.</param>
     void ResetColor(GameObject obj)
     {
         Renderer renderer = obj.GetComponent<Renderer>();
@@ -138,6 +155,9 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the alpha value of the toggle button based on the deletion mode.
+    /// </summary>
     void UpdateButtonAlpha()
     {
         if (toggleButton != null)

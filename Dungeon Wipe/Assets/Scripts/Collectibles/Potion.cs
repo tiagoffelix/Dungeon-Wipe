@@ -1,30 +1,42 @@
 using UnityEngine;
 
+/// <summary>
+/// Represents a generic potion, including its properties and effects.
+/// </summary>
 public class Potion : ScriptableObject
 {
-    [SerializeField] private string potionName;
-    [SerializeField] private AudioClip sound;
-    [SerializeField] private float duration;
-    [SerializeField] private int timeToDespawn;
+    [SerializeField] private string potionName; // Name of the potion
+    [SerializeField] private AudioClip sound; // Sound effect associated with the potion
+    [SerializeField] private float duration; // Duration of the potion's effect in seconds
+    [SerializeField] private int timeToDespawn; // Time in seconds before the potion despawns
 
-    // Public getter and setter for potionName
+    /// <summary>
+    /// Gets the name of the potion.
+    /// </summary>
     public string PotionName
     {
         get { return potionName; }
     }
 
-    // Public getter and setter for sound
+    /// <summary>
+    /// Gets the sound effect associated with the potion.
+    /// </summary>
     public AudioClip Sound
     {
         get { return sound; }
     }
 
-    // Public getter and setter for duration
+    /// <summary>
+    /// Gets the duration of the potion's effect in seconds.
+    /// </summary>
     public float Duration
     {
         get { return duration; }
     }
 
+    /// <summary>
+    /// Gets the time in seconds before the potion despawns.
+    /// </summary>
     public int TimeToDespawn
     {
         get { return timeToDespawn; }

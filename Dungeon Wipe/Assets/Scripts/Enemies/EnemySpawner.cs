@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Spawns enemies at a specified rate when the player enters a trigger area.
+/// </summary>
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private Transform spawnPoint;  // The spawn point where enemies will be instantiated.
@@ -9,11 +12,14 @@ public class EnemySpawner : MonoBehaviour
     private float timeBetweenSpawns;      // Minimum time between spawns.
     private float spawnTimeVariation;     // Variation in time between spawns.
 
-    [SerializeField] private EnemySpawnRate spawnRate;
+    [SerializeField] private EnemySpawnRate spawnRate; // ScriptableObject defining the spawn rate.
 
     private bool playerInTrigger = false; // To check if the player is inside the trigger area.
     private bool isSpawning = false; // To check if enemies are being spawned
 
+    /// <summary>
+    /// Initializes the spawner with spawn rate data.
+    /// </summary>
     void Start()
     {
         timeBetweenSpawns = spawnRate.TimeBetweenSpawns;
@@ -21,6 +27,10 @@ public class EnemySpawner : MonoBehaviour
         enemyPrefabs = spawnRate.EnemyPrefabs;
     }
 
+    /// <summary>
+    /// Activates enemy spawning when the player enters the trigger area.
+    /// </summary>
+    /// <param name="other">The collider entering the trigger.</param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -35,6 +45,10 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Deactivates enemy spawning when the player exits the trigger area.
+    /// </summary>
+    /// <param name="other">The collider exiting the trigger.</param>
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -43,6 +57,9 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Coroutine to continuously spawn enemies with random delays.
+    /// </summary>
     private IEnumerator SpawnEnemies()
     {
         isSpawning = true; // Set flag to indicate spawning has started
@@ -51,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
         {
             if (playerInTrigger)
             {
-                // Calculate next spawn time between 5 to 8 seconds.
+                // Calculate next spawn time between base time and variation.
                 float spawnDelay = timeBetweenSpawns + Random.Range(0f, spawnTimeVariation);
                 yield return new WaitForSeconds(spawnDelay);
 

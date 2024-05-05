@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 1121550060205270638}
   - component: {fileID: -6167120552633525746}
   - component: {fileID: -4617929030850572818}
+  - component: {fileID: 6035326540140699315}
   m_Layer: 8
-  m_Name: Floor
+  m_Name: Floor 1
   m_TagString: Prefab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,8 +123,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3761524534090057585}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87255b10e46ecba498fc2fc9e36c3746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &6035326540140699315
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3761524534090057585}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 137.29047, y: 3.462664, z: 112.233765}
+  m_Center: {x: -0.13613892, y: 1.731332, z: 0.20209694}

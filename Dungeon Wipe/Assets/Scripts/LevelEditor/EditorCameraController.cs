@@ -1,16 +1,19 @@
 using UnityEngine;
 
+/// <summary>
+/// Controls the movement, rotation, and zooming of the editor camera.
+/// </summary>
 public class EditorCameraController : MonoBehaviour
 {
-    private float movementSpeed = 10f;
-    private float rotationSpeed = 5f;
-    private float zoomSpeed = 60f;
+    private float movementSpeed = 10f; // The speed of camera movement.
+    private float rotationSpeed = 5f; // The speed of camera rotation.
+    private float zoomSpeed = 60f; // The speed of camera zooming.
 
-    private float yaw = 0f;
-    private float pitch = 0f;
+    private float yaw = 0f; // The yaw angle for camera rotation.
+    private float pitch = 0f; // The pitch angle for camera rotation.
 
-    private Vector3 originalPosition;
-    private Quaternion originalRotation;
+    private Vector3 originalPosition; // The original position of the camera.
+    private Quaternion originalRotation; // The original rotation of the camera.
 
     void Start()
     {
@@ -45,6 +48,9 @@ public class EditorCameraController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets the camera position and rotation to its original state.
+    /// </summary>
     public void ResetCameraPosition()
     {
         transform.position = originalPosition;
