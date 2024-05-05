@@ -160,6 +160,7 @@ GameObject:
   - component: {fileID: 5785478110186425816}
   - component: {fileID: 2228101188046063285}
   - component: {fileID: 4393915661746848329}
+  - component: {fileID: 728344484995431260}
   m_Layer: 8
   m_Name: wall_door
   m_TagString: Untagged
@@ -278,6 +279,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 3431544817893821685}
   spawnRate: {fileID: 11400000, guid: 66ecf84b75264dc4c84642e82ff93b0e, type: 2}
+--- !u!65 &728344484995431260
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7053816337780080477}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 402.00708, y: 4, z: 361.86133}
+  m_Center: {x: -0.8723944, y: 2, z: 180.29337}
 --- !u!1 &8009875791885681126
 GameObject:
   m_ObjectHideFlags: 0
