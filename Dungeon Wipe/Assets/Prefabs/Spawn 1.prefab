@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: -4617929030850572818}
   - component: {fileID: 6035326540140699315}
   - component: {fileID: 6897477000258947572}
+  - component: {fileID: 2847971007565563578}
   m_Layer: 8
   m_Name: Spawn 1
   m_TagString: Prefab
@@ -271,6 +272,18 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 672f7ee1eb8e60748bdace8994b17c32, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &2847971007565563578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3761524534090057585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28c491af556b7ee4eacb4d7c6dc282b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4675036318035495175
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,7 +454,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5463054980248100925}
   m_LocalRotation: {x: -0, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.836}
+  m_LocalPosition: {x: 0, y: 0, z: 0.93}
   m_LocalScale: {x: 1.4285713, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
