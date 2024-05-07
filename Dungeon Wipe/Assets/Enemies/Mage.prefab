@@ -1494,6 +1494,7 @@ GameObject:
   - component: {fileID: 2653015765955603352}
   - component: {fileID: 5634891233550809585}
   - component: {fileID: 6820263654010710590}
+  - component: {fileID: 8197685726395293550}
   m_Layer: 3
   m_Name: Mage
   m_TagString: Enemy
@@ -1542,7 +1543,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   weapon: {fileID: 4939175251403964875}
-  player: {fileID: 0}
+  player: {fileID: 5936785653439656932, guid: d79f90e7c01e45d46b9c24b07f819459, type: 3}
   enemyType: {fileID: 11400000, guid: 33be3e75e908585458e6807346f6891f, type: 2}
   particles: {fileID: 3028914730052976382}
   bloodParticles: {fileID: 0}
@@ -1716,6 +1717,22 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &8197685726395293550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6029684447867280373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: 
 --- !u!1 &6037077388243878531
 GameObject:
   m_ObjectHideFlags: 0

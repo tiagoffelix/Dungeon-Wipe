@@ -217,89 +217,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &922708372
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 922708376}
-  - component: {fileID: 922708375}
-  - component: {fileID: 922708374}
-  m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!23 &922708374
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 922708372}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 2d3cf9b8790c39b4e97da11e6ffc60b1, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &922708375
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 922708372}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &922708376
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 922708372}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -99, z: 0}
-  m_LocalScale: {x: 2914.37, y: 64, z: 2578.09}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1494524452
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,16 +247,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
-  - {fileID: 3761524534090057585, guid: 632ce9565ed9c6a499dd627aa733b903, type: 3}
+  - {fileID: 3761524534090057585, guid: 11ae57de90affa84690fa85381042a9d, type: 3}
   - {fileID: 3761524534090057585, guid: b7afb5e850a13ff49bf5ff8714dc3116, type: 3}
-  - {fileID: 3761524534090057585, guid: a072ea19def589a4b932a3a866c2b55c, type: 3}
+  - {fileID: 3761524534090057585, guid: 0beb478db9240214eb3009713cfec09c, type: 3}
   - {fileID: 4814393471076114547, guid: 17ce9e056a46fb8468162eaa75482710, type: 3}
-  - {fileID: 3761524534090057585, guid: 0ee61b6b047e1804e9148188c3ea3353, type: 3}
-  - {fileID: 3761524534090057585, guid: 6a99f7f442a557d43bbd6de4b7425eb1, type: 3}
-  - {fileID: 3761524534090057585, guid: 2e1cfdef00ca84344a7257fdeeeadcfc, type: 3}
-  - {fileID: 3761524534090057585, guid: c1d93ce7d2627a642a78a708ea12ccb2, type: 3}
-  - {fileID: 3761524534090057585, guid: 1734a53e5feadfa4cb639a89f13cf1d3, type: 3}
-  - {fileID: 3761524534090057585, guid: 0ea2be4c74c696f4ab8703a297332947, type: 3}
+  - {fileID: 3761524534090057585, guid: 90ac0f52e044e9d4fa7facee6845b94e, type: 3}
+  - {fileID: 3761524534090057585, guid: b49c074cf382c4244993591b014a5058, type: 3}
+  - {fileID: 3761524534090057585, guid: ec73df71dbfc7e349be36b2fcd7445ac, type: 3}
+  - {fileID: 3761524534090057585, guid: 275f7a53bc9ea384ab985fd9a6c5afef, type: 3}
+  - {fileID: 3761524534090057585, guid: a2588ae25b588034d873ff48eef6fca5, type: 3}
+  - {fileID: 3761524534090057585, guid: 2809988ee739a2248b42ebf07f84b714, type: 3}
   - {fileID: 3761524534090057585, guid: 63c0ef66f70dbe8409c12ebe079ad24e, type: 3}
   stats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
   levelEditor: {fileID: 11400000, guid: e036f55c5386b39409256ec03c100c85, type: 2}

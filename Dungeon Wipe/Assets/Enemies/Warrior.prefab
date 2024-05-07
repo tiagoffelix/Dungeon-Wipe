@@ -6904,6 +6904,7 @@ GameObject:
   - component: {fileID: 7919104836709897673}
   - component: {fileID: 4467579108287516503}
   - component: {fileID: 983004850473815787}
+  - component: {fileID: 1301208235132508835}
   m_Layer: 3
   m_Name: Warrior
   m_TagString: Enemy
@@ -6955,7 +6956,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   weapon: {fileID: 4073590022959012626}
-  player: {fileID: 0}
+  player: {fileID: 5936785653439656932, guid: d79f90e7c01e45d46b9c24b07f819459, type: 3}
   enemyType: {fileID: 11400000, guid: 56bfd3435d42e394ca27f7834d6c9eaa, type: 2}
   particles: {fileID: 89802505039642924}
   bloodParticles: {fileID: 5314910082213056450}
@@ -7129,6 +7130,22 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1301208235132508835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7639330792223265537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: 
 --- !u!1 &7665659864913906295
 GameObject:
   m_ObjectHideFlags: 0

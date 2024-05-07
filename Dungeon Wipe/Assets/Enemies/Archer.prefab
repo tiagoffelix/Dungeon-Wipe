@@ -1207,6 +1207,7 @@ GameObject:
   - component: {fileID: 3137245737969157951}
   - component: {fileID: -6455946664739239343}
   - component: {fileID: 1874413396425999082}
+  - component: {fileID: 2806554008122060190}
   m_Layer: 3
   m_Name: Archer
   m_TagString: Enemy
@@ -1255,7 +1256,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   weapon: {fileID: 7657212834509335640}
-  player: {fileID: 0}
+  player: {fileID: 5936785653439656932, guid: d79f90e7c01e45d46b9c24b07f819459, type: 3}
   enemyType: {fileID: 11400000, guid: 4147df2a15b89a54c85d8b4ecffc1b6b, type: 2}
   particles: {fileID: 4553593566204474042}
   bloodParticles: {fileID: 0}
@@ -1429,6 +1430,22 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &2806554008122060190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3940224208166622048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: 
 --- !u!1 &3948463781052992022
 GameObject:
   m_ObjectHideFlags: 0
