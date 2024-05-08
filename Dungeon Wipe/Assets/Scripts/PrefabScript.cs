@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.AI.Navigation;
 
-public class Prefab : MonoBehaviour
+public class PrefabScript : MonoBehaviour
 {
     private NavMeshSurface nav;
 
@@ -11,6 +11,10 @@ public class Prefab : MonoBehaviour
     void Start()
     {
         nav = GetComponent<NavMeshSurface>();
+    }
+
+    public void BuildMesh() 
+    {
         nav.BuildNavMesh();
     }
 }
