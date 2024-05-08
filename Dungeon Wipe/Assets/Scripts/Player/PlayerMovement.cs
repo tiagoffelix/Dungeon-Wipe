@@ -426,6 +426,10 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("Dead", true);
         controller.enabled = false;
         canvas.enabled = false;
+        if (walkingSound.isPlaying)
+        {
+            walkingSound.Stop();
+        }
     }
 
     /// <summary>
@@ -440,6 +444,10 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("DeathFall", true);
         controller.enabled = false;
         canvas.enabled = false;
+        if (walkingSound.isPlaying)
+        {
+            walkingSound.Stop();
+        }
     }
 
     /// <summary>

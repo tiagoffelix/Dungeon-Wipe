@@ -7660,7 +7660,7 @@ MonoBehaviour:
   m_Area: 0
   m_OverrideGenerateLinks: 0
   m_GenerateLinks: 0
-  m_IgnoreFromBuild: 0
+  m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: 
 --- !u!1 &3652780073304001578
@@ -12445,6 +12445,10 @@ PrefabInstance:
     - target: {fileID: 453967900752671626, guid: f5fd8845d36c2e447970baef755f6673, type: 3}
       propertyPath: m_Name
       value: Walking Sound
+      objectReference: {fileID: 0}
+    - target: {fileID: 7685903846864791727, guid: f5fd8845d36c2e447970baef755f6673, type: 3}
+      propertyPath: m_Volume
+      value: 0.306
       objectReference: {fileID: 0}
     - target: {fileID: 7726127181160441605, guid: f5fd8845d36c2e447970baef755f6673, type: 3}
       propertyPath: m_LocalPosition.x

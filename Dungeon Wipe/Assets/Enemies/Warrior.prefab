@@ -6917,7 +6917,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7011975212092328379}
   - component: {fileID: -4388994438917846073}
-  - component: {fileID: 7497829083421591345}
   - component: {fileID: -3130006805880484803}
   - component: {fileID: 7919104836709897673}
   - component: {fileID: 983004850473815787}
@@ -6978,32 +6977,6 @@ MonoBehaviour:
   enemyType: {fileID: 11400000, guid: 56bfd3435d42e394ca27f7834d6c9eaa, type: 2}
   particles: {fileID: 89802505039642924}
   bloodParticles: {fileID: 5314910082213056450}
---- !u!143 &7497829083421591345
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7639330792223265537}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2.27
-  m_Radius: 0.5
-  m_SlopeLimit: 30
-  m_StepOffset: 0.2
-  m_SkinWidth: 0.0001
-  m_MinMoveDistance: 0
-  m_Center: {x: 0, y: 1.12, z: 0}
 --- !u!95 &-3130006805880484803
 Animator:
   serializedVersion: 5
@@ -7099,7 +7072,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.403
   m_Pitch: 1
   Loop: 0
   Mute: 0

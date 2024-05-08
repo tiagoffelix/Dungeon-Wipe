@@ -1,11 +1,11 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// Represents an enemy in the game, handling its behaviors like movement, attacking, and death.
 /// </summary>
 public class Enemy : MonoBehaviour
 {
-    private CharacterController characterController;
     private Animator animator;
 
     private bool isAttacking;
@@ -19,14 +19,7 @@ public class Enemy : MonoBehaviour
     /// The layer mask used to detect enemies.
     /// </summary>
     [SerializeField] private LayerMask enemyLayers;
-
-    private float speed;
-    private float gravity;
     private float cooldownTimer;
-
-    private bool isGrounded;
-
-    private Vector3 moveVelocity;
 
     private float distance;
 
@@ -60,21 +53,21 @@ public class Enemy : MonoBehaviour
     private int points;
 
     private AudioSource audioSource;
+    private NavMeshAgent agent;
+    public bool playerSighted;
 
     /// <summary>
     /// Initializes the enemy properties.
     /// </summary>
     void Start()
     {
+        agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
         player = PlayerMovement.Instance;
-        characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        speed = 0.75f;
-        gravity = 1f;
+        agent.speed = 0.75f;
         cooldownTimer = enemyType.AttackCooldown;
         isAttacking = false;
-        moveVelocity = Vector3.zero;
         distance = 0;
         health = enemyType.Health;
         points = enemyType.Points;
@@ -85,13 +78,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        isGrounded = characterController.isGrounded;
-
-        if (!isGrounded)
-        {
-            moveVelocity.y -= gravity * Time.deltaTime;
-            characterController.Move(moveVelocity * Time.deltaTime);
-        }
+        //playerSighted = CheckLineOfSight();
 
         if (transform.position.y < -2)
         {
@@ -100,16 +87,18 @@ public class Enemy : MonoBehaviour
 
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Death")
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("DeathFall")
-            && !animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
+            && !animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")
+            && !animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
         {
             distance = Vector3.Distance(player.transform.position, transform.position);
 
-            Vector3 directionToPlayer = player.transform.position - transform.position;
-            directionToPlayer.y = 0; // Set the y-component to zero to keep the rotation horizontal
-            transform.rotation = Quaternion.LookRotation(directionToPlayer);
-
-            if (distance <= enemyType.AttackRange)
+            if (distance <= enemyType.AttackRange && playerSighted)
             {
+                Vector3 directionToPlayer = player.transform.position - transform.position;
+                directionToPlayer.y = 0; // Set the y-component to zero to keep the rotation horizontal
+                transform.rotation = Quaternion.LookRotation(directionToPlayer);
+
+                agent.isStopped = true;
                 animator.SetFloat("Speed", 0);
 
                 if (cooldownTimer > 0) { cooldownTimer -= Time.deltaTime; }
@@ -144,8 +133,9 @@ public class Enemy : MonoBehaviour
             {
                 if (!isAttacking)
                 {
-                    characterController.Move(directionToPlayer.normalized * speed * Time.deltaTime);
-                    animator.SetFloat("Speed", speed);
+                    agent.isStopped = false;
+                    agent.SetDestination(player.transform.position);
+                    animator.SetFloat("Speed", agent.speed);
                 }
             }
 
@@ -210,7 +200,6 @@ public class Enemy : MonoBehaviour
         player.Danger = false;
         weapon.SetActive(false);
         animator.SetBool("Death", true);
-        characterController.enabled = false;
         enabled = false;
         isAttacking = true;
         foreach (Collider col in GetComponents<Collider>())
@@ -229,7 +218,6 @@ public class Enemy : MonoBehaviour
         player.Danger = false;
         weapon.SetActive(false);
         animator.SetBool("DeathFall", true);
-        characterController.enabled = false;
         enabled = false;
         isAttacking = true;
         foreach (Collider col in GetComponents<Collider>())
