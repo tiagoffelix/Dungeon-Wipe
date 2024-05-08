@@ -21,6 +21,8 @@ public class LevelManager : MonoBehaviour
     // Store ground objects instead of positions
     private List<GameObject> spawnedGrounds = new List<GameObject>(); // List of spawned ground objects.
 
+    [SerializeField] private GameObject parentGameObject; // Array of coin prefabs.
+
     /// <summary>
     /// Initializes the level with default values and spawns collectibles.
     /// </summary>
@@ -29,6 +31,7 @@ public class LevelManager : MonoBehaviour
         stats.Score = 0;
         stats.NumberOfSpawns = 0;
         LoadLevel(levelEditor.SelectedLevelPath);
+        parentGameObject.GetComponent<PrefabScript>().BuildMesh();
         StartCoroutine(SpawnPotions());
         StartCoroutine(SpawnCoins());
     }
@@ -117,6 +120,8 @@ public class LevelManager : MonoBehaviour
             if (toInstantiate != null)
             {
                 GameObject instance = Instantiate(toInstantiate, prefabData.Position, prefabData.Rotation);
+
+                instance.transform.SetParent(parentGameObject.transform);
 
                 // If it's a ground tile, add the GameObject to spawnedGrounds
                 if (prefabData.Name == "Floor")
