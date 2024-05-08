@@ -9,7 +9,7 @@ using UnityEngine;
 public class CoinsSO : ScriptableObject
 {
     [SerializeField] private int score; // Score value assigned to the coin
-    [SerializeField] private AudioSource sound; // Sound to be played upon coin collection
+    [SerializeField] private AudioClip sound; // Sound to be played upon coin collection
     [SerializeField] private int timeToDespawn; // Time in seconds before the coin despawns
 
     /// <summary>
@@ -23,7 +23,7 @@ public class CoinsSO : ScriptableObject
     /// <summary>
     /// Gets the audio source to be played upon coin collection.
     /// </summary>
-    public AudioSource Sound
+    public AudioClip Sound
     {
         get { return sound; }
     }

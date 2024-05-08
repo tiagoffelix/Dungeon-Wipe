@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Large Damage Potion
   m_EditorClassIdentifier: 
   potionName: DamagePotion
-  sound: {fileID: 0}
+  sound: {fileID: 8272022174571623267, guid: 8d701234feed91f42b69c35aa559b425, type: 3}
   duration: 10
   timeToDespawn: 12
   damageBoost: 2

@@ -20,3 +20,4 @@ MonoBehaviour:
   points: 1200
   attackSound: {fileID: 8300000, guid: 23ebd5e38845dff4e8642593fff7f275, type: 3}
   deathSound: {fileID: 8300000, guid: 66603d16707b59c4ab207d4539bcf87c, type: 3}
+  spikeSound: {fileID: 8300000, guid: a7b202495af2e4f418f12044c6600196, type: 3}

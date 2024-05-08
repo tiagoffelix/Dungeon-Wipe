@@ -11,6 +11,7 @@ public class PrefabScript : MonoBehaviour
     void Start()
     {
         nav = GetComponent<NavMeshSurface>();
+        BuildMesh();
     }
 
     public void BuildMesh() 

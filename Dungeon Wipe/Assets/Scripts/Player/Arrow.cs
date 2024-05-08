@@ -22,6 +22,11 @@ public class Arrow : MonoBehaviour
     private bool destroy; // Determines if the arrow should be destroyed
 
     /// <summary>
+    /// Checks if the arrow was shot by the Player.
+    /// </summary>
+    public bool shotByPlayer;
+
+    /// <summary>
     /// Initializes the Rigidbody component reference.
     /// </summary>
     void Start()
@@ -40,6 +45,11 @@ public class Arrow : MonoBehaviour
         }
     }
 
+    public void SetShotByPlayer() 
+    {
+        shotByPlayer = true;
+    }
+
     /// <summary>
     /// Handles collision events for the arrow.
     /// </summary>
@@ -48,9 +58,6 @@ public class Arrow : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag("Arrow"))
         {
-            // Stop physics simulation for this arrow
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
 
             GetComponent<Collider>().enabled = false;
@@ -66,7 +73,7 @@ public class Arrow : MonoBehaviour
                 destroy = true;
             }
             // Handle collision with player
-            else if (collision.gameObject.GetComponent<PlayerMovement>() != null)
+            else if (collision.gameObject.GetComponent<PlayerMovement>() != null && !shotByPlayer)
             {
                 collision.gameObject.GetComponent<PlayerMovement>().TakeDamage(Damage);
                 particles.Play();

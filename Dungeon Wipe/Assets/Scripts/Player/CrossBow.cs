@@ -14,10 +14,16 @@ public class CrossBow : MonoBehaviour
     private float projectileSpeed; // Speed at which the projectile will move
 
     /// <summary>
+    /// Checks if the arrow was shot by the Player.
+    /// </summary>
+    public bool ShotByPlayer { get; set; }
+
+    /// <summary>
     /// Initializes the projectile speed.
     /// </summary>
     void Start()
     {
+        ShotByPlayer = false;
         projectileSpeed = 10f;
     }
 
@@ -71,6 +77,7 @@ public class CrossBow : MonoBehaviour
             GameObject projectile = Instantiate(projectilePrefab, shootingPoint.position, Quaternion.LookRotation(shootingDirection));
 
             projectile.GetComponent<Arrow>().Damage = damage;
+            projectile.GetComponent<Arrow>().SetShotByPlayer();
 
             // Apply velocity to the projectile's Rigidbody component to move it in the shooting direction
             projectile.GetComponent<Rigidbody>().velocity = shootingDirection * projectileSpeed;

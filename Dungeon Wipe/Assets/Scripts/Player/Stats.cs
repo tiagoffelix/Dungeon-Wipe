@@ -14,19 +14,6 @@ public class Stats : ScriptableObject
     [SerializeField] private bool dead; // Indicates whether the player is dead
     [SerializeField] private int sensitivity; // The player's mouse sensitivity
 
-    // Audio clips for various player sounds
-    [SerializeField] private AudioClip walkingSound;
-    [SerializeField] private AudioClip swordSound;
-    [SerializeField] private AudioClip slashSound;
-    [SerializeField] private AudioClip hitSound;
-    [SerializeField] private AudioClip bowSound;
-    [SerializeField] private AudioClip spikesSound;
-    [SerializeField] private AudioClip parrySound;
-    [SerializeField] private AudioClip shieldedSound;
-    [SerializeField] private AudioClip shieldBreakSound;
-    [SerializeField] private AudioClip coinsSound;
-    [SerializeField] private AudioClip drawSwordSound;
-
     [SerializeField] private int score; // The player's score
     [SerializeField] private int numberOfSpawns; // Number of times the player has spawned
     [SerializeField] private int levelMinutes; // The time (in minutes) for each level
@@ -111,30 +98,6 @@ public class Stats : ScriptableObject
         get { return this.dead; }
         set { this.dead = value; }
     }
-
-    // Getters for audio clips
-
-    public AudioClip WalkingSound => walkingSound;
-
-    public AudioClip SwordSound => swordSound;
-
-    public AudioClip DrawSwordSound => drawSwordSound;
-
-    public AudioClip SlashSound => slashSound;
-
-    public AudioClip HitSound => hitSound;
-
-    public AudioClip BowSound => bowSound;
-
-    public AudioClip SpikesSound => spikesSound;
-
-    public AudioClip ParrySound => parrySound;
-
-    public AudioClip ShieldedSound => shieldedSound;
-
-    public AudioClip ShieldBreakSound => shieldBreakSound;
-
-    public AudioClip CoinsSound => coinsSound;
 
     /// <summary>
     /// Adds health to the player, up to a maximum of 100.

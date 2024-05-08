@@ -286,6 +286,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Spikes"))
         {
+            audioSource.PlayOneShot(enemyType.SpikeSound);
             DeathFall();
         }
     }

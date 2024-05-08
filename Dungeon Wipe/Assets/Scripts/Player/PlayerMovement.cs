@@ -64,13 +64,20 @@ public class PlayerMovement : MonoBehaviour
 
     public static PlayerMovement Instance { get; private set; }
 
-    private AudioSource audioSource; // Reference to the AudioSource component
-
-    [SerializeField] private AudioSource walkingSound; // AudioSource for walking sound effects
-
     [SerializeField] private Image crackImage1; // UI Image for the first crack indicator
     [SerializeField] private Image crackImage2; // UI Image for the second crack indicator
     [SerializeField] private Image crackImage3; // UI Image for the third crack indicator
+
+    [SerializeField] private AudioSource walkingSound;
+    [SerializeField] private AudioSource swordSound;
+    [SerializeField] private AudioSource slashSound;
+    [SerializeField] private AudioSource hitSound;
+    [SerializeField] private AudioSource bowSound;
+    [SerializeField] private AudioSource spikesSound;
+    [SerializeField] private AudioSource parrySound;
+    [SerializeField] private AudioSource shieldedSound;
+    [SerializeField] private AudioSource shieldBreakSound;
+    [SerializeField] private AudioSource drawSwordSound;
 
     /// <summary>
     /// Initializes the singleton instance and other components.
@@ -86,8 +93,6 @@ public class PlayerMovement : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        audioSource = GetComponent<AudioSource>();
-        walkingSound.clip = playerStats.WalkingSound;
     }
 
     /// <summary>
@@ -290,7 +295,7 @@ public class PlayerMovement : MonoBehaviour
                 !shotArrow)
             {
                 shotArrow = true;
-                audioSource.PlayOneShot(playerStats.BowSound);
+                bowSound.Play();
                 bow.GetComponent<CrossBow>().ShootProjectile(arrowDamage);
             }
 
@@ -364,7 +369,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (activateSword)
         {
-            audioSource.PlayOneShot(playerStats.DrawSwordSound);
+            drawSwordSound.Play();
         }
     }
 
@@ -376,18 +381,18 @@ public class PlayerMovement : MonoBehaviour
     {
         if (blockingTime > 0 && blockingTime < 0.3)
         {
-            audioSource.PlayOneShot(playerStats.ParrySound);
+            parrySound.Play();
             animator.SetTrigger("Blocked");
         }
         else
         {
             if (isBlocking)
             {
-                audioSource.PlayOneShot(playerStats.ShieldedSound);
+                shieldedSound.Play();
                 blockCounter++;
                 if (blockCounter >= 3)
                 {
-                    audioSource.PlayOneShot(playerStats.ShieldBreakSound);
+                    shieldBreakSound.Play();
                     animator.SetBool("Block", false);
                     isBlocking = false;
                     blockCounter = 0;
@@ -397,7 +402,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                audioSource.PlayOneShot(playerStats.HitSound);
+                hitSound.Play();
                 animator.SetTrigger("Hit");
                 playerStats.TakeDamage(damage);
             }
@@ -428,7 +433,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void DeathFall()
     {
-        audioSource.PlayOneShot(playerStats.HitSound);
+        hitSound.Play();
         deathFall = true;
         playerStats.TakeDamage(1000);
         healthBarImage.fillAmount = playerStats.Health / 100f;
@@ -452,8 +457,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (enemy != null)
             {
-                audioSource.Stop();
-                audioSource.PlayOneShot(playerStats.SwordSound);
+                swordSound.Play();
                 particles.Play();
                 animator.SetFloat("Speed", 0);
                 enemy.TakeDamage(damage);
@@ -461,7 +465,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
             }
         }
-        if (hitEnemies.Length == 0) { audioSource.PlayOneShot(playerStats.SlashSound); }
+        if (hitEnemies.Length == 0) { slashSound.Play(); }
     }
 
     /// <summary>
@@ -480,7 +484,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Spikes"))
         {
-            audioSource.PlayOneShot(playerStats.SpikesSound);
+            spikesSound.Play();
             DeathFall();
         }
         if (other.gameObject.CompareTag("Potion"))
@@ -488,7 +492,6 @@ public class PlayerMovement : MonoBehaviour
             PotionItem potionItem = other.gameObject.GetComponent<PotionItem>();
             if (potionItem != null)
             {
-                audioSource.PlayOneShot(playerStats.CoinsSound);
                 // Check each potion type and apply effects accordingly
                 if (potionItem.SpeedPotion != null)
                 {
@@ -523,14 +526,12 @@ public class PlayerMovement : MonoBehaviour
         {
             Coins coins = other.gameObject.GetComponent<Coins>();
 
-            audioSource.PlayOneShot(playerStats.CoinsSound);
-
             if (coins != null)
             {
                 playerStats.Score += coins.CoinsSO.Score;
                 if (coins.CoinsSO.Sound != null)
                 {
-                    coins.CoinsSO.Sound.Play();
+                    AudioSource.PlayClipAtPoint(coins.CoinsSO.Sound, transform.position);
                 }
                 Destroy(other.gameObject);
             }
