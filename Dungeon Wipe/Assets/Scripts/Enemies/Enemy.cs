@@ -54,7 +54,7 @@ public class Enemy : MonoBehaviour
 
     private AudioSource audioSource;
     private NavMeshAgent agent;
-    public bool playerSighted;
+    private bool playerSighted;
 
     /// <summary>
     /// Initializes the enemy properties.
@@ -78,11 +78,26 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        //playerSighted = CheckLineOfSight();
-
-        if (transform.position.y < -2)
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")
+        || animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")
+        || animator.GetCurrentAnimatorStateInfo(0).IsName("Death")
+        || animator.GetCurrentAnimatorStateInfo(0).IsName("DeathFall")
+        || animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
         {
-            DeathFall();
+            isAttacking = true;
+        }
+        else
+        {
+            isAttacking = false;
+        }
+
+        if(isAttacking)
+        {
+            agent.isStopped = true;
+        }
+        else 
+        {
+            agent.isStopped = false;
         }
 
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Death")
@@ -90,51 +105,74 @@ public class Enemy : MonoBehaviour
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
         {
-            distance = Vector3.Distance(player.transform.position, transform.position);
+            Vector3 playerPosition = player.transform.position;
+            Vector3 directionToPlayer = playerPosition - transform.position;
+            distance = new Vector3(directionToPlayer.x, 0, directionToPlayer.z).magnitude;
+            float verticalDistance = Mathf.Abs(directionToPlayer.y);
 
-            if (distance <= enemyType.AttackRange && playerSighted)
+            int obstacleLayerMask = LayerMask.GetMask("Obstacle");
+            int enemyLayerMask = LayerMask.GetMask("Enemy");
+
+            // Combine masks for 'Obstacle' and 'Enemy'
+            int combinedMask = obstacleLayerMask | enemyLayerMask;
+
+            // Bitwise invert to ignore both 'Obstacle' and 'Enemy' layers
+            combinedMask = ~combinedMask;
+
+            if (verticalDistance <= 1.0f) // Adjust this value based on your game's jump height
             {
-                Vector3 directionToPlayer = player.transform.position - transform.position;
-                directionToPlayer.y = 0; // Set the y-component to zero to keep the rotation horizontal
-                transform.rotation = Quaternion.LookRotation(directionToPlayer);
-
-                agent.isStopped = true;
-                animator.SetFloat("Speed", 0);
-
-                if (cooldownTimer > 0) { cooldownTimer -= Time.deltaTime; }
-
-                if (cooldownTimer <= 0 && !isAttacking)
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, directionToPlayer.normalized, out hit, Mathf.Infinity, combinedMask))
                 {
-                    player.Danger = true;
-                    ResetCooldown();
-
-                    if (enemyType.TypeName == "Warrior")
+                    if (hit.collider.gameObject == player.gameObject)
                     {
-                        Attack();
+                        playerSighted = true;
                     }
-                    else if (enemyType.TypeName == "Archer")
+                    else
                     {
-                        animator.SetTrigger("Attack");
-                        particles.Play();
-                        audioSource.PlayOneShot(enemyType.AttackSound);
-                        Vector3 shootingPosition = player.transform.position;
-                        shootingPosition.y -= 0.5f;
-                        weapon.GetComponent<EnemyBow>().ShootProjectile(shootingPosition, enemyType.BaseDamage);
-                    }
-                    else if (enemyType.TypeName == "Mage")
-                    {
-                        particles.Play();
-                        audioSource.PlayOneShot(enemyType.AttackSound);
-                        animator.SetTrigger("Attack");
+                        playerSighted = false;
                     }
                 }
-            }
-            else
-            {
-                if (!isAttacking)
+
+                if (distance <= enemyType.AttackRange && playerSighted)
                 {
-                    agent.isStopped = false;
-                    agent.SetDestination(player.transform.position);
+                    directionToPlayer.y = 0;
+                    transform.rotation = Quaternion.LookRotation(directionToPlayer);
+
+                    agent.isStopped = true;
+                    animator.SetFloat("Speed", 0);
+
+                    if (cooldownTimer > 0) { cooldownTimer -= Time.deltaTime; }
+
+                    if (cooldownTimer <= 0 && !isAttacking)
+                    {
+                        player.Danger = true;
+                        ResetCooldown();
+
+                        if (enemyType.TypeName == "Warrior")
+                        {
+                            Attack();
+                        }
+                        else if (enemyType.TypeName == "Archer")
+                        {
+                            animator.SetTrigger("Attack");
+                            particles.Play();
+                            audioSource.PlayOneShot(enemyType.AttackSound);
+                            Vector3 shootingPosition = player.transform.position;
+                            shootingPosition.y -= 0.5f;
+                            weapon.GetComponent<EnemyBow>().ShootProjectile(shootingPosition, enemyType.BaseDamage);
+                        }
+                        else if (enemyType.TypeName == "Mage")
+                        {
+                            particles.Play();
+                            audioSource.PlayOneShot(enemyType.AttackSound);
+                            animator.SetTrigger("Attack");
+                        }
+                    }
+                }
+                else
+                {
+                    agent.SetDestination(FindNearestPointOnNavMesh(player.transform.position));
                     animator.SetFloat("Speed", agent.speed);
                 }
             }
@@ -161,19 +199,29 @@ public class Enemy : MonoBehaviour
                 }
                 ResetCooldown();
             }
+        }
 
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")
-            || animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")
-            || animator.GetCurrentAnimatorStateInfo(0).IsName("Death")
-            || animator.GetCurrentAnimatorStateInfo(0).IsName("DeathFall")
-            || animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
-            {
-                isAttacking = true;
-            }
-            else
-            {
-                isAttacking = false;
-            }
+    }
+
+    /// <summary>
+    /// Finds the nearest point on the NavMesh to a given position.
+    /// </summary>
+    /// <param name="targetPosition">The target position to find the nearest NavMesh point.</param>
+    /// <returns>The closest position on the NavMesh. Returns null if no valid point found.</returns>
+    public Vector3 FindNearestPointOnNavMesh(Vector3 targetPosition)
+    {
+        NavMeshHit hit;
+        // The distance within which to search for a NavMesh point.
+        float maxDistance = 10.0f;
+
+        // Check if there is a valid NavMesh position within maxDistance of targetPosition
+        if (NavMesh.SamplePosition(targetPosition, out hit, maxDistance, NavMesh.AllAreas))
+        {
+            return hit.position;
+        }
+        else
+        {
+            return transform.position; // No valid NavMesh point was found within the search distance
         }
     }
 
@@ -197,27 +245,11 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void Death()
     {
+        agent.isStopped = true;
+        agent.enabled = false;
         player.Danger = false;
         weapon.SetActive(false);
         animator.SetBool("Death", true);
-        enabled = false;
-        isAttacking = true;
-        foreach (Collider col in GetComponents<Collider>())
-        {
-            col.enabled = false;
-        }
-        player.PlayerStats.Score += points;
-        Destroy(gameObject, 15);
-    }
-
-    /// <summary>
-    /// Handles the enemy's death when falling off the map.
-    /// </summary>
-    private void DeathFall()
-    {
-        player.Danger = false;
-        weapon.SetActive(false);
-        animator.SetBool("DeathFall", true);
         enabled = false;
         isAttacking = true;
         foreach (Collider col in GetComponents<Collider>())
@@ -264,18 +296,5 @@ public class Enemy : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (attackCenter) { Gizmos.DrawWireSphere(attackCenter.position, enemyType.AttackRange); }
-    }
-
-    /// <summary>
-    /// Handles collision with spike traps, triggering death.
-    /// </summary>
-    /// <param name="other">The collider of the other object that was hit.</param>
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Spikes"))
-        {
-            audioSource.PlayOneShot(enemyType.SpikeSound);
-            DeathFall();
-        }
     }
 }

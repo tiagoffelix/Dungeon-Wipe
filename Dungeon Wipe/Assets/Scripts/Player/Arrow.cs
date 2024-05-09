@@ -73,10 +73,17 @@ public class Arrow : MonoBehaviour
                 destroy = true;
             }
             // Handle collision with player
-            else if (collision.gameObject.GetComponent<PlayerMovement>() != null && !shotByPlayer)
+            else if (collision.gameObject.GetComponent<PlayerMovement>() != null)
             {
-                collision.gameObject.GetComponent<PlayerMovement>().TakeDamage(Damage);
-                particles.Play();
+                if(!shotByPlayer) 
+                {
+                    collision.gameObject.GetComponent<PlayerMovement>().TakeDamage(Damage);
+                    particles.Play();
+                }
+                else 
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

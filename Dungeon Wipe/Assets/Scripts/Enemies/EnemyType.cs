@@ -14,7 +14,6 @@ public class EnemyType : ScriptableObject
     [SerializeField] private int points; // Points awarded for defeating the enemy.
     [SerializeField] private AudioClip attackSound; // Sound played when the enemy attacks.
     [SerializeField] private AudioClip deathSound; // Sound played when the enemy dies.
-    [SerializeField] private AudioClip spikeSound; // Sound played when the enemy dies.
 
     /// <summary>
     /// Gets the name of the enemy type.
@@ -80,11 +79,4 @@ public class EnemyType : ScriptableObject
         get { return deathSound; }
     }
 
-    /// <summary>
-    /// Gets the sound played when the enemy type dies to spikes.
-    /// </summary>
-    public AudioClip SpikeSound
-    {
-        get { return spikeSound; }
-    }
 }
