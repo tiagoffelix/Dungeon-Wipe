@@ -36,8 +36,12 @@ public class EditorCameraController : MonoBehaviour
         float xMovement = Input.GetAxis("Horizontal") * movementSpeed * Time.deltaTime; // A/D or Left/Right
         float yMovement = Input.GetAxis("Vertical") * movementSpeed * Time.deltaTime; // W/S or Up/Down
 
-        // Handle zooming with the scroll wheel
-        float zMovement = Input.mouseScrollDelta.y * zoomSpeed * Time.deltaTime;
+        // Handle zooming with the scroll wheel if Control is pressed
+        float zMovement = 0f;
+        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+        {
+            zMovement = Input.mouseScrollDelta.y * zoomSpeed * Time.deltaTime;
+        }
 
         Vector3 move = transform.right * xMovement + transform.forward * zMovement + transform.up * yMovement;
         transform.position += move;

@@ -16,8 +16,6 @@ public class PrefabManager : MonoBehaviour
     public static PrefabManager Instance { get; private set; }
 
     [SerializeField] private List<GameObject> prefabs; // List of prefabs available for instantiation
-    [SerializeField] private Transform scrollViewContent; // Content transform of the scroll view for prefab buttons
-    [SerializeField] private GameObject buttonPrefab; // Prefab for the buttons in the scroll view
 
     [SerializeField] private ObjectManager objectManager; // Reference to the ObjectManager script
     [SerializeField] private LevelEditorSO levelEditor; // Reference to the LevelEditorSO scriptable object
@@ -58,13 +56,6 @@ public class PrefabManager : MonoBehaviour
     void Start()
     {
         PlayerPlaced = false; // Initialize the player placed flag
-        foreach (var prefab in prefabs)
-        {
-            GameObject btn = Instantiate(buttonPrefab, scrollViewContent);
-            btn.GetComponentInChildren<TextMeshProUGUI>().text = prefab.name;
-            btn.GetComponent<Button>().onClick.AddListener(() => SetCurrentPrefab(prefab));
-            btn.GetComponent<Button>().onClick.AddListener(() => objectManager.SetDeletingFalse());
-        }
         LoadPrefabsFromJson();
     }
 
@@ -203,7 +194,7 @@ public class PrefabManager : MonoBehaviour
     /// Sets the current prefab to the specified prefab.
     /// </summary>
     /// <param name="prefab">Prefab to set as current.</param>
-    void SetCurrentPrefab(GameObject prefab)
+    public void SetCurrentPrefab(GameObject prefab)
     {
         if (currentPrefab != null)
         {
