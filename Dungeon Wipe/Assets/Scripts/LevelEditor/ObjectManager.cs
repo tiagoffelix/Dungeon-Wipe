@@ -29,6 +29,12 @@ public class ObjectManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            PrefabManager.Instance.DestroyCurrentPrefab();
+            ChangeDeleting();
+        }
+
         if (deleting)
         {
             // Raycast to detect the object the mouse is pointing at

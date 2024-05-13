@@ -68,6 +68,14 @@ public class PrefabManager : MonoBehaviour
         {
             currentPrefab.transform.Rotate(0, 90, 0); // Rotate 90 degrees around the Y axis
         }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SerializePrefabs();
+        }
+        if (Input.GetKeyDown(KeyCode.E) && currentPrefab != null)
+        {
+            DestroyCurrentPrefab();
+        }
     }
 
     /// <summary>

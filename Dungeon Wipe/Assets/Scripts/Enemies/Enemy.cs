@@ -121,8 +121,10 @@ public class Enemy : MonoBehaviour
 
             if (verticalDistance <= 1.0f) // Adjust this value based on your game's jump height
             {
+                Vector3 updatedPosition = transform.position;
+                updatedPosition.y += 0.5f;
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, directionToPlayer.normalized, out hit, Mathf.Infinity, combinedMask))
+                if (Physics.Raycast(updatedPosition, directionToPlayer.normalized, out hit, Mathf.Infinity, combinedMask))
                 {
                     if (hit.collider.gameObject == player.gameObject)
                     {
