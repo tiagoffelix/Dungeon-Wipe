@@ -167,6 +167,7 @@ public class PlayerMovement : MonoBehaviour
 
             healthBarImage.fillAmount = playerStats.Health / 100f;
 
+            //TIRAR NA BUILD FINAL
             if (Input.GetKeyDown(KeyCode.P))
             {
                 playerStats.Health = 100;
