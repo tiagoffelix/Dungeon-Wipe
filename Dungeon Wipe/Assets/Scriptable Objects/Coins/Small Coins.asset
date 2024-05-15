@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Small Coins
   m_EditorClassIdentifier: 
   score: 1250
-  sound: {fileID: 8272022174571623267, guid: 8d701234feed91f42b69c35aa559b425, type: 3}
+  sound: {fileID: 8300000, guid: 15ffbb7ea318b9041b10f06cb35473e7, type: 3}
   timeToDespawn: 15
