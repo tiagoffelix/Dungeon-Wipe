@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private Animator animator; // Reference to the Animator component
     private CharacterController controller; // Reference to the CharacterController component
+    private AudioSource audioSource; // Reference to the AudioSource component
 
     [SerializeField] private Transform attackCenter; // Center position for attack range
     [SerializeField] float attackRange; // Range of the attack
@@ -102,6 +103,7 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();  
         attackRange = 0.375f;
         nextAttackTimer = 0f;
         jumpHeight = 0.2f;
@@ -507,7 +509,7 @@ public class PlayerMovement : MonoBehaviour
                     StartCoroutine(ApplySpeedBoost(potionItem.SpeedPotion.SpeedBoost, potionItem.SpeedPotion.Duration));
                     if (potionItem.SpeedPotion.Sound != null)
                     {
-                        AudioSource.PlayClipAtPoint(potionItem.SpeedPotion.Sound, transform.position);
+                        audioSource.PlayOneShot(potionItem.SpeedPotion.Sound);
                     }
                     Destroy(other.gameObject);
                 }
@@ -516,7 +518,7 @@ public class PlayerMovement : MonoBehaviour
                     StartCoroutine(ApplyDamageBoost(potionItem.DamagePotion.DamageBoost, potionItem.DamagePotion.Duration));
                     if (potionItem.DamagePotion.Sound != null)
                     {
-                        AudioSource.PlayClipAtPoint(potionItem.DamagePotion.Sound, transform.position);
+                        audioSource.PlayOneShot(potionItem.DamagePotion.Sound);
                     }
                     Destroy(other.gameObject);
                 }
@@ -525,7 +527,7 @@ public class PlayerMovement : MonoBehaviour
                     playerStats.AddHealth(potionItem.HealthPotion.Health);
                     if (potionItem.HealthPotion.Sound != null)
                     {
-                        AudioSource.PlayClipAtPoint(potionItem.HealthPotion.Sound, transform.position);
+                        audioSource.PlayOneShot(potionItem.HealthPotion.Sound);
                     }
                     Destroy(other.gameObject);
                 }
