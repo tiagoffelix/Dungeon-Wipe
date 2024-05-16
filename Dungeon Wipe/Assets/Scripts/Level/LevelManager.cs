@@ -124,7 +124,9 @@ public class LevelManager : MonoBehaviour
                 instance.transform.SetParent(parentGameObject.transform);
 
                 // If it's a ground tile, add the GameObject to spawnedGrounds
-                if (prefabData.Name == "Floor")
+                if (prefabData.Name == "Floor" || prefabData.Name == "Wood Corner Left"
+                    || prefabData.Name == "Wood Corner Right" || prefabData.Name == "Wood Floor" 
+                    || prefabData.Name == "Wood Rails")
                 {
                     spawnedGrounds.Add(instance);
                 }
@@ -151,17 +153,9 @@ public class LevelManager : MonoBehaviour
         {
             prefabName = "Player 1";
         }
-        else if (prefabName == "Spawn")
-        {
-            prefabName = "Spawn 1";
-        }
         else if (prefabName == "Spikes")
         {
             prefabName = "Spikes 1";
-        }
-        else if (prefabName == "Floor")
-        {
-            prefabName = "Floor 1";
         }
 
         foreach (GameObject prefab in prefabs)

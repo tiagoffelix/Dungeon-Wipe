@@ -46,32 +46,21 @@ public class CrossBow : MonoBehaviour
     }
 
     /// <summary>
-    /// Shoots a projectile towards the direction of the crossbow.
+    /// Shoots a projectile forward from the shooting point.
     /// </summary>
     /// <param name="damage">The damage value the projectile will inflict.</param>
     public void ShootProjectile(float damage)
     {
-        Camera activeCamera = GetActiveCamera(); // Get the currently active camera
-
-        if (projectilePrefab != null && shootingPoint != null && activeCamera != null)
+        if (projectilePrefab != null && shootingPoint != null)
         {
-            // Create a ray from the center of the screen
-            Ray ray = activeCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-            RaycastHit hit;
-
-            Vector3 targetPoint;
-            if (Physics.Raycast(ray, out hit))
+            Camera activeCamera = GetActiveCamera(); // Get the currently active camera
+            if (activeCamera != null)
             {
-                // If the ray hits something in the scene, use the hit point as the target
-                targetPoint = hit.point;
-            }
-            else
-            {
-                // If nothing is hit, use a point far away in the direction of the ray
-                targetPoint = ray.origin + ray.direction * 1000;
+                // Rotate the shooting point to align with the camera's forward direction
+                shootingPoint.rotation = Quaternion.LookRotation(activeCamera.transform.forward);
             }
 
-            Vector3 shootingDirection = (targetPoint - shootingPoint.position).normalized;
+            Vector3 shootingDirection = shootingPoint.forward;
 
             // Instantiate the projectile at the shooting point with orientation towards the shooting direction
             GameObject projectile = Instantiate(projectilePrefab, shootingPoint.position, Quaternion.LookRotation(shootingDirection));

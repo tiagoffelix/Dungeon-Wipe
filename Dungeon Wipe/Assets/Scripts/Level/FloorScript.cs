@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Represents a floor in the game world.
@@ -21,6 +22,25 @@ public class FloorScript : MonoBehaviour
     void Start()
     {
         hasCollectible = false;
+        CheckAndDeactivateCollider();
+    }
+
+    /// <summary>
+    /// Checks the collider and deactivates it if the scene is not "Game".
+    /// </summary>
+    private void CheckAndDeactivateCollider()
+    {
+        if (SceneManager.GetActiveScene().name != "Game")
+        {
+            Collider[] colliders = GetComponents<Collider>();
+            foreach (var collider in colliders)
+            {
+                if (collider.isTrigger)
+                {
+                    collider.enabled = false;
+                }
+            }
+        }
     }
 
     /// <summary>

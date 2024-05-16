@@ -257,9 +257,8 @@ MonoBehaviour:
   - {fileID: 3761524534090057585, guid: d1cdbdbd153a2134a9850a537b2e83a2, type: 3}
   - {fileID: 3761524534090057585, guid: e3f1d2304ae7e494f8e92c0ecabd6c7a, type: 3}
   - {fileID: 3761524534090057585, guid: 95c8d2fd9c9593c4ab2a6398f238287e, type: 3}
-  - {fileID: 3171350973839213168, guid: a4c2e77dc7d516b45922fe9dac83dc17, type: 3}
+  - {fileID: 3761524534090057585, guid: 09eab838a9bcb4c43bd4286e182b2102, type: 3}
   - {fileID: 3761524534090057585, guid: b49c074cf382c4244993591b014a5058, type: 3}
-  - {fileID: 3761524534090057585, guid: ec73df71dbfc7e349be36b2fcd7445ac, type: 3}
   - {fileID: 4814393471076114547, guid: 17ce9e056a46fb8468162eaa75482710, type: 3}
   - {fileID: 3761524534090057585, guid: 63c0ef66f70dbe8409c12ebe079ad24e, type: 3}
   - {fileID: 3761524534090057585, guid: 8b5f6bd5c1106864587ead0a8f474724, type: 3}
@@ -273,6 +272,7 @@ MonoBehaviour:
   - {fileID: 3761524534090057585, guid: c12e2d7740e4ed240a5b67c08a7a5d66, type: 3}
   - {fileID: 3761524534090057585, guid: 21bb84acab14ffb4284d1e4a75a01c4d, type: 3}
   - {fileID: 3761524534090057585, guid: 70c448a9bd982604b980beca87462a23, type: 3}
+  - {fileID: 3761524534090057585, guid: ec73df71dbfc7e349be36b2fcd7445ac, type: 3}
   stats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
   levelEditor: {fileID: 11400000, guid: e036f55c5386b39409256ec03c100c85, type: 2}
   potionPrefabs:

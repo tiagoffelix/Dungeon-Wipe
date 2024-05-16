@@ -128,7 +128,7 @@ public class GridGenerator : MonoBehaviour
     public void UpdateGridSizeY(float value)
     {
         levelEditor.GridSizeY = (int)value;
-        textY.text = "Grid Height: " + levelEditor.GridSizeY;
+        textY.text = "Grid Length: " + levelEditor.GridSizeY;
     }
 
     /// <summary>

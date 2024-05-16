@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Spawns enemies at a specified rate when the player enters a trigger area.
@@ -25,8 +26,27 @@ public class EnemySpawner : MonoBehaviour
         timeBetweenSpawns = spawnRate.TimeBetweenSpawns;
         spawnTimeVariation = spawnRate.SpawnTimeVariation;
         enemyPrefabs = spawnRate.EnemyPrefabs;
+        CheckAndDeactivateCollider();
     }
 
+    /// <summary>
+    /// Checks the collider and deactivates it if the scene is not "Game".
+    /// </summary>
+    private void CheckAndDeactivateCollider()
+    {
+        if (SceneManager.GetActiveScene().name != "Game")
+        {
+            Collider[] colliders = GetComponents<Collider>();
+            foreach (var collider in colliders)
+            {
+                if (collider.isTrigger)
+                {
+                    collider.enabled = false;
+                }
+            }
+            this.enabled = false;
+        }
+    }
     /// <summary>
     /// Activates enemy spawning when the player enters the trigger area.
     /// </summary>

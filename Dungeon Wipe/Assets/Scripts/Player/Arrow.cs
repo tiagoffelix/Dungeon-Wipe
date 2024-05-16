@@ -82,6 +82,7 @@ public class Arrow : MonoBehaviour
                 }
                 else 
                 {
+                    print("Hit Player");
                     Destroy(gameObject);
                 }
             }

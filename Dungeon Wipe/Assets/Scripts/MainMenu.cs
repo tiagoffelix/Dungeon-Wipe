@@ -60,7 +60,11 @@ public class MainMenu : MonoBehaviour
         foreach (var filePath in levelFiles)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
-            CreateButton(content, fileName, () => SelectLevel(filePath));
+
+            // Add a space between "Level" and the number
+            string spacedFileName = AddSpaceToLevelName(fileName);
+
+            CreateButton(content, spacedFileName, () => SelectLevel(filePath));
         }
     }
 
@@ -73,12 +77,30 @@ public class MainMenu : MonoBehaviour
         foreach (var filePath in levelFiles)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
-            CreateButton(content, fileName, () => OpenEditor(filePath));
+
+            // Add a space between "Level" and the number
+            string spacedFileName = AddSpaceToLevelName(fileName);
+
+            CreateButton(content, spacedFileName, () => OpenEditor(filePath));
         }
 
         // Button for creating a new level
         int totalLevels = levelFiles.Length;
-        CreateButton(content, $"New Level", () => OpenEditor(Path.Combine(levelsFolderPath, $"Level {totalLevels + 1}.json")));
+        CreateButton(content, "New Level", () => OpenEditor(Path.Combine(levelsFolderPath, $"Level{totalLevels + 1}.json")));
+    }
+
+    /// <summary>
+    /// Adds a space between "Level" and the number in the file name.
+    /// </summary>
+    /// <param name="fileName">The original file name without extension.</param>
+    /// <returns>The modified file name with a space added.</returns>
+    private string AddSpaceToLevelName(string fileName)
+    {
+        if (fileName.StartsWith("Level") && fileName.Length > 5)
+        {
+            return fileName.Insert(5, " ");
+        }
+        return fileName;
     }
 
     /// <summary>

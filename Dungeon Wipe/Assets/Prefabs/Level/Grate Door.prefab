@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6495288027560102227}
   - component: {fileID: 4563873925052175178}
   - component: {fileID: 4841816054383281384}
+  - component: {fileID: 2146753215809614077}
   m_Layer: 0
   m_Name: Grate Door
   m_TagString: Untagged
@@ -107,8 +108,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.000001, y: 1.4747481, z: 1.5000026}
-  m_Center: {x: 0, y: 3.262626, z: 0}
+  m_Size: {x: 4.000001, y: 1.1895742, z: 1.5000026}
+  m_Center: {x: 0, y: 3.4052129, z: 0}
 --- !u!65 &4563873925052175178
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -128,8 +129,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.039171, y: 4, z: 1.5000026}
-  m_Center: {x: 1.480415, y: 2, z: 0}
+  m_Size: {x: 0.9710897, y: 4, z: 1.5000026}
+  m_Center: {x: 1.5144556, y: 2, z: 0}
 --- !u!65 &4841816054383281384
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -149,8 +150,29 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.0274734, y: 4, z: 1.5000026}
-  m_Center: {x: -1.4862638, y: 2, z: 0}
+  m_Size: {x: 0.9480958, y: 4, z: 1.5000026}
+  m_Center: {x: -1.5259526, y: 2, z: 0}
+--- !u!65 &2146753215809614077
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3740429028237310793}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.1181087, y: 0.11142975, z: 0.20250571}
+  m_Center: {x: -0.014561653, y: 0.055714875, z: -0.001793921}
 --- !u!1 &3761524534090057585
 GameObject:
   m_ObjectHideFlags: 0
