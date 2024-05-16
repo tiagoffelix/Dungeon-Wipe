@@ -155,6 +155,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4573491247908036043}
     m_Modifications:
+    - target: {fileID: 334969552842929209, guid: d79f90e7c01e45d46b9c24b07f819459, type: 3}
+      propertyPath: m_Radius
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 1360256740898574553, guid: d79f90e7c01e45d46b9c24b07f819459, type: 3}
       propertyPath: m_AffectedAgents.Array.size
       value: 1

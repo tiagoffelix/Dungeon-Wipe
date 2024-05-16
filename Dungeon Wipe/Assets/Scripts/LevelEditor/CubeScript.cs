@@ -94,7 +94,7 @@ public class CubeScript : MonoBehaviour
     /// <returns>True if an object is on top, false otherwise.</returns>
     private bool HasObjectOnTop()
     {
-        Vector3 boxSize = new Vector3(transform.localScale.x * 0.15f, transform.localScale.y * 0.15f, transform.localScale.z * 0.15f);
+        Vector3 boxSize = new Vector3(transform.localScale.x * 0.15f, transform.localScale.y * 0.05f, transform.localScale.z * 0.15f);
         Collider[] colliders = Physics.OverlapBox(transform.position, boxSize / 2, Quaternion.identity);
         foreach (Collider collider in colliders)
         {

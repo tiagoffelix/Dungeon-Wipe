@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 277364422618570781}
   m_Layer: 8
   m_Name: Wood Corner Left
-  m_TagString: Arrow
+  m_TagString: Prefab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -283,8 +283,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4, y: 1, z: 4}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Size: {x: 4, y: 0.73340034, z: 4}
+  m_Center: {x: 0, y: 0.36670017, z: 0}
 --- !u!114 &3639487695429608134
 MonoBehaviour:
   m_ObjectHideFlags: 0
