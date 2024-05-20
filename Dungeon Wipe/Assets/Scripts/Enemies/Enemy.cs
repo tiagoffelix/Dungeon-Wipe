@@ -105,7 +105,10 @@ public class Enemy : MonoBehaviour
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
         {
-            Vector3 directionToPlayer = player.transform.position - transform.position;
+            Vector3 playerPosition = player.transform.position;
+            Vector3 directionToPlayer = playerPosition - transform.position;
+
+            playerPosition.y += 0.0f;
 
             distance = directionToPlayer.magnitude;
 
@@ -118,8 +121,11 @@ public class Enemy : MonoBehaviour
             // Bitwise invert to ignore both 'Obstacle' and 'Enemy' layers
             combinedMask = ~combinedMask;
 
+            Vector3 updatedPosition = transform.position;
+            updatedPosition.y += 0.4f;
+
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, directionToPlayer.normalized, out hit, Mathf.Infinity, combinedMask))
+            if (Physics.Raycast(updatedPosition, directionToPlayer.normalized, out hit, Mathf.Infinity, combinedMask, QueryTriggerInteraction.Ignore))
             {
                 if (hit.collider.gameObject == player.gameObject)
                 {
@@ -209,6 +215,7 @@ public class Enemy : MonoBehaviour
         NavMeshHit hit;
         float searchRadius = 10.0f; // A larger search radius to find possible NavMesh points
         float stepSize = 1.0f; // Step size for sampling positions
+        NavMeshPath path = new NavMeshPath(); // Used to store the calculated path
 
         for (float radius = 0; radius <= searchRadius; radius += stepSize)
         {
@@ -218,7 +225,12 @@ public class Enemy : MonoBehaviour
                 // Check if the point is within the attack range from the target position
                 if (Vector3.Distance(hit.position, targetPosition) <= enemyType.AttackRange)
                 {
-                    return hit.position;
+                    // Calculate path to the hit position
+                    if (agent.CalculatePath(hit.position, path) && path.status == NavMeshPathStatus.PathComplete)
+                    {
+                        // Return the position if the path is complete
+                        return hit.position;
+                    }
                 }
             }
         }
@@ -236,12 +248,14 @@ public class Enemy : MonoBehaviour
 
         if (nearestPoint.HasValue)
         {
+            print("Has Path");
             agent.isStopped = false;
             animator.SetFloat("Speed", agent.speed);
             agent.SetDestination(nearestPoint.Value);
         }
         else
         {
+            print("No Path");
             animator.SetFloat("Speed", 0);
             agent.isStopped = true; // Stop the agent if no valid point is found within the attack range
         }
