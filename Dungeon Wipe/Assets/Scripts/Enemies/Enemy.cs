@@ -107,8 +107,7 @@ public class Enemy : MonoBehaviour
         {
             Vector3 playerPosition = player.transform.position;
             Vector3 directionToPlayer = playerPosition - transform.position;
-            float horizontalDistance = new Vector3(directionToPlayer.x, 0, directionToPlayer.z).magnitude;
-            float verticalDistance = Mathf.Abs(directionToPlayer.y);
+            distance = directionToPlayer.magnitude;
 
             int obstacleLayerMask = LayerMask.GetMask("Obstacle");
             int enemyLayerMask = LayerMask.GetMask("Enemy");
@@ -119,13 +118,10 @@ public class Enemy : MonoBehaviour
             // Bitwise invert to ignore both 'Obstacle' and 'Enemy' layers
             combinedMask = ~combinedMask;
 
-            Vector3 raycastOrigin = transform.position;
-            raycastOrigin.y += 0.5f;
+            Vector3 updatedPosition = transform.position;
+            updatedPosition.y += 0.5f;
             RaycastHit hit;
-
-            // Use a direction without the Y component for the raycast
-            Vector3 raycastDirection = new Vector3(directionToPlayer.x, 0, directionToPlayer.z).normalized;
-            if (Physics.Raycast(raycastOrigin, raycastDirection, out hit, Mathf.Infinity, combinedMask))
+            if (Physics.Raycast(updatedPosition, directionToPlayer.normalized, out hit, Mathf.Infinity, combinedMask))
             {
                 if (hit.collider.gameObject == player.gameObject)
                 {
@@ -137,10 +133,9 @@ public class Enemy : MonoBehaviour
                 }
             }
 
-            // Check both horizontal distance and vertical distance
-            if (horizontalDistance <= enemyType.AttackRange && playerSighted && verticalDistance <= 1f)
+            if (distance <= enemyType.AttackRange && playerSighted)
             {
-                directionToPlayer.y = 0; // Ensure rotation is only on the horizontal plane
+                directionToPlayer.y = 0;
                 transform.rotation = Quaternion.LookRotation(directionToPlayer);
 
                 agent.isStopped = true;
@@ -179,7 +174,6 @@ public class Enemy : MonoBehaviour
                 agent.SetDestination(FindNearestPointOnNavMesh(player.transform.position));
                 animator.SetFloat("Speed", agent.speed);
             }
-
 
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
             {
