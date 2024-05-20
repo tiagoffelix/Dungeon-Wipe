@@ -210,7 +210,7 @@ public class Enemy : MonoBehaviour
     /// <param name="targetPosition">The target position to find the nearest NavMesh point.</param>
     /// <param name="attackRange">The attack range within which to find the NavMesh point.</param>
     /// <returns>The closest position on the NavMesh within the specified attack range from the target position. Returns null if no valid point is found.</returns>
-    public Vector3? FindNearestPointOnNavMesh(Vector3 targetPosition)
+    private Vector3? FindNearestPointOnNavMesh()
     {
         NavMeshHit hit;
         float searchRadius = 10.0f; // A larger search radius to find possible NavMesh points
@@ -220,10 +220,10 @@ public class Enemy : MonoBehaviour
         for (float radius = 0; radius <= searchRadius; radius += stepSize)
         {
             // Check if there is a valid NavMesh position within the current radius of the target position
-            if (NavMesh.SamplePosition(targetPosition, out hit, radius, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(player.transform.position, out hit, radius, NavMesh.AllAreas))
             {
                 // Check if the point is within the attack range from the target position
-                if (Vector3.Distance(hit.position, targetPosition) <= enemyType.AttackRange)
+                if ((hit.position - player.transform.position).magnitude <= enemyType.AttackRange)
                 {
                     // Calculate path to the hit position
                     if (agent.CalculatePath(hit.position, path) && path.status == NavMeshPathStatus.PathComplete)
@@ -242,9 +242,9 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// Moves the agent to the closest position where it can attack, or stops if no valid point is found.
     /// </summary>
-    public void MoveToAttackPosition()
+    private void MoveToAttackPosition()
     {
-        Vector3? nearestPoint = FindNearestPointOnNavMesh(player.transform.position);
+        Vector3? nearestPoint = FindNearestPointOnNavMesh();
 
         if (nearestPoint.HasValue)
         {
