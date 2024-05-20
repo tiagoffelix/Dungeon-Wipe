@@ -213,8 +213,8 @@ public class Enemy : MonoBehaviour
     private Vector3? FindNearestPointOnNavMesh()
     {
         NavMeshHit hit;
-        float searchRadius = 10.0f; // A larger search radius to find possible NavMesh points
-        float stepSize = 1.0f; // Step size for sampling positions
+        float searchRadius = 15.0f; // A larger search radius to find possible NavMesh points
+        float stepSize = 0.1f; // Step size for sampling positions
         NavMeshPath path = new NavMeshPath(); // Used to store the calculated path
 
         for (float radius = 0; radius <= searchRadius; radius += stepSize)
