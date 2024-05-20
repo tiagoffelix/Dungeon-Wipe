@@ -107,7 +107,7 @@ public class Enemy : MonoBehaviour
         {
             Vector3 playerPosition = player.transform.position;
             Vector3 directionToPlayer = playerPosition - transform.position;
-            distance = new Vector3(directionToPlayer.x, 0, directionToPlayer.z).magnitude;
+            float horizontalDistance = new Vector3(directionToPlayer.x, 0, directionToPlayer.z).magnitude;
             float verticalDistance = Mathf.Abs(directionToPlayer.y);
 
             int obstacleLayerMask = LayerMask.GetMask("Obstacle");
@@ -119,65 +119,67 @@ public class Enemy : MonoBehaviour
             // Bitwise invert to ignore both 'Obstacle' and 'Enemy' layers
             combinedMask = ~combinedMask;
 
-            if (verticalDistance <= 1.0f) // Adjust this value based on your game's jump height
+            Vector3 raycastOrigin = transform.position;
+            raycastOrigin.y += 0.5f;
+            RaycastHit hit;
+
+            // Use a direction without the Y component for the raycast
+            Vector3 raycastDirection = new Vector3(directionToPlayer.x, 0, directionToPlayer.z).normalized;
+            if (Physics.Raycast(raycastOrigin, raycastDirection, out hit, Mathf.Infinity, combinedMask))
             {
-                Vector3 updatedPosition = transform.position;
-                updatedPosition.y += 0.5f;
-                RaycastHit hit;
-                if (Physics.Raycast(updatedPosition, directionToPlayer.normalized, out hit, Mathf.Infinity, combinedMask))
+                if (hit.collider.gameObject == player.gameObject)
                 {
-                    if (hit.collider.gameObject == player.gameObject)
-                    {
-                        playerSighted = true;
-                    }
-                    else
-                    {
-                        playerSighted = false;
-                    }
-                }
-
-                if (distance <= enemyType.AttackRange && playerSighted)
-                {
-                    directionToPlayer.y = 0;
-                    transform.rotation = Quaternion.LookRotation(directionToPlayer);
-
-                    agent.isStopped = true;
-                    animator.SetFloat("Speed", 0);
-
-                    if (cooldownTimer > 0) { cooldownTimer -= Time.deltaTime; }
-
-                    if (cooldownTimer <= 0 && !isAttacking)
-                    {
-                        player.Danger = true;
-                        ResetCooldown();
-
-                        if (enemyType.TypeName == "Warrior")
-                        {
-                            Attack();
-                        }
-                        else if (enemyType.TypeName == "Archer")
-                        {
-                            animator.SetTrigger("Attack");
-                            particles.Play();
-                            audioSource.PlayOneShot(enemyType.AttackSound);
-                            Vector3 shootingPosition = player.transform.position;
-                            shootingPosition.y -= 0.5f;
-                            weapon.GetComponent<EnemyBow>().ShootProjectile(shootingPosition, enemyType.BaseDamage);
-                        }
-                        else if (enemyType.TypeName == "Mage")
-                        {
-                            particles.Play();
-                            audioSource.PlayOneShot(enemyType.AttackSound);
-                            animator.SetTrigger("Attack");
-                        }
-                    }
+                    playerSighted = true;
                 }
                 else
                 {
-                    agent.SetDestination(FindNearestPointOnNavMesh(player.transform.position));
-                    animator.SetFloat("Speed", agent.speed);
+                    playerSighted = false;
                 }
             }
+
+            // Check both horizontal distance and vertical distance
+            if (horizontalDistance <= enemyType.AttackRange && playerSighted && verticalDistance <= 1f)
+            {
+                directionToPlayer.y = 0; // Ensure rotation is only on the horizontal plane
+                transform.rotation = Quaternion.LookRotation(directionToPlayer);
+
+                agent.isStopped = true;
+                animator.SetFloat("Speed", 0);
+
+                if (cooldownTimer > 0) { cooldownTimer -= Time.deltaTime; }
+
+                if (cooldownTimer <= 0 && !isAttacking)
+                {
+                    player.Danger = true;
+                    ResetCooldown();
+
+                    if (enemyType.TypeName == "Warrior")
+                    {
+                        Attack();
+                    }
+                    else if (enemyType.TypeName == "Archer")
+                    {
+                        animator.SetTrigger("Attack");
+                        particles.Play();
+                        audioSource.PlayOneShot(enemyType.AttackSound);
+                        Vector3 shootingPosition = player.transform.position;
+                        shootingPosition.y -= 0.5f;
+                        weapon.GetComponent<EnemyBow>().ShootProjectile(shootingPosition, enemyType.BaseDamage);
+                    }
+                    else if (enemyType.TypeName == "Mage")
+                    {
+                        particles.Play();
+                        audioSource.PlayOneShot(enemyType.AttackSound);
+                        animator.SetTrigger("Attack");
+                    }
+                }
+            }
+            else
+            {
+                agent.SetDestination(FindNearestPointOnNavMesh(player.transform.position));
+                animator.SetFloat("Speed", agent.speed);
+            }
+
 
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
             {
@@ -247,6 +249,11 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void Death()
     {
+        if (audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+        audioSource.PlayOneShot(enemyType.DeathSound);
         agent.isStopped = true;
         agent.enabled = false;
         player.Danger = false;
