@@ -214,6 +214,7 @@ public class Enemy : MonoBehaviour
     /// <returns>The closest position on the NavMesh within the specified attack range from the target position. Returns null if no valid point is found.</returns>
     public Vector3? FindNearestPointOnNavMesh(Vector3 targetPosition, float attackRange)
     {
+        print(attackRange);
         NavMeshHit hit;
         float searchRadius = 10.0f; // A larger search radius to find possible NavMesh points
         float stepSize = 1.0f; // Step size for sampling positions
