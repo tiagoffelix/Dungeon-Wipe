@@ -7522,7 +7522,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.6
+  m_Radius: 0.5
   m_SlopeLimit: 60
   m_StepOffset: 0.15
   m_SkinWidth: 0.0001
@@ -7683,8 +7683,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.95383704, y: 1.776456, z: 1}
-  m_Center: {x: -0.020428324, y: 0.8878549, z: 0}
+  m_Size: {x: 0.94227946, y: 1.776456, z: 0.97480464}
+  m_Center: {x: -0.026207093, y: 0.8878549, z: 0.012597789}
 --- !u!1 &3652780073304001578
 GameObject:
   m_ObjectHideFlags: 0
@@ -9271,7 +9271,7 @@ Transform:
   m_GameObject: {fileID: 5301722465036214795}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5291856, y: -0, z: -0, w: 0.84850615}
-  m_LocalPosition: {x: 0, y: 5.74, z: -1.45}
+  m_LocalPosition: {x: 0, y: 3.4, z: -1.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

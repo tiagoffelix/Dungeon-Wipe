@@ -119,7 +119,7 @@ public class Enemy : MonoBehaviour
             combinedMask = ~combinedMask;
 
             Vector3 updatedPosition = transform.position;
-            updatedPosition.y += 0.5f;
+            updatedPosition.y += 0.1f;
             RaycastHit hit;
             if (Physics.Raycast(updatedPosition, directionToPlayer.normalized, out hit, Mathf.Infinity, combinedMask))
             {
@@ -132,6 +132,8 @@ public class Enemy : MonoBehaviour
                     playerSighted = false;
                 }
             }
+
+            print(playerSighted);
 
             if (distance <= enemyType.AttackRange && playerSighted)
             {
@@ -211,10 +213,13 @@ public class Enemy : MonoBehaviour
         NavMeshHit hit;
         // The distance within which to search for a NavMesh point.
         float maxDistance = 10.0f;
+        targetPosition.y -= 0.7f;
+        print(targetPosition);
 
         // Check if there is a valid NavMesh position within maxDistance of targetPosition
         if (NavMesh.SamplePosition(targetPosition, out hit, maxDistance, NavMesh.AllAreas))
         {
+            print(hit.position);
             return hit.position;
         }
         else
