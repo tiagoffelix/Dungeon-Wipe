@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 7626593202974091553}
   - component: {fileID: 4036676232510439761}
   - component: {fileID: 2403500215115248477}
-  m_Layer: 0
+  - component: {fileID: 4983356622657000523}
+  m_Layer: 12
   m_Name: Broken Pillar
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,6 +107,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.6353939, y: 3.5014708, z: 1.6456709}
   m_Center: {x: 0.0074561536, y: 1.7507354, z: -0.01746726}
+--- !u!208 &4983356622657000523
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730906657533939759}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.818, y: 1.751, z: 0.823}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.007, y: 1.751, z: -0.017}
+  m_TimeToStationary: 0.5
 --- !u!1 &3761524534090057585
 GameObject:
   m_ObjectHideFlags: 0

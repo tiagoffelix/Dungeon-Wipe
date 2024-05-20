@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 3001797024229508285}
   - component: {fileID: 2306703476158606946}
   - component: {fileID: 9178715522554255838}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Window Grate
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3480759144894998417}
   - component: {fileID: 7773398982737671952}
   - component: {fileID: 5069203641321410223}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Grate Corner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 1773217932273004792}
   - component: {fileID: 4714287548829631575}
   - component: {fileID: 1744523195524694676}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Grate 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

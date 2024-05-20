@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4563873925052175178}
   - component: {fileID: 4841816054383281384}
   - component: {fileID: 2146753215809614077}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Grate Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
