@@ -60,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
 
     private int blockCounter; // Counter for blocking attempts
     private bool deathFall; // Flag to indicate if the player has fallen to death
+    private bool hasDiedFall; // Flag to indicate if the player has died from Spike Damage
 
     public bool Danger { get; set; }
 
@@ -120,6 +121,7 @@ public class PlayerMovement : MonoBehaviour
         arrowDamage = playerStats.ArrowDamage;
         blockCounter = 0;
         deathFall = false;
+        hasDiedFall = false;
     }
 
     /// <summary>
@@ -418,6 +420,8 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="damage">Amount of damage to take.</param>
     public void TakeDamageMage(int damage)
     {
+        hitSound.Play();
+        animator.SetTrigger("Hit");
         playerStats.TakeDamage(damage);
     }
 
@@ -495,8 +499,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Spikes"))
         {
-            spikesSound.Play();
-            DeathFall();
+            if(!hasDiedFall) 
+            {
+                spikesSound.Play();
+                DeathFall();
+                hasDiedFall = true;
+            }
         }
         if (other.gameObject.CompareTag("Potion"))
         {

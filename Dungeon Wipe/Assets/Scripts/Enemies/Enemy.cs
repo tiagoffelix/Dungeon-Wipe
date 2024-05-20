@@ -105,11 +105,8 @@ public class Enemy : MonoBehaviour
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
         {
-            Vector3 playerPosition = player.transform.position;
-            Vector3 playerPositionRayCast = player.transform.position;
-            playerPositionRayCast.y += 0.5f;
-            Vector3 directionToPlayer = playerPosition - transform.position;
-            Vector3 directionToPlayerRayCast = playerPositionRayCast - transform.position;
+            Vector3 directionToPlayer = player.transform.position - transform.position;
+
             distance = directionToPlayer.magnitude;
 
             int obstacleLayerMask = LayerMask.GetMask("Obstacle");
@@ -121,13 +118,8 @@ public class Enemy : MonoBehaviour
             // Bitwise invert to ignore both 'Obstacle' and 'Enemy' layers
             combinedMask = ~combinedMask;
 
-            Vector3 updatedPosition = transform.position;
-            updatedPosition.y += 0.1f;
-
-            Debug.DrawRay(updatedPosition, directionToPlayerRayCast.normalized * distance, Color.red);
-
             RaycastHit hit;
-            if (Physics.Raycast(updatedPosition, directionToPlayerRayCast.normalized, out hit, Mathf.Infinity, combinedMask))
+            if (Physics.Raycast(transform.position, directionToPlayer.normalized, out hit, Mathf.Infinity, combinedMask))
             {
                 if (hit.collider.gameObject == player.gameObject)
                 {
@@ -138,7 +130,7 @@ public class Enemy : MonoBehaviour
                     playerSighted = false;
                 }
             }
-
+            print("Distance: " + distance + " Attack Range: " + enemyType.AttackRange + " " +playerSighted);
             if (distance <= enemyType.AttackRange && playerSighted)
             {
                 directionToPlayer.y = 0;
@@ -149,7 +141,7 @@ public class Enemy : MonoBehaviour
 
                 if (cooldownTimer > 0) { cooldownTimer -= Time.deltaTime; }
 
-                if (cooldownTimer <= 0 && !isAttacking)
+                if (cooldownTimer <= 0 && !isAttacking && player.PlayerStats.Health > 0)
                 {
                     player.Danger = true;
                     ResetCooldown();
@@ -184,14 +176,14 @@ public class Enemy : MonoBehaviour
             {
                 if (enemyType.TypeName == "Warrior"
                     && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.8f
-                    && distance <= enemyType.AttackRange)
+                    && distance <= enemyType.AttackRange && player.PlayerStats.Health > 0)
                 {
                     audioSource.PlayOneShot(enemyType.AttackSound);
                     player.TakeDamage(enemyType.BaseDamage);
                     bloodParticles.Play();
                     animator.Play("Idle");
                 }
-                else if (enemyType.TypeName == "Mage" && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
+                else if (enemyType.TypeName == "Mage" && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f && player.PlayerStats.Health > 0)
                 {
                     player.TakeDamageMage(enemyType.BaseDamage);
                     animator.Play("Idle");
@@ -212,9 +204,8 @@ public class Enemy : MonoBehaviour
     /// <param name="targetPosition">The target position to find the nearest NavMesh point.</param>
     /// <param name="attackRange">The attack range within which to find the NavMesh point.</param>
     /// <returns>The closest position on the NavMesh within the specified attack range from the target position. Returns null if no valid point is found.</returns>
-    public Vector3? FindNearestPointOnNavMesh(Vector3 targetPosition, float attackRange)
+    public Vector3? FindNearestPointOnNavMesh(Vector3 targetPosition)
     {
-        print(attackRange);
         NavMeshHit hit;
         float searchRadius = 10.0f; // A larger search radius to find possible NavMesh points
         float stepSize = 1.0f; // Step size for sampling positions
@@ -225,7 +216,7 @@ public class Enemy : MonoBehaviour
             if (NavMesh.SamplePosition(targetPosition, out hit, radius, NavMesh.AllAreas))
             {
                 // Check if the point is within the attack range from the target position
-                if (Vector3.Distance(hit.position, targetPosition) <= attackRange)
+                if (Vector3.Distance(hit.position, targetPosition) <= enemyType.AttackRange)
                 {
                     return hit.position;
                 }
@@ -241,10 +232,11 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void MoveToAttackPosition()
     {
-        Vector3? nearestPoint = FindNearestPointOnNavMesh(player.transform.position, enemyType.AttackRange);
+        Vector3? nearestPoint = FindNearestPointOnNavMesh(player.transform.position);
 
         if (nearestPoint.HasValue)
         {
+            agent.isStopped = false;
             animator.SetFloat("Speed", agent.speed);
             agent.SetDestination(nearestPoint.Value);
         }

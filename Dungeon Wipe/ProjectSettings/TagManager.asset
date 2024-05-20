@@ -14,6 +14,7 @@ TagManager:
   - ScrollView
   - Cube
   - Prefab
+  - Sword
   layers:
   - Default
   - TransparentFX
