@@ -130,7 +130,7 @@ public class Enemy : MonoBehaviour
                     playerSighted = false;
                 }
             }
-            print("Distance: " + distance + " Attack Range: " + enemyType.AttackRange + " " +playerSighted);
+
             if (distance <= enemyType.AttackRange && playerSighted)
             {
                 directionToPlayer.y = 0;
