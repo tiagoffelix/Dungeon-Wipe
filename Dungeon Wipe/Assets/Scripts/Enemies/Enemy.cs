@@ -162,7 +162,7 @@ public class Enemy : MonoBehaviour
                         particles.Play();
                         audioSource.PlayOneShot(enemyType.AttackSound);
                         Vector3 shootingPosition = player.transform.position;
-                        shootingPosition.y -= 0.5f;
+                        shootingPosition.y -= 0.2f;
                         weapon.GetComponent<EnemyBow>().ShootProjectile(shootingPosition, enemyType.BaseDamage);
                     }
                     else if (enemyType.TypeName == "Mage")
@@ -174,6 +174,11 @@ public class Enemy : MonoBehaviour
                 }
             }
             else
+            {
+                MoveToAttackPosition();
+            }
+            
+            if(!playerSighted) 
             {
                 MoveToAttackPosition();
             }
@@ -210,25 +215,33 @@ public class Enemy : MonoBehaviour
     /// <param name="targetPosition">The target position to find the nearest NavMesh point.</param>
     /// <param name="attackRange">The attack range within which to find the NavMesh point.</param>
     /// <returns>The closest position on the NavMesh within the specified attack range from the target position. Returns null if no valid point is found.</returns>
-    private Vector3? FindNearestPointOnNavMesh()
+    private Vector3? FindNearestPointOnNavMesh(Vector3 targetPosition, float attackRange)
     {
         NavMeshHit hit;
-        float searchRadius = 15.0f; // A larger search radius to find possible NavMesh points
+        float searchRadius = attackRange; // Use the attack range as the search radius
         float stepSize = 0.1f; // Step size for sampling positions
         NavMeshPath path = new NavMeshPath(); // Used to store the calculated path
 
-        for (float radius = 0; radius <= searchRadius; radius += stepSize)
+        // Check if the player position itself is valid and reachable
+        if (NavMesh.SamplePosition(targetPosition, out hit, stepSize, NavMesh.AllAreas))
         {
-            // Check if there is a valid NavMesh position within the current radius of the target position
-            if (NavMesh.SamplePosition(player.transform.position, out hit, radius, NavMesh.AllAreas))
+            if (agent.CalculatePath(hit.position, path) && path.status == NavMeshPathStatus.PathComplete)
             {
-                // Check if the point is within the attack range from the target position
-                if ((hit.position - player.transform.position).magnitude <= enemyType.AttackRange)
+                return hit.position;
+            }
+        }
+
+        // If the exact player position is not reachable, find the nearest reachable point
+        for (float radius = stepSize; radius <= searchRadius; radius += stepSize)
+        {
+            // Check positions in a circular pattern around the target position
+            for (float angle = 0; angle < 360; angle += 10) // Sample every 10 degrees
+            {
+                Vector3 samplePosition = targetPosition + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), 0, Mathf.Sin(angle * Mathf.Deg2Rad)) * radius;
+                if (NavMesh.SamplePosition(samplePosition, out hit, stepSize, NavMesh.AllAreas))
                 {
-                    // Calculate path to the hit position
                     if (agent.CalculatePath(hit.position, path) && path.status == NavMeshPathStatus.PathComplete)
                     {
-                        // Return the position if the path is complete
                         return hit.position;
                     }
                 }
@@ -244,22 +257,21 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void MoveToAttackPosition()
     {
-        Vector3? nearestPoint = FindNearestPointOnNavMesh();
+        Vector3? nearestPoint = FindNearestPointOnNavMesh(player.transform.position, enemyType.AttackRange);
 
         if (nearestPoint.HasValue)
         {
-            print("Has Path");
             agent.isStopped = false;
             animator.SetFloat("Speed", agent.speed);
             agent.SetDestination(nearestPoint.Value);
         }
         else
         {
-            print("No Path");
             animator.SetFloat("Speed", 0);
             agent.isStopped = true; // Stop the agent if no valid point is found within the attack range
         }
     }
+
 
     /// <summary>
     /// Reduces the enemy's health by the specified damage amount.
