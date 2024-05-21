@@ -33,12 +33,6 @@ public class ObjectManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            PrefabManager.Instance.DestroyCurrentPrefab();
-            ChangeDeleting();
-        }
-
         if (deleting)
         {
             // Raycast to detect the object the mouse is pointing at
@@ -111,6 +105,17 @@ public class ObjectManager : MonoBehaviour
                 }
             }
         }
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            PrefabManager.Instance.DestroyCurrentPrefab();
+            if (lastHoveredObject != null)
+            {
+                ResetColor(lastHoveredObject);
+                lastHoveredObject = null;
+            }
+            ChangeDeleting();
+        }
+
     }
 
     /// <summary>

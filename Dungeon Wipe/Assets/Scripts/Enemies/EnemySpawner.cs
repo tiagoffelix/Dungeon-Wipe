@@ -47,6 +47,7 @@ public class EnemySpawner : MonoBehaviour
             this.enabled = false;
         }
     }
+
     /// <summary>
     /// Activates enemy spawning when the player enters the trigger area.
     /// </summary>
@@ -58,7 +59,7 @@ public class EnemySpawner : MonoBehaviour
             playerInTrigger = true;
 
             // If spawning is not currently happening, start the coroutine
-            if (!isSpawning)
+            if (!isSpawning && SceneManager.GetActiveScene().name == "Game")
             {
                 StartCoroutine(SpawnEnemies());
             }
