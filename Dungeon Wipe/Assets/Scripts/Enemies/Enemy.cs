@@ -282,8 +282,8 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            animator.SetFloat("Speed", 0);
             agent.isStopped = true; // Stop the agent if no valid point is found within the attack range
+            animator.SetFloat("Speed", 0);
         }
     }
 
