@@ -48,7 +48,7 @@ public class LevelManager : MonoBehaviour
             {
                 int randomIndex = Random.Range(0, spawnedGrounds.Count);
                 GameObject groundObject = spawnedGrounds[randomIndex];
-                FloorScript floorScript = groundObject.GetComponent<FloorScript>();
+                FloorScript floorScript = groundObject.GetComponent<FloorScript>() ?? groundObject.GetComponentInChildren<FloorScript>();
                 if (!floorScript.HasCollectible && floorScript.PlayerInRange)
                 {
                     Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
@@ -86,7 +86,9 @@ public class LevelManager : MonoBehaviour
             {
                 int randomIndex = Random.Range(0, spawnedGrounds.Count);
                 GameObject groundObject = spawnedGrounds[randomIndex];
-                FloorScript floorScript = groundObject.GetComponent<FloorScript>();
+
+                FloorScript floorScript = groundObject.GetComponent<FloorScript>() ?? groundObject.GetComponentInChildren<FloorScript>();
+
                 if (!floorScript.HasCollectible && floorScript.PlayerInRange)
                 {
                     Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;

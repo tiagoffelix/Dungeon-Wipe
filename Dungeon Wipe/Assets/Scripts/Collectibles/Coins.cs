@@ -60,10 +60,16 @@ public class Coins : MonoBehaviour
     }
 
     /// <summary>
-    /// Performs cleanup when the coin is destroyed.
+    /// Performs cleanup when the coin item is destroyed.
     /// </summary>
     public void OnDestroy()
     {
-        GetComponentInParent<FloorScript>().HasCollectible = false;
+        // Get the parent GameObject
+        GameObject parent = transform.parent.gameObject;
+
+        // Search for the FloorScript component in the parent or its children
+        FloorScript floorScript = parent.GetComponent<FloorScript>() ?? parent.GetComponentInChildren<FloorScript>();
+
+        floorScript.HasCollectible = false;
     }
 }
