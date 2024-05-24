@@ -13,9 +13,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Stats stats; // Reference to the Stats scriptable object.
     [SerializeField] private LevelEditorSO levelEditor; // Reference to the LevelEditorSO scriptable object.
 
-    [SerializeField] private GameObject[] potionPrefabs; // Array of potion prefabs.
     [SerializeField] private SpawnCollectibles potionSpawnSettings; // Settings for spawning potions.
-    [SerializeField] private GameObject[] coinPrefabs; // Array of coin prefabs.
     [SerializeField] private SpawnCollectibles coinSpawnSettings; // Settings for spawning coins.
 
     // Store ground objects instead of positions
@@ -55,8 +53,18 @@ public class LevelManager : MonoBehaviour
                 {
                     Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
 
-                    GameObject potion = Instantiate(potionPrefabs[Random.Range(0, potionPrefabs.Length)], spawnPosition, Quaternion.identity);
-                    potion.transform.SetParent(groundObject.transform); // Set as child of the ground
+                    if (potionSpawnSettings.OnlyHealth) 
+                    {
+                        GameObject potion = Instantiate(potionSpawnSettings.HealthPrefabs[Random.Range(0, potionSpawnSettings.HealthPrefabs.Count)],
+                            spawnPosition, Quaternion.identity);
+                        potion.transform.SetParent(groundObject.transform); // Set as child of the ground
+                    }
+                    else 
+                    {
+                        GameObject potion = Instantiate(potionSpawnSettings.Prefabs[Random.Range(0, potionSpawnSettings.Prefabs.Count)], 
+                            spawnPosition, Quaternion.identity);
+                        potion.transform.SetParent(groundObject.transform); // Set as child of the ground
+                    }
 
                     floorScript.HasCollectible = true;
                 }
@@ -83,7 +91,7 @@ public class LevelManager : MonoBehaviour
                 {
                     Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
 
-                    GameObject coin = Instantiate(coinPrefabs[Random.Range(0, coinPrefabs.Length)], spawnPosition, Quaternion.identity);
+                    GameObject coin = Instantiate(coinSpawnSettings.Prefabs[Random.Range(0, coinSpawnSettings.Prefabs.Count)], spawnPosition, Quaternion.identity);
                     coin.transform.SetParent(groundObject.transform); // Set as child of the ground
 
                     floorScript.HasCollectible = true;

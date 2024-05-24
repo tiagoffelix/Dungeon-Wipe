@@ -14,3 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnInterval: 5
   spawnTimeVariation: 5
+  prefabs:
+  - {fileID: 3467095302182120054, guid: 4271ecfa52208fb42abab6d82bc6f16e, type: 3}
+  - {fileID: 1927906190853149745, guid: 26a13ed7dc1b2a34db377a41e37fdd64, type: 3}
+  - {fileID: 2337475056922997401, guid: 195fae292acb01e4daf58f728fb727cf, type: 3}
+  healthPrefabs: []
+  onlyHealth: 0

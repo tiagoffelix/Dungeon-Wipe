@@ -14,3 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnInterval: 5
   spawnTimeVariation: 5
+  prefabs:
+  - {fileID: 3356991148050266300, guid: 8506bed1e16fb7247b775e61349d7c19, type: 3}
+  - {fileID: 2108463348006575564, guid: 9405e9e3619c53845a4e334d7e58afc6, type: 3}
+  - {fileID: 6842976958963219126, guid: ab62158afad75974f9a1c9e3f45420dd, type: 3}
+  - {fileID: 3047477156043207241, guid: 3207df686a2f67546a11ad26f47872dd, type: 3}
+  - {fileID: 1950980542051557338, guid: b2aba93bff64bf944b6c2b2c59831095, type: 3}
+  - {fileID: 9114610940653059602, guid: 5c08fbe2f0c32c041ba28e81f9b21c3a, type: 3}
+  - {fileID: 6776662812709646116, guid: 5e902df68a56b0e4f82aea89e8bb03aa, type: 3}
+  - {fileID: 5334022212711418561, guid: 84af6e8c1e7999f42bc6f42f0dd5c5c4, type: 3}
+  - {fileID: 1612512420440095243, guid: 6932dc8f535ef62468df6ef225e89d06, type: 3}
+  healthPrefabs:
+  - {fileID: 3047477156043207241, guid: 3207df686a2f67546a11ad26f47872dd, type: 3}
+  - {fileID: 1950980542051557338, guid: b2aba93bff64bf944b6c2b2c59831095, type: 3}
+  - {fileID: 9114610940653059602, guid: 5c08fbe2f0c32c041ba28e81f9b21c3a, type: 3}
+  onlyHealth: 0

@@ -16,6 +16,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private LevelEditorSO levelEditor; // ScriptableObject for level editor data
     private string levelsFolderPath; // Path to the levels folder
     private string[] levelFiles; // Array of level file paths
+    [SerializeField] private GameObject CollectiblesCanvas;
+    [SerializeField] private GameObject onlyHealthButton;
+    [SerializeField] private SpawnCollectibles healthSettings;
 
     /// <summary>
     /// Initializes the menu by loading levels and high scores.
@@ -32,6 +35,42 @@ public class MainMenu : MonoBehaviour
 
         LoadLevelButtons(levelScrollViewContent);
         LoadEditorButtons(levelEditorScrollViewContent);
+
+        Image indicatorImage = onlyHealthButton.transform.Find("Indicator").GetComponent<Image>();
+        indicatorImage.gameObject.SetActive(healthSettings.OnlyHealth);
+
+        onlyHealthButton.GetComponent<Button>().onClick.AddListener(() 
+            => ToggleGridActivation(indicatorImage));
+    }
+
+    /// <summary>
+    /// Updates the menu to check for user input.
+    /// </summary>
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            CollectiblesCanvas.SetActive(!CollectiblesCanvas.activeSelf);
+        }
+    }
+
+    /// <summary>
+    /// Toggles the activation of only health collectibles.
+    /// </summary>
+    /// <param name="indicatorImage">Indicator image to be toggled.</param>
+    private void ToggleGridActivation(Image indicatorImage)
+    {
+        healthSettings.OnlyHealth = !healthSettings.OnlyHealth;
+
+        if (healthSettings.OnlyHealth)
+        {
+            indicatorImage.gameObject.SetActive(true); // Hide indicator when active
+        }
+        else
+        {
+            indicatorImage.gameObject.SetActive(false); // Show indicator when inactive
+        }
+        
     }
 
     /// <summary>
