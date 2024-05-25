@@ -9255,6 +9255,7 @@ GameObject:
   - component: {fileID: 8459673038534540559}
   - component: {fileID: 8937683974111841480}
   - component: {fileID: 3771977209258079816}
+  - component: {fileID: 6773582928481341745}
   m_Layer: 0
   m_Name: Death Camera
   m_TagString: Untagged
@@ -9336,6 +9337,19 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5301722465036214795}
   m_Enabled: 1
+--- !u!114 &6773582928481341745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5301722465036214795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a22d4552a98870541976a0ed0078e6f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
 --- !u!1 &5391270647409081120
 GameObject:
   m_ObjectHideFlags: 0
@@ -11492,6 +11506,7 @@ GameObject:
   - component: {fileID: 793187169266113719}
   - component: {fileID: 3093940876063962733}
   - component: {fileID: 2153590465464095921}
+  - component: {fileID: 2789827731305965827}
   m_Layer: 0
   m_Name: Third Person Camera
   m_TagString: Untagged
@@ -11587,6 +11602,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerStats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
   player: {fileID: 4200509330011824528}
+--- !u!114 &2789827731305965827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8085258213142794633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a22d4552a98870541976a0ed0078e6f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
 --- !u!1 &8104246629585901769
 GameObject:
   m_ObjectHideFlags: 0
@@ -11908,6 +11936,7 @@ GameObject:
   - component: {fileID: 8517741936629715949}
   - component: {fileID: 4375203597100634286}
   - component: {fileID: 9156778950951879044}
+  - component: {fileID: 3581031289426547683}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -12003,6 +12032,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerStats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
   player: {fileID: 4200509330011824528}
+--- !u!114 &3581031289426547683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056558613075134867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a22d4552a98870541976a0ed0078e6f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
 --- !u!1 &9130863501994176991
 GameObject:
   m_ObjectHideFlags: 0

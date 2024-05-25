@@ -13,6 +13,7 @@ public class Stats : ScriptableObject
     [SerializeField] private float attackCooldown; // The cooldown between player attacks
     [SerializeField] private bool dead; // Indicates whether the player is dead
     [SerializeField] private int sensitivity; // The player's mouse sensitivity
+    [SerializeField] private float volume; // The volume for the game
 
     [SerializeField] private int score; // The player's score
     [SerializeField] private int numberOfSpawns; // Number of times the player has spawned
@@ -52,6 +53,15 @@ public class Stats : ScriptableObject
     {
         get { return this.attackCooldown; }
         set { this.attackCooldown = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the volume.
+    /// </summary>
+    public float Volume
+    {
+        get { return this.volume; }
+        set { this.volume = value; }
     }
 
     /// <summary>

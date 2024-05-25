@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fefa07e16b6aa64f98c367e44f3aed4, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  health: 0
+  health: 100
   damage: 50
   arrowDamage: 30
   attackCooldown: 0.8
-  dead: 1
+  dead: 0
   sensitivity: 200
-  score: 4800
-  numberOfSpawns: 1
-  levelMinutes: 2
+  volume: 0
+  score: 0
+  numberOfSpawns: 2
+  levelMinutes: 3
