@@ -105,10 +105,7 @@ public class Enemy : MonoBehaviour
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("Hit")
             && !animator.GetCurrentAnimatorStateInfo(0).IsName("Spawn"))
         {
-            Vector3 playerPosition = player.transform.position;
-            Vector3 directionToPlayer = playerPosition - transform.position;
-
-            playerPosition.y += 0.0f;
+            Vector3 directionToPlayer = player.transform.position - transform.position;
 
             distance = directionToPlayer.magnitude;
 
@@ -282,6 +279,9 @@ public class Enemy : MonoBehaviour
         }
         else
         {
+            Vector3 directionToPlayer = player.transform.position - transform.position;
+            directionToPlayer.y = 0;
+            transform.rotation = Quaternion.LookRotation(directionToPlayer);
             agent.isStopped = true; // Stop the agent if no valid point is found within the attack range
             animator.SetFloat("Speed", 0);
         }
