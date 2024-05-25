@@ -54,7 +54,6 @@ public class Coins : MonoBehaviour
 
         if (timeSinceSpawned >= coinsSO.TimeToDespawn)
         {
-            GetComponentInParent<FloorScript>().HasCollectible = false;
             Destroy(gameObject);
         }
     }
@@ -64,11 +63,8 @@ public class Coins : MonoBehaviour
     /// </summary>
     public void OnDestroy()
     {
-        // Get the parent GameObject
-        GameObject parent = transform.parent.gameObject;
-
         // Search for the FloorScript component in the parent or its children
-        FloorScript floorScript = parent.GetComponent<FloorScript>() ?? parent.GetComponentInChildren<FloorScript>();
+        FloorScript floorScript = transform.parent.GetComponent<FloorScript>() ?? transform.parent.GetComponentInChildren<FloorScript>();
 
         floorScript.HasCollectible = false;
     }
