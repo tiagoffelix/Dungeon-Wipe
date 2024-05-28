@@ -41,34 +41,44 @@ public class LevelManager : MonoBehaviour
     {
         while (true)
         {
-            float timeDelay = potionSpawnSettings.SpawnInterval + Random.Range(0, potionSpawnSettings.SpawnTimeVariation);
-            yield return new WaitForSeconds(timeDelay);
-
-            if (spawnedGrounds.Count > 0)
+            bool potionSpawned = false;
+            while (!potionSpawned)
             {
-                int randomIndex = Random.Range(0, spawnedGrounds.Count);
-                GameObject groundObject = spawnedGrounds[randomIndex];
-                FloorScript floorScript = groundObject.GetComponent<FloorScript>() ?? groundObject.GetComponentInChildren<FloorScript>();
-                if (!floorScript.HasCollectible && floorScript.PlayerInRange)
+                if (spawnedGrounds.Count > 0)
                 {
-                    Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
-
-                    if (potionSpawnSettings.OnlyHealth) 
+                    int randomIndex = Random.Range(0, spawnedGrounds.Count);
+                    GameObject groundObject = spawnedGrounds[randomIndex];
+                    FloorScript floorScript = groundObject.GetComponent<FloorScript>() ?? groundObject.GetComponentInChildren<FloorScript>();
+                    if (!floorScript.HasCollectible && floorScript.PlayerInRange)
                     {
-                        GameObject potion = Instantiate(potionSpawnSettings.HealthPrefabs[Random.Range(0, potionSpawnSettings.HealthPrefabs.Count)],
-                            spawnPosition, Quaternion.identity);
-                        potion.transform.SetParent(groundObject.transform); // Set as child of the ground
-                    }
-                    else 
-                    {
-                        GameObject potion = Instantiate(potionSpawnSettings.Prefabs[Random.Range(0, potionSpawnSettings.Prefabs.Count)], 
-                            spawnPosition, Quaternion.identity);
-                        potion.transform.SetParent(groundObject.transform); // Set as child of the ground
-                    }
+                        Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
 
-                    floorScript.HasCollectible = true;
+                        if (potionSpawnSettings.OnlyHealth)
+                        {
+                            GameObject potion = Instantiate(potionSpawnSettings.HealthPrefabs[Random.Range(0, potionSpawnSettings.HealthPrefabs.Count)],
+                                spawnPosition, Quaternion.identity);
+                            potion.transform.SetParent(groundObject.transform); // Set as child of the ground
+                        }
+                        else
+                        {
+                            GameObject potion = Instantiate(potionSpawnSettings.Prefabs[Random.Range(0, potionSpawnSettings.Prefabs.Count)],
+                                spawnPosition, Quaternion.identity);
+                            potion.transform.SetParent(groundObject.transform); // Set as child of the ground
+                        }
+
+                        floorScript.HasCollectible = true;
+                        potionSpawned = true;
+                    }
+                }
+
+                if (!potionSpawned)
+                {
+                    yield return null; // Wait until next frame to recheck conditions
                 }
             }
+
+            float timeDelay = potionSpawnSettings.SpawnInterval + Random.Range(0, potionSpawnSettings.SpawnTimeVariation);
+            yield return new WaitForSeconds(timeDelay);
         }
     }
 
@@ -79,26 +89,36 @@ public class LevelManager : MonoBehaviour
     {
         while (true)
         {
-            float timeDelay = coinSpawnSettings.SpawnInterval + Random.Range(0, coinSpawnSettings.SpawnTimeVariation);
-            yield return new WaitForSeconds(timeDelay);
-
-            if (spawnedGrounds.Count > 0)
+            bool coinSpawned = false;
+            while (!coinSpawned)
             {
-                int randomIndex = Random.Range(0, spawnedGrounds.Count);
-                GameObject groundObject = spawnedGrounds[randomIndex];
-
-                FloorScript floorScript = groundObject.GetComponent<FloorScript>() ?? groundObject.GetComponentInChildren<FloorScript>();
-
-                if (!floorScript.HasCollectible && floorScript.PlayerInRange)
+                if (spawnedGrounds.Count > 0)
                 {
-                    Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
+                    int randomIndex = Random.Range(0, spawnedGrounds.Count);
+                    GameObject groundObject = spawnedGrounds[randomIndex];
 
-                    GameObject coin = Instantiate(coinSpawnSettings.Prefabs[Random.Range(0, coinSpawnSettings.Prefabs.Count)], spawnPosition, Quaternion.identity);
-                    coin.transform.SetParent(groundObject.transform); // Set as child of the ground
+                    FloorScript floorScript = groundObject.GetComponent<FloorScript>() ?? groundObject.GetComponentInChildren<FloorScript>();
 
-                    floorScript.HasCollectible = true;
+                    if (!floorScript.HasCollectible && floorScript.PlayerInRange)
+                    {
+                        Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
+
+                        GameObject coin = Instantiate(coinSpawnSettings.Prefabs[Random.Range(0, coinSpawnSettings.Prefabs.Count)], spawnPosition, Quaternion.identity);
+                        coin.transform.SetParent(groundObject.transform); // Set as child of the ground
+
+                        floorScript.HasCollectible = true;
+                        coinSpawned = true;
+                    }
+                }
+
+                if (!coinSpawned)
+                {
+                    yield return null; // Wait until next frame to recheck conditions
                 }
             }
+
+            float timeDelay = coinSpawnSettings.SpawnInterval + Random.Range(0, coinSpawnSettings.SpawnTimeVariation);
+            yield return new WaitForSeconds(timeDelay);
         }
     }
 
