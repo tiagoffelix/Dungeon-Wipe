@@ -30,7 +30,16 @@ public class LevelManager : MonoBehaviour
         stats.NumberOfSpawns = 0;
         LoadLevel(levelEditor.SelectedLevelPath);
         parentGameObject.GetComponent<PrefabScript>().BuildMesh();
-        StartCoroutine(SpawnPotions());
+
+        if (potionSpawnSettings.OnlyHealth) 
+        {
+            StartCoroutine(SpawnHealthPotions());
+        }
+        else 
+        {
+            StartCoroutine(SpawnPotions());
+        }
+
         StartCoroutine(SpawnCoins());
     }
 
@@ -53,18 +62,10 @@ public class LevelManager : MonoBehaviour
                     {
                         Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
 
-                        if (potionSpawnSettings.OnlyHealth)
-                        {
-                            GameObject potion = Instantiate(potionSpawnSettings.HealthPrefabs[Random.Range(0, potionSpawnSettings.HealthPrefabs.Count)],
-                                spawnPosition, Quaternion.identity);
-                            potion.transform.SetParent(groundObject.transform); // Set as child of the ground
-                        }
-                        else
-                        {
-                            GameObject potion = Instantiate(potionSpawnSettings.Prefabs[Random.Range(0, potionSpawnSettings.Prefabs.Count)],
-                                spawnPosition, Quaternion.identity);
-                            potion.transform.SetParent(groundObject.transform); // Set as child of the ground
-                        }
+                        GameObject potion = Instantiate(potionSpawnSettings.Prefabs[Random.Range(0, potionSpawnSettings.Prefabs.Count)],
+                            spawnPosition, Quaternion.identity);
+                        potion.transform.SetParent(groundObject.transform); // Set as child of the ground
+                        
 
                         floorScript.HasCollectible = true;
                         potionSpawned = true;
@@ -78,6 +79,60 @@ public class LevelManager : MonoBehaviour
             }
 
             float timeDelay = potionSpawnSettings.SpawnInterval + Random.Range(0, potionSpawnSettings.SpawnTimeVariation);
+            yield return new WaitForSeconds(timeDelay);
+        }
+    }
+
+    /// <summary>
+    /// Coroutine to spawn health potions at regular intervals.
+    /// </summary>
+    IEnumerator SpawnHealthPotions()
+    {
+        while (true)
+        {
+            bool potionSpawned = false;
+            while (!potionSpawned)
+            {
+                if (spawnedGrounds.Count > 0)
+                {
+                    int randomIndex = Random.Range(0, spawnedGrounds.Count);
+                    GameObject groundObject = spawnedGrounds[randomIndex];
+                    FloorScript floorScript = groundObject.GetComponent<FloorScript>() ?? groundObject.GetComponentInChildren<FloorScript>();
+                    if (!floorScript.HasCollectible && floorScript.PlayerInRange)
+                    {
+                        // Implementing the Dynamic Difficulty Adjustment algorithm
+                        float playerCurrentHealth = stats.Health;
+                        GameObject potion = null;
+                        Vector3 spawnPosition = groundObject.transform.position + Vector3.up * 0.4f;
+
+                        if (playerCurrentHealth < 20) // Player is in critical condition
+                        {
+                            potion = Instantiate(potionSpawnSettings.HealthPrefabs[0], spawnPosition, Quaternion.identity); ;
+                        }
+                        else if (playerCurrentHealth < 50) // Player is in moderate condition
+                        {
+                            potion = Instantiate(potionSpawnSettings.HealthPrefabs[1], spawnPosition, Quaternion.identity);
+                        }
+                        else if (playerCurrentHealth < 70) // Player is in mild condition
+                        {
+                            potion = Instantiate(potionSpawnSettings.HealthPrefabs[2], spawnPosition, Quaternion.identity);
+                        }
+
+                        if (potion != null)
+                        {
+                            potion.transform.SetParent(groundObject.transform); // Set as child of the ground
+                            floorScript.HasCollectible = true;
+                            potionSpawned = true;
+                        }
+                    }
+                }
+
+                if (!potionSpawned)
+                {
+                    yield return null; // Wait until next frame to recheck conditions
+                }
+            }
+            float timeDelay = potionSpawnSettings.SpawnInterval;
             yield return new WaitForSeconds(timeDelay);
         }
     }
