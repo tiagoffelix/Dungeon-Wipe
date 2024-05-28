@@ -109,11 +109,11 @@ public class LevelManager : MonoBehaviour
                         {
                             potion = Instantiate(potionSpawnSettings.HealthPrefabs[0], spawnPosition, Quaternion.identity); ;
                         }
-                        else if (playerCurrentHealth > 20 && playerCurrentHealth < 50) // Player is in moderate condition
+                        else if (playerCurrentHealth < 50) // Player is in moderate condition
                         {
                             potion = Instantiate(potionSpawnSettings.HealthPrefabs[1], spawnPosition, Quaternion.identity);
                         }
-                        else if (playerCurrentHealth > 50 && playerCurrentHealth < 70) // Player is in mild condition
+                        else if (playerCurrentHealth < 70) // Player is in mild condition
                         {
                             potion = Instantiate(potionSpawnSettings.HealthPrefabs[2], spawnPosition, Quaternion.identity);
                         }
