@@ -259,23 +259,23 @@ public class PlayerMovement : MonoBehaviour
                     // Reset block counter and attack handling
                     blockCounter = 0;
 
-                    if (Input.GetKeyDown(KeyCode.Alpha2) && !isAttacking && !isBlocking)
+                    if (Input.GetKeyDown(KeyCode.Alpha2) && !isAttacking && !isBlocking && !bow.activeSelf)
                     {
                         ActivateWeapon(false);
                     }
 
-                    if (Input.GetKeyDown(KeyCode.Alpha1) && !isAttacking && !isBlocking)
+                    if (Input.GetKeyDown(KeyCode.Alpha1) && !isAttacking && !isBlocking && !sword.activeSelf)
                     {
                         ActivateWeapon(true);
                     }
 
                     if (Input.GetAxis("Mouse ScrollWheel") > 0f && !isBlocking && !sword.activeSelf) // Scroll up
                     {
-                        ActivateWeapon(true); // true for sword
+                        ActivateWeapon(true);
                     }
                     else if (Input.GetAxis("Mouse ScrollWheel") < 0f && !isBlocking && !bow.activeSelf) // Scroll down
                     {
-                        ActivateWeapon(false); // false for bow
+                        ActivateWeapon(false);
                     }
 
                     if (Input.GetMouseButtonDown(0) && !isBlocking && Time.time >= nextAttackTimer)

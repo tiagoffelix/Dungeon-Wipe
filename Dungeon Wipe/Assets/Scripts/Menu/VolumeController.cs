@@ -31,7 +31,6 @@ public class VolumeController : MonoBehaviour
             // Update volume from playerStats every frame
             SetVolume(playerStats.Volume);
         }
-        print(playerStats.Volume);
     }
 
     /// <summary>
