@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.IO;
+using System.Collections;
 
 /// <summary>
 /// Manages the main menu, including level selection and high score management.
@@ -19,6 +20,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject CollectiblesCanvas;
     [SerializeField] private GameObject onlyHealthButton;
     [SerializeField] private SpawnCollectibles healthSettings;
+    [SerializeField] private GameObject loadingScreen; // Loading screen GameObject
+    [SerializeField] private Slider progressBar; // Progress bar Slider
 
     /// <summary>
     /// Initializes the menu by loading levels and high scores.
@@ -39,7 +42,7 @@ public class MainMenu : MonoBehaviour
         Image indicatorImage = onlyHealthButton.transform.Find("Indicator").GetComponent<Image>();
         indicatorImage.gameObject.SetActive(healthSettings.OnlyHealth);
 
-        onlyHealthButton.GetComponent<Button>().onClick.AddListener(() 
+        onlyHealthButton.GetComponent<Button>().onClick.AddListener(()
             => ToggleGridActivation(indicatorImage));
     }
 
@@ -70,7 +73,6 @@ public class MainMenu : MonoBehaviour
         {
             indicatorImage.gameObject.SetActive(false); // Show indicator when inactive
         }
-        
     }
 
     /// <summary>
@@ -149,7 +151,7 @@ public class MainMenu : MonoBehaviour
     private void SelectLevel(string filePath)
     {
         levelEditor.SelectedLevelPath = filePath;
-        SceneManager.LoadScene("Game");
+        StartCoroutine(LoadSceneAsync("Game"));
     }
 
     /// <summary>
@@ -159,7 +161,34 @@ public class MainMenu : MonoBehaviour
     public void OpenEditor(string filePath)
     {
         levelEditor.SelectedLevelPath = filePath;
-        SceneManager.LoadScene("Editor");
+        StartCoroutine(LoadSceneAsync("Editor"));
+    }
+
+    /// <summary>
+    /// Coroutine to load a scene asynchronously with a loading screen.
+    /// </summary>
+    /// <param name="sceneName">Name of the scene to load.</param>
+    /// <returns>IEnumerator for the coroutine.</returns>
+    private IEnumerator LoadSceneAsync(string sceneName)
+    {
+        loadingScreen.SetActive(true);
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
+        asyncOperation.allowSceneActivation = false;
+
+        while (!asyncOperation.isDone)
+        {
+            float progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
+            progressBar.value = progress;
+
+            if (asyncOperation.progress >= 0.9f)
+            {
+                asyncOperation.allowSceneActivation = true;
+            }
+
+            yield return null;
+        }
+
+        loadingScreen.SetActive(false);
     }
 
     /// <summary>

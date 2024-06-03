@@ -28,14 +28,68 @@ public class LevelManager : MonoBehaviour
     {
         stats.Score = 0;
         stats.NumberOfSpawns = 0;
-        LoadLevel(levelEditor.SelectedLevelPath);
+        StartCoroutine(LoadLevelAsync(levelEditor.SelectedLevelPath));
+    }
+
+    /// <summary>
+    /// Coroutine to load a level from a JSON file asynchronously.
+    /// </summary>
+    /// <param name="path">The path to the JSON file.</param>
+    /// <returns>IEnumerator for the coroutine.</returns>
+    IEnumerator LoadLevelAsync(string path)
+    {
+        if (string.IsNullOrEmpty(path) || !File.Exists(path))
+        {
+            Debug.LogError("Invalid or missing JSON file path.");
+            yield break;
+        }
+
+        string jsonContent = File.ReadAllText(path);
+        yield return null; // Yield to ensure the UI updates
+
+        PrefabManager.PrefabDataList prefabDataWrapper = JsonUtility.FromJson<PrefabManager.PrefabDataList>(jsonContent);
+        if (prefabDataWrapper == null || prefabDataWrapper.prefabData == null)
+        {
+            Debug.LogError("Failed to parse the JSON file.");
+            yield break;
+        }
+
+        foreach (PrefabManager.PrefabData prefabData in prefabDataWrapper.prefabData)
+        {
+            GameObject toInstantiate = FindPrefabByName(prefabData.Name);
+
+            if (toInstantiate != null)
+            {
+                GameObject instance = Instantiate(toInstantiate, prefabData.Position, prefabData.Rotation);
+                instance.transform.SetParent(parentGameObject.transform);
+
+                // If it's a ground tile, add the GameObject to spawnedGrounds
+                if (prefabData.Name == "Floor" || prefabData.Name == "Wood Corner Left" ||
+                    prefabData.Name == "Wood Corner Right" || prefabData.Name == "Wood Floor" ||
+                    prefabData.Name == "Wood Rails")
+                {
+                    spawnedGrounds.Add(instance);
+                }
+                if (prefabData.Name == "Spawn")
+                {
+                    stats.NumberOfSpawns++;
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"Prefab '{prefabData.Name}' not found.");
+            }
+
+            yield return null; // Yield to avoid blocking the main thread
+        }
+
         parentGameObject.GetComponent<PrefabScript>().BuildMesh();
 
-        if (potionSpawnSettings.OnlyHealth) 
+        if (potionSpawnSettings.OnlyHealth)
         {
             StartCoroutine(SpawnHealthPotions());
         }
-        else 
+        else
         {
             StartCoroutine(SpawnPotions());
         }
@@ -65,7 +119,7 @@ public class LevelManager : MonoBehaviour
                         GameObject potion = Instantiate(potionSpawnSettings.Prefabs[Random.Range(0, potionSpawnSettings.Prefabs.Count)],
                             spawnPosition, Quaternion.identity);
                         potion.transform.SetParent(groundObject.transform); // Set as child of the ground
-                        
+
 
                         floorScript.HasCollectible = true;
                         potionSpawned = true;
@@ -210,7 +264,7 @@ public class LevelManager : MonoBehaviour
 
                 // If it's a ground tile, add the GameObject to spawnedGrounds
                 if (prefabData.Name == "Floor" || prefabData.Name == "Wood Corner Left"
-                    || prefabData.Name == "Wood Corner Right" || prefabData.Name == "Wood Floor" 
+                    || prefabData.Name == "Wood Corner Right" || prefabData.Name == "Wood Floor"
                     || prefabData.Name == "Wood Rails")
                 {
                     spawnedGrounds.Add(instance);
