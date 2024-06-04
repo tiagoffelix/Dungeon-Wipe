@@ -77,15 +77,15 @@ public class PauseMenu3D : MonoBehaviour
             {
                 if (isPaused)
                 {
-                    Time.timeScale = 0f;
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
+                    Time.timeScale = 0f;
                     timerImage.gameObject.SetActive(false);
                 }
                 else
                 {
-                    Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
                     Time.timeScale = 1f;
                     elapsedTime += Time.deltaTime;
                     float fraction = (totalDuration - elapsedTime) / totalDuration;
