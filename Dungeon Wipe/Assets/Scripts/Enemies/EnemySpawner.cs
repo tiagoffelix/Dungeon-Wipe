@@ -9,14 +9,15 @@ using UnityEngine.SceneManagement;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private Transform spawnPoint;  // The spawn point where enemies will be instantiated.
-    private GameObject[] enemyPrefabs;          // Array to hold the enemy prefabs.
-    private float timeBetweenSpawns;      // Minimum time between spawns.
-    private float spawnTimeVariation;     // Variation in time between spawns.
-
+    [SerializeField] private GameObject[] enemyPrefabs; // Array to hold the enemy prefabs.
+    [SerializeField] private float timeBetweenSpawns; // Minimum time between spawns.
+    [SerializeField] private float spawnTimeVariation; // Variation in time between spawns.
     [SerializeField] private EnemySpawnRate spawnRate; // ScriptableObject defining the spawn rate.
 
     private bool playerInTrigger = false; // To check if the player is inside the trigger area.
-    private bool isSpawning = false; // To check if enemies are being spawned
+    private Collider[] colliders; // Cache of colliders
+
+    private float nextSpawnTime = 0f; // Time until next spawn
 
     /// <summary>
     /// Initializes the spawner with spawn rate data.
@@ -26,6 +27,8 @@ public class EnemySpawner : MonoBehaviour
         timeBetweenSpawns = spawnRate.TimeBetweenSpawns;
         spawnTimeVariation = spawnRate.SpawnTimeVariation;
         enemyPrefabs = spawnRate.EnemyPrefabs;
+        colliders = GetComponents<Collider>();
+
         CheckAndDeactivateCollider();
     }
 
@@ -36,7 +39,6 @@ public class EnemySpawner : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name != "Game")
         {
-            Collider[] colliders = GetComponents<Collider>();
             foreach (var collider in colliders)
             {
                 if (collider.isTrigger)
@@ -57,12 +59,7 @@ public class EnemySpawner : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInTrigger = true;
-
-            // If spawning is not currently happening, start the coroutine
-            if (!isSpawning && SceneManager.GetActiveScene().name == "Game")
-            {
-                StartCoroutine(SpawnEnemies());
-            }
+            nextSpawnTime = Time.time + GetRandomSpawnDelay();
         }
     }
 
@@ -79,32 +76,33 @@ public class EnemySpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// Coroutine to continuously spawn enemies with random delays.
+    /// Update method to handle enemy spawning.
     /// </summary>
-    private IEnumerator SpawnEnemies()
+    void Update()
     {
-        isSpawning = true; // Set flag to indicate spawning has started
-
-        while (true)
+        if (playerInTrigger && Time.time >= nextSpawnTime)
         {
-            if (playerInTrigger)
-            {
-                // Calculate next spawn time between base time and variation.
-                float spawnDelay = timeBetweenSpawns + Random.Range(0f, spawnTimeVariation);
-                yield return new WaitForSeconds(spawnDelay);
-
-                // Randomly pick an enemy to spawn.
-                int randomIndex = Random.Range(0, enemyPrefabs.Length);
-                GameObject enemyPrefab = enemyPrefabs[randomIndex];
-
-                // Instantiate the enemy at the spawn point's position and rotation.
-                Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-            }
-            else
-            {
-                // Pause until the player re-enters the trigger
-                yield return null;
-            }
+            SpawnEnemy();
+            nextSpawnTime = Time.time + GetRandomSpawnDelay();
         }
+    }
+
+    /// <summary>
+    /// Spawns a random enemy at the spawn point.
+    /// </summary>
+    private void SpawnEnemy()
+    {
+        int randomIndex = Random.Range(0, enemyPrefabs.Length);
+        GameObject enemyPrefab = enemyPrefabs[randomIndex];
+        Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+    }
+
+    /// <summary>
+    /// Calculates the next spawn delay time.
+    /// </summary>
+    /// <returns>A float representing the delay time.</returns>
+    private float GetRandomSpawnDelay()
+    {
+        return timeBetweenSpawns + Random.Range(0f, spawnTimeVariation);
     }
 }

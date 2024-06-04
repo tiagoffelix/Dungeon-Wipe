@@ -392,6 +392,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 6422362882624571691}
+  enemyPrefabs: []
+  timeBetweenSpawns: 0
+  spawnTimeVariation: 0
   spawnRate: {fileID: 11400000, guid: 66ecf84b75264dc4c84642e82ff93b0e, type: 2}
 --- !u!65 &5795183987808898562
 BoxCollider:

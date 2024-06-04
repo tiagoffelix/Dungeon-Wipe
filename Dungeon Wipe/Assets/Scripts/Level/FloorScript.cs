@@ -6,22 +6,24 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class FloorScript : MonoBehaviour
 {
-    private bool hasCollectible; // Indicates if the floor has a collectible.
-    public bool HasCollectible { get { return hasCollectible; } set { hasCollectible = value; } }
-
-    private bool playerInRange; // Indicates if the player is in range of the floor.
-
     /// <summary>
-    /// Gets a value indicating whether the player is in range of the floor.
+    /// Indicates if the floor has a collectible.
     /// </summary>
-    public bool PlayerInRange { get { return playerInRange; } }
+    public bool HasCollectible { get; set; } = false;
 
     /// <summary>
-    /// Initializes the floor with no collectible.
+    /// Indicates if the player is in range of the floor.
+    /// </summary>
+    public bool PlayerInRange { get; private set; }
+
+    private Collider[] colliders; // Cache of colliders
+
+    /// <summary>
+    /// Initializes the floor.
     /// </summary>
     void Start()
     {
-        hasCollectible = false;
+        colliders = GetComponents<Collider>();
         CheckAndDeactivateCollider();
     }
 
@@ -32,7 +34,6 @@ public class FloorScript : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name != "Game")
         {
-            Collider[] colliders = GetComponents<Collider>();
             foreach (var collider in colliders)
             {
                 if (collider.isTrigger)
@@ -51,7 +52,7 @@ public class FloorScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = true;
+            PlayerInRange = true;
         }
     }
 
@@ -63,7 +64,7 @@ public class FloorScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = false;
+            PlayerInRange = false;
         }
     }
 }
