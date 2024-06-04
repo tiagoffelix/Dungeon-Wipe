@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Stats PlayerStats { get { return playerStats; } }
 
+    public bool IsBlocking { get { return isBlocking; } }
+
     private float nextAttackTimer; // Timer for attack cooldown
     private float jumpHeight; // Height of the player's jump
     private float gravityValue; // Gravity applied to the player

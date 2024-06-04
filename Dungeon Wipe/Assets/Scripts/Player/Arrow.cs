@@ -62,12 +62,10 @@ public class Arrow : MonoBehaviour
 
             GetComponent<Collider>().enabled = false;
 
-            // Parent the arrow to the object it collided with
-            transform.SetParent(collision.transform);
-
             // Handle collision with enemy
             if (collision.gameObject.GetComponent<Enemy>() != null)
             {
+                transform.SetParent(collision.transform);
                 collision.gameObject.GetComponent<Enemy>().TakeDamage(Damage);
                 particles.Play();
                 destroy = true;
@@ -77,12 +75,19 @@ public class Arrow : MonoBehaviour
             {
                 if(!shotByPlayer) 
                 {
+                    if (!collision.gameObject.GetComponent<PlayerMovement>().IsBlocking) 
+                    {
+                        transform.SetParent(collision.transform);
+                    }
+                    else 
+                    {
+                        Destroy(gameObject);
+                    }
                     collision.gameObject.GetComponent<PlayerMovement>().TakeDamage(Damage);
                     particles.Play();
                 }
                 else 
                 {
-                    print("Hit Player");
                     Destroy(gameObject);
                 }
             }
