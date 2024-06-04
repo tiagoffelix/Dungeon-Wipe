@@ -7477,7 +7477,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &2014581091737002597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9256,7 +9256,6 @@ GameObject:
   - component: {fileID: 8937683974111841480}
   - component: {fileID: 3771977209258079816}
   - component: {fileID: 6773582928481341745}
-  - component: {fileID: 8976225243503222994}
   m_Layer: 0
   m_Name: Death Camera
   m_TagString: Untagged
@@ -9311,7 +9310,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 20
+  far clip plane: 30
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -9319,7 +9318,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -9351,18 +9350,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerStats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
---- !u!114 &8976225243503222994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5301722465036214795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eff5d6c390c1ed4a86b0a7085a17751, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5391270647409081120
 GameObject:
   m_ObjectHideFlags: 0
@@ -11520,7 +11507,6 @@ GameObject:
   - component: {fileID: 3093940876063962733}
   - component: {fileID: 2153590465464095921}
   - component: {fileID: 2789827731305965827}
-  - component: {fileID: 1963404395831112455}
   m_Layer: 0
   m_Name: Third Person Camera
   m_TagString: Untagged
@@ -11574,8 +11560,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.01
-  far clip plane: 20
+  near clip plane: 0.1
+  far clip plane: 30
   field of view: 60.000004
   orthographic: 0
   orthographic size: 5
@@ -11583,7 +11569,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -11629,18 +11615,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerStats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
---- !u!114 &1963404395831112455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8085258213142794633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eff5d6c390c1ed4a86b0a7085a17751, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8104246629585901769
 GameObject:
   m_ObjectHideFlags: 0
@@ -11963,7 +11937,6 @@ GameObject:
   - component: {fileID: 4375203597100634286}
   - component: {fileID: 9156778950951879044}
   - component: {fileID: 3581031289426547683}
-  - component: {fileID: 747358797651430411}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -12018,7 +11991,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 1000
+  far clip plane: 30
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -12026,7 +11999,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -12072,18 +12045,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerStats: {fileID: 11400000, guid: 1697254e7d1e91247b6b3f3926e2467f, type: 2}
---- !u!114 &747358797651430411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056558613075134867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eff5d6c390c1ed4a86b0a7085a17751, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9130863501994176991
 GameObject:
   m_ObjectHideFlags: 0
