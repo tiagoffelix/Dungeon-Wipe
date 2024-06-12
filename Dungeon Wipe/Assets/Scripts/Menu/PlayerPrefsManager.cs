@@ -10,15 +10,16 @@ using TMPro;
 /// </summary>
 public class PlayerPrefsManager : MonoBehaviour
 {
-    /// <summary>
-    /// Singleton instance of PlayerPrefsManager.
-    /// </summary>
-    public static PlayerPrefsManager Instance;
 
     [SerializeField] private Stats playerStats; // Reference to the player's statistics
 
     [SerializeField] private GameObject textPrefab; // Prefab for high score display
     private Dictionary<int, (int score, float time, string name)> highScores; // Dictionary to store high scores
+
+    /// <summary>
+    /// Singleton instance of PlayerPrefsManager.
+    /// </summary>
+    public static PlayerPrefsManager Instance;
 
     /// <summary>
     /// Initializes the singleton instance and ensures it is not destroyed on scene load.

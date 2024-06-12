@@ -55,6 +55,7 @@ public class Enemy : MonoBehaviour
     private AudioSource audioSource;
     private NavMeshAgent agent;
     private bool playerSighted;
+    private bool playerOnTheSameFloor;
 
     /// <summary>
     /// Initializes the enemy properties.
@@ -108,6 +109,8 @@ public class Enemy : MonoBehaviour
             Vector3 directionToPlayer = player.transform.position - transform.position;
 
             distance = directionToPlayer.magnitude;
+
+            playerOnTheSameFloor = Mathf.FloorToInt(player.transform.position.y) == Mathf.FloorToInt(transform.position.y);
 
             int obstacleLayerMask = LayerMask.GetMask("Obstacle");
             int enemyLayerMask = LayerMask.GetMask("Enemy");
@@ -170,12 +173,12 @@ public class Enemy : MonoBehaviour
                     }
                 }
             }
-            else if(!isAttacking)
+            else if(!isAttacking && distance < 5.5f && playerOnTheSameFloor)
             {
                 MoveToAttackPosition();
             }
 
-            if (!playerSighted && !isAttacking) 
+            if (!playerSighted && !isAttacking && distance < 5.5f && playerOnTheSameFloor) 
             {
                 MoveToAttackPosition();
             }
@@ -212,42 +215,17 @@ public class Enemy : MonoBehaviour
     /// <param name="targetPosition">The target position to find the nearest NavMesh point.</param>
     /// <param name="attackRange">The attack range within which to find the NavMesh point.</param>
     /// <returns>The closest position on the NavMesh within the specified attack range from the target position. Returns null if no valid point is found.</returns>
-    private Vector3? FindNearestPointOnNavMesh(Vector3 targetPosition, float attackRange)
+    private Vector3? FindNearestPointOnNavMesh(Vector3 targetPosition)
     {
         NavMeshHit hit;
-        float stepSize = 0.1f; // Step size for sampling positions
         NavMeshPath path = new NavMeshPath(); // Used to store the calculated path
 
         // Initialize the closest position and distance
         Vector3? closestPoint = null;
         float closestDistance = float.MaxValue;
 
-        // Check positions in a circular pattern around the target position
-        for (float radius = 0; radius <= attackRange; radius += stepSize)
-        {
-            for (float angle = 0; angle < 360; angle += 10) // Sample every 10 degrees
-            {
-                Vector3 samplePosition = targetPosition + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), 0, Mathf.Sin(angle * Mathf.Deg2Rad)) * radius;
-                if (NavMesh.SamplePosition(samplePosition, out hit, stepSize, NavMesh.AllAreas))
-                {
-                    float distanceToAgent = Vector3.Distance(agent.transform.position, hit.position);
-                    float distanceToTarget = Vector3.Distance(hit.position, targetPosition);
-
-                    // Check if the point is within attack range of the target and closer to the agent
-                    if (distanceToTarget <= attackRange && distanceToAgent < closestDistance)
-                    {
-                        if (agent.CalculatePath(hit.position, path) && path.status == NavMeshPathStatus.PathComplete)
-                        {
-                            closestPoint = hit.position;
-                            closestDistance = distanceToAgent;
-                        }
-                    }
-                }
-            }
-        }
-
-        // Check if the player position itself is valid and reachable, ignoring obstacles
-        if (NavMesh.SamplePosition(targetPosition, out hit, attackRange, NavMesh.AllAreas))
+        // Check if the target position is valid and reachable
+        if (NavMesh.SamplePosition(targetPosition, out hit, float.MaxValue, NavMesh.AllAreas))
         {
             float distanceToAgent = Vector3.Distance(agent.transform.position, hit.position);
             if (distanceToAgent < closestDistance)
@@ -255,11 +233,12 @@ public class Enemy : MonoBehaviour
                 if (agent.CalculatePath(hit.position, path) && path.status == NavMeshPathStatus.PathComplete)
                 {
                     closestPoint = hit.position;
+                    closestDistance = distanceToAgent;
                 }
             }
         }
 
-        // Return the closest valid point within attack range or null if no such point exists
+        // Return the closest valid point to the target position or null if no such point exists
         return closestPoint;
     }
 
@@ -269,7 +248,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void MoveToAttackPosition()
     {
-        Vector3? nearestPoint = FindNearestPointOnNavMesh(player.transform.position, enemyType.AttackRange);
+        Vector3? nearestPoint = FindNearestPointOnNavMesh(player.transform.position);
 
         if (nearestPoint.HasValue)
         {

@@ -15,6 +15,7 @@ TagManager:
   - Cube
   - Prefab
   - Sword
+  - Trap
   layers:
   - Default
   - TransparentFX
