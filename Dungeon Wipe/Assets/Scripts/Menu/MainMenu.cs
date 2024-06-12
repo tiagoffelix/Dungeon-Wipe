@@ -44,6 +44,8 @@ public class MainMenu : MonoBehaviour
 
         onlyHealthButton.GetComponent<Button>().onClick.AddListener(()
             => ToggleGridActivation(indicatorImage));
+
+        levelEditor.LevelLoaded = false;
     }
 
     /// <summary>
@@ -173,17 +175,10 @@ public class MainMenu : MonoBehaviour
     {
         loadingScreen.SetActive(true);
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
-        asyncOperation.allowSceneActivation = false;
 
-        while (!asyncOperation.isDone)
+        while (!levelEditor.LevelLoaded)
         {
-            float progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
-            progressBar.value = progress;
-
-            if (asyncOperation.progress >= 0.9f)
-            {
-                asyncOperation.allowSceneActivation = true;
-            }
+            progressBar.value = asyncOperation.progress;
 
             yield return null;
         }

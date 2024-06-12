@@ -16,6 +16,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private SpawnCollectibles potionSpawnSettings; // Settings for spawning potions.
     [SerializeField] private SpawnCollectibles coinSpawnSettings; // Settings for spawning coins.
 
+
     // Store ground objects instead of positions
     private List<GameObject> spawnedGrounds = new List<GameObject>(); // List of spawned ground objects.
 
@@ -82,6 +83,8 @@ public class LevelManager : MonoBehaviour
 
             yield return null; // Yield to avoid blocking the main thread
         }
+
+        levelEditor.LevelLoaded = true;
 
         parentGameObject.GetComponent<PrefabScript>().BuildMesh();
 

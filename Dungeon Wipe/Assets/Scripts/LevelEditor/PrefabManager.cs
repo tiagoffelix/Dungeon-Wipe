@@ -254,15 +254,32 @@ public class PrefabManager : MonoBehaviour
         }
 
         List<PrefabData> prefabDataList = new List<PrefabData>();
+        PrefabData playerPrefabData = null;
+
         foreach (GameObject prefab in instantiatedPrefabs)
         {
             string prefabName = prefab.name.Replace("(Clone)", "").Trim();
-            prefabDataList.Add(new PrefabData
+            PrefabData data = new PrefabData
             {
                 Name = prefabName,
                 Position = prefab.transform.position,
                 Rotation = prefab.transform.rotation
-            });
+            };
+
+            if (prefabName == "Player")
+            {
+                playerPrefabData = data;
+            }
+            else
+            {
+                prefabDataList.Add(data);
+            }
+        }
+
+        // Ensure the Player prefab is added last
+        if (playerPrefabData != null)
+        {
+            prefabDataList.Add(playerPrefabData);
         }
 
         PrefabDataList wrapper = new PrefabDataList();
@@ -275,6 +292,7 @@ public class PrefabManager : MonoBehaviour
 #endif
         savedButton.SetActive(true);
     }
+
 
     /// <summary>
     /// Loads prefabs from JSON file.

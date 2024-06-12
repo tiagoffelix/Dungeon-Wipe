@@ -18,6 +18,8 @@ public class LevelEditorSO : ScriptableObject
 
     [SerializeField] private string selectedLevelPath; // The file path of the selected level.
 
+    [SerializeField] private bool levelLoaded; // if the level is loaded
+
     /// <summary>
     /// Gets or sets the file path of the selected level.
     /// </summary>
@@ -61,5 +63,14 @@ public class LevelEditorSO : ScriptableObject
     {
         get { return this.gridsDeactivated; }
         set { this.gridsDeactivated = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets if the level is loaded.
+    /// </summary>
+    public bool LevelLoaded
+    {
+        get { return this.levelLoaded; }
+        set { this.levelLoaded = value; }
     }
 }

@@ -17,4 +17,5 @@ MonoBehaviour:
   grids: 4
   gridsDeactivated: 
   selectedLevelPath: C:/Users/Speazyy/Documents/Faculdade/2 ano 2 semestre/DV/Projeto
-    Final/Dungeon Wipe/Dungeon Wipe/Assets\Resources\Levels\Level 1.json
+    Final/Dungeon Wipe/Dungeon Wipe/Assets\Resources\Levels\Dungeon.json
+  levelLoaded: 0
