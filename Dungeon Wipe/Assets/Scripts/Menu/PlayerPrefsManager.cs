@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.IO;
 
 /// <summary>
 /// Manages player preferences and high scores in the game.
@@ -12,14 +13,18 @@ public class PlayerPrefsManager : MonoBehaviour
 {
 
     [SerializeField] private Stats playerStats; // Reference to the player's statistics
+    [SerializeField] private LevelEditorSO levelEditor; // Reference to the player's statistics
 
     [SerializeField] private GameObject textPrefab; // Prefab for high score display
-    private Dictionary<int, (int score, float time, string name)> highScores; // Dictionary to store high scores
+    private Dictionary<string, (int score, float time, string name)> highScores; // Dictionary to store high scores
+    private string levelName;
 
     /// <summary>
     /// Singleton instance of PlayerPrefsManager.
     /// </summary>
     public static PlayerPrefsManager Instance;
+    private string levelsFolderPath;
+    private string[] levelFiles;
 
     /// <summary>
     /// Initializes the singleton instance and ensures it is not destroyed on scene load.
@@ -52,9 +57,11 @@ public class PlayerPrefsManager : MonoBehaviour
     /// <param name="time">Time taken to achieve the score.</param>
     public void SaveHighScore(string playerName, float time)
     {
-        string scoreKey = GetScoreKey(playerStats.NumberOfSpawns);
-        string timeKey = GetTimeKey(playerStats.NumberOfSpawns);
-        string nameKey = GetNameKey(playerStats.NumberOfSpawns);
+        levelName = Path.GetFileNameWithoutExtension(levelEditor.SelectedLevelPath);
+
+        string scoreKey = GetScoreKey(levelName);
+        string timeKey = GetTimeKey(levelName);
+        string nameKey = GetNameKey(levelName);
 
         // Save score if it's higher than the previous one
         if (playerStats.Score > PlayerPrefs.GetInt(scoreKey, 0))
@@ -74,7 +81,7 @@ public class PlayerPrefsManager : MonoBehaviour
     public bool IsCurrentScoreHighScore()
     {
         // Generate the keys for the high score associated with the given number of spawns
-        string scoreKey = GetScoreKey(playerStats.NumberOfSpawns);
+        string scoreKey = GetScoreKey(levelName);
 
         // Get the high score from PlayerPrefs for the specified number of spawns
         int highScore = PlayerPrefs.GetInt(scoreKey, 0); // Default to 0 if no score is found
@@ -87,17 +94,20 @@ public class PlayerPrefsManager : MonoBehaviour
     /// Loads all saved high scores into a dictionary.
     /// </summary>
     /// <returns>A dictionary of high scores mapped by spawn count.</returns>
-    public Dictionary<int, (int score, float time, string name)> LoadAllHighScores()
+    public Dictionary<string, (int score, float time, string name)> LoadAllHighScores()
     {
-        Dictionary<int, (int score, float time, string name)> highScores = new Dictionary<int, (int score, float time, string name)>();
+        Dictionary<string, (int score, float time, string name)> highScores = new Dictionary<string, (int score, float time, string name)>();
 
-        // Assume there is a fixed maximum number of high scores we want to check, for example, 1000.
-        int maxHighScores = 1000;
-        for (int i = 0; i < maxHighScores; i++)
+        levelsFolderPath = Path.Combine(Application.dataPath, "Resources", "Levels");
+        levelFiles = Directory.GetFiles(levelsFolderPath, "*.json");
+
+        foreach (var filePath in levelFiles)
         {
-            string scoreKey = GetScoreKey(i);
-            string timeKey = GetTimeKey(i);
-            string nameKey = GetNameKey(i);
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+
+            string scoreKey = GetScoreKey(fileName);
+            string timeKey = GetTimeKey(fileName);
+            string nameKey = GetNameKey(fileName);
 
             if (PlayerPrefs.HasKey(scoreKey))
             {
@@ -105,7 +115,7 @@ public class PlayerPrefsManager : MonoBehaviour
                 float time = PlayerPrefs.GetFloat(timeKey, 0f);
                 string name = PlayerPrefs.GetString(nameKey, "Unknown Player");
 
-                highScores.Add(i, (score, time, name));
+                highScores.Add(fileName, (score, time, name));
             }
         }
 
@@ -129,7 +139,7 @@ public class PlayerPrefsManager : MonoBehaviour
             {
                 GameObject highScoreEntry = Instantiate(textPrefab, scrollViewContent.transform);
                 TextMeshProUGUI entryText = highScoreEntry.GetComponent<TextMeshProUGUI>();
-                entryText.text = $"Highscore: {entry.Value.score} - {entry.Key} Spawns - {(int)entry.Value.time} Seconds - {entry.Value.name}";
+                entryText.text = $"{entry.Key} - Highscore: {entry.Value.score}  - {(int)entry.Value.time} Seconds - {entry.Value.name}";
             }
         }
         else
@@ -169,42 +179,13 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Creates sample high scores for testing and saves them to PlayerPrefs.
-    /// </summary>
-    public void CreateSampleHighScores()
-    {
-        // Sample data to create
-        string[] names = { "Mario", "Jaime", "Xico", "Edu", "Manu", "Speazyy" };
-        int[] scores = { 21350, 35420, 2, 23450, 1240, 223430 };
-        float[] times = { 120.5f, 115.0f, 110.5f, 105.0f, 100.5f, 95.0f, 90.5f, 85.0f, 80.0f, 75.5f };
-
-        // Save sample high scores
-        for (int i = 0; i < 6; i++)
-        {
-            string scoreKey = GetScoreKey(i);
-            string timeKey = GetTimeKey(i);
-            string nameKey = GetNameKey(i);
-
-            PlayerPrefs.SetInt(scoreKey, scores[i]);
-            PlayerPrefs.SetFloat(timeKey, times[i]);
-            PlayerPrefs.SetString(nameKey, names[i]);
-        }
-
-        // Ensure all changes are saved to disk
-        PlayerPrefs.Save();
-
-        // Reload scores to reflect new data
-        highScores = LoadAllHighScores();
-    }
-
-    /// <summary>
     /// Generates the key string for a high score based on spawn count.
     /// </summary>
     /// <param name="numberOfSpawns">Number of spawns to use for the key.</param>
     /// <returns>A formatted string key.</returns>
-    private string GetScoreKey(int numberOfSpawns)
+    private string GetScoreKey(string levelName)
     {
-        return "HighScore_" + numberOfSpawns;
+        return "HighScore_" + levelName;
     }
 
     /// <summary>
@@ -212,9 +193,9 @@ public class PlayerPrefsManager : MonoBehaviour
     /// </summary>
     /// <param name="numberOfSpawns">Number of spawns to use for the key.</param>
     /// <returns>A formatted string key.</returns>
-    private string GetTimeKey(int numberOfSpawns)
+    private string GetTimeKey(string levelName)
     {
-        return "HighScoreTime_" + numberOfSpawns;
+        return "HighScoreTime_" + levelName;
     }
 
     /// <summary>
@@ -222,8 +203,8 @@ public class PlayerPrefsManager : MonoBehaviour
     /// </summary>
     /// <param name="numberOfSpawns">Number of spawns to use for the key.</param>
     /// <returns>A formatted string key.</returns>
-    private string GetNameKey(int numberOfSpawns)
+    private string GetNameKey(string levelName)
     {
-        return "HighScoreName_" + numberOfSpawns;
+        return "HighScoreName_" + levelName;
     }
 }

@@ -173,12 +173,12 @@ public class Enemy : MonoBehaviour
                     }
                 }
             }
-            else if(!isAttacking && distance < 5.5f && playerOnTheSameFloor)
+            else if(!isAttacking && distance < 7f && playerOnTheSameFloor)
             {
                 MoveToAttackPosition();
             }
 
-            if (!playerSighted && !isAttacking && distance < 5.5f && playerOnTheSameFloor) 
+            if (!playerSighted && !isAttacking && distance < 7f && playerOnTheSameFloor) 
             {
                 MoveToAttackPosition();
             }

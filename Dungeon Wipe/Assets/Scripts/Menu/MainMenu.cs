@@ -204,16 +204,4 @@ public class MainMenu : MonoBehaviour
             PlayerPrefsManager.Instance.ClearAllHighScores(scrollViewContent);
         }
     }
-
-    /// <summary>
-    /// Generates sample high scores for testing purposes.
-    /// </summary>
-    public void GenerateHighScores()
-    {
-        if (PlayerPrefsManager.Instance != null)
-        {
-            PlayerPrefsManager.Instance.CreateSampleHighScores();
-            PlayerPrefsManager.Instance.LoadScoresIntoScrollView(scrollViewContent);
-        }
-    }
 }
