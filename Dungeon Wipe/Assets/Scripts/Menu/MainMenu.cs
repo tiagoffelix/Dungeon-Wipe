@@ -19,6 +19,8 @@ public class MainMenu : MonoBehaviour
     private string[] levelFiles; // Array of level file paths
     [SerializeField] private GameObject CollectiblesCanvas;
     [SerializeField] private GameObject onlyHealthButton;
+    [SerializeField] private Slider sliderTime;
+    [SerializeField] private TextMeshProUGUI sliderTimeText;
     [SerializeField] private SpawnCollectibles healthSettings;
     [SerializeField] private GameObject loadingScreen; // Loading screen GameObject
     [SerializeField] private Slider progressBar; // Progress bar Slider
@@ -56,6 +58,12 @@ public class MainMenu : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             CollectiblesCanvas.SetActive(!CollectiblesCanvas.activeSelf);
+        }
+
+        if (sliderTime.isActiveAndEnabled) 
+        {
+            sliderTimeText.text = "" + sliderTime.value;
+            levelEditor.LevelMinutes = (int)sliderTime.value;
         }
     }
 

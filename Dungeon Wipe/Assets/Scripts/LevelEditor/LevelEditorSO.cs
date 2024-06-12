@@ -20,6 +20,8 @@ public class LevelEditorSO : ScriptableObject
 
     [SerializeField] private bool levelLoaded; // if the level is loaded
 
+    [SerializeField] private int levelMinutes; // The time (in minutes) for each level
+
     /// <summary>
     /// Gets or sets the file path of the selected level.
     /// </summary>
@@ -72,5 +74,14 @@ public class LevelEditorSO : ScriptableObject
     {
         get { return this.levelLoaded; }
         set { this.levelLoaded = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the time (in minutes) for each level.
+    /// </summary>
+    public int LevelMinutes
+    {
+        get { return this.levelMinutes; }
+        set { this.levelMinutes = value; }
     }
 }

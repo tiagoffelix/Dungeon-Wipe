@@ -7502,6 +7502,7 @@ MonoBehaviour:
   buttonSound: {fileID: 5769022062142881885}
   endingSound: {fileID: 0}
   inputField: {fileID: 8521998675514124616}
+  levelEditor: {fileID: 11400000, guid: e036f55c5386b39409256ec03c100c85, type: 2}
 --- !u!143 &334969552842929209
 CharacterController:
   m_ObjectHideFlags: 0

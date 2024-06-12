@@ -32,6 +32,8 @@ public class PauseMenu3D : MonoBehaviour
 
     [SerializeField] private TMP_InputField inputField; // The input field for entering player name.
 
+    [SerializeField] private LevelEditorSO levelEditor; // Reference to the LevelEditorSO scriptable object.
+
     private float totalDuration; // The total duration of the game.
     private bool end; // Indicates whether the game has ended.
 
@@ -41,7 +43,7 @@ public class PauseMenu3D : MonoBehaviour
         Cursor.visible = false;
         isPaused = false;
         elapsedTime = 0f;
-        totalDuration = player.PlayerStats.LevelMinutes * 60;
+        totalDuration = levelEditor.LevelMinutes * 60;
         end = false;
     }
 

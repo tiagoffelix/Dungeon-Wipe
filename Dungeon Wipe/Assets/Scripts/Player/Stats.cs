@@ -17,7 +17,6 @@ public class Stats : ScriptableObject
 
     [SerializeField] private int score; // The player's score
     [SerializeField] private int numberOfSpawns; // Number of times the player has spawned
-    [SerializeField] private int levelMinutes; // The time (in minutes) for each level
 
     /// <summary>
     /// Gets or sets the player's health.
@@ -89,15 +88,6 @@ public class Stats : ScriptableObject
     {
         get { return this.numberOfSpawns; }
         set { this.numberOfSpawns = value; }
-    }
-
-    /// <summary>
-    /// Gets or sets the time (in minutes) for each level.
-    /// </summary>
-    public int LevelMinutes
-    {
-        get { return this.levelMinutes; }
-        set { this.levelMinutes = value; }
     }
 
     /// <summary>
