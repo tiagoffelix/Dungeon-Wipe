@@ -291,6 +291,8 @@ public class PrefabManager : MonoBehaviour
         UnityEditor.AssetDatabase.Refresh();
 #endif
         savedButton.SetActive(true);
+
+        PlayerPrefsManager.Instance.LoadAllHighScores();
     }
 
 
