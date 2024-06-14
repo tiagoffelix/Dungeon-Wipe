@@ -48,7 +48,12 @@ public class Enemy : MonoBehaviour
     /// </summary>
     [SerializeField] private ParticleSystem bloodParticles;
 
+    public delegate void DeathDelegate();
+    public event DeathDelegate OnDeath;
+
     private float health;
+
+    public float Health { get { return health; }}
 
     private int points;
 
@@ -278,6 +283,7 @@ public class Enemy : MonoBehaviour
         health -= damage;
         if (health <= 0)
         {
+            OnDeath?.Invoke();
             Death();
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyDetector : MonoBehaviour
 {
-    private bool stationaryEnemy;
+    public bool stationaryEnemy;
 
     /// <summary>
     /// Gets or sets a value indicating whether there is an enemy in the trigger area.
@@ -19,7 +19,27 @@ public class EnemyDetector : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            StationaryEnemy = true;
+            Enemy enemy = other.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                if (enemy.Health > 0)
+                {
+                    stationaryEnemy = true;
+                    enemy.OnDeath += HandleEnemyDeath;
+                }
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Enemy enemy = other.GetComponent<Enemy>();
+            if (enemy != null && enemy.Health > 0)
+            {
+                stationaryEnemy = true;
+            }
         }
     }
 
@@ -27,7 +47,17 @@ public class EnemyDetector : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            StationaryEnemy = false;
+            Enemy enemy = other.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.OnDeath -= HandleEnemyDeath;
+                stationaryEnemy = false;
+            }
         }
+    }
+
+    private void HandleEnemyDeath()
+    {
+        stationaryEnemy = false;
     }
 }
