@@ -8,16 +8,17 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private Transform spawnPoint;  // The spawn point where enemies will be instantiated.
-    [SerializeField] private GameObject[] enemyPrefabs; // Array to hold the enemy prefabs.
-    [SerializeField] private float timeBetweenSpawns; // Minimum time between spawns.
-    [SerializeField] private float spawnTimeVariation; // Variation in time between spawns.
+    [SerializeField] private GameObject spawnPoint;  // The spawn point where enemies will be instantiated.
+    private GameObject[] enemyPrefabs; // Array to hold the enemy prefabs.
+    private float timeBetweenSpawns; // Minimum time between spawns.
+    private float spawnTimeVariation; // Variation in time between spawns.
     [SerializeField] private EnemySpawnRate spawnRate; // ScriptableObject defining the spawn rate.
 
     private bool playerInTrigger = false; // To check if the player is inside the trigger area.
     private Collider[] colliders; // Cache of colliders
-
     private float nextSpawnTime = 0f; // Time until next spawn
+
+    private EnemyDetector enemyDetector; // Reference to the EnemyDetector component
 
     /// <summary>
     /// Initializes the spawner with spawn rate data.
@@ -28,6 +29,8 @@ public class EnemySpawner : MonoBehaviour
         spawnTimeVariation = spawnRate.SpawnTimeVariation;
         enemyPrefabs = spawnRate.EnemyPrefabs;
         colliders = GetComponents<Collider>();
+
+        enemyDetector = spawnPoint.GetComponent<EnemyDetector>();
 
         CheckAndDeactivateCollider();
     }
@@ -82,8 +85,11 @@ public class EnemySpawner : MonoBehaviour
     {
         if (playerInTrigger && Time.time >= nextSpawnTime)
         {
-            SpawnEnemy();
-            nextSpawnTime = Time.time + GetRandomSpawnDelay();
+            if (enemyDetector != null && !enemyDetector.StationaryEnemy)
+            {
+                SpawnEnemy();
+                nextSpawnTime = Time.time + GetRandomSpawnDelay();
+            }
         }
     }
 
@@ -94,7 +100,7 @@ public class EnemySpawner : MonoBehaviour
     {
         int randomIndex = Random.Range(0, enemyPrefabs.Length);
         GameObject enemyPrefab = enemyPrefabs[randomIndex];
-        Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
     }
 
     /// <summary>

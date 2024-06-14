@@ -95,7 +95,10 @@ public class CubeScript : MonoBehaviour
     private bool HasObjectOnTop()
     {
         Vector3 boxSize = new Vector3(transform.localScale.x * 0.15f, transform.localScale.y * 0.05f, transform.localScale.z * 0.15f);
-        Collider[] colliders = Physics.OverlapBox(transform.position, boxSize / 2, Quaternion.identity);
+        int obstacleLayer = LayerMask.NameToLayer("Obstacle");
+        int layerMask = ~(1 << obstacleLayer);  // Invert the bitmask to ignore the "Obstacle" layer
+
+        Collider[] colliders = Physics.OverlapBox(transform.position, boxSize / 2, Quaternion.identity, layerMask);
         foreach (Collider collider in colliders)
         {
             if (collider.gameObject != gameObject && collider.gameObject != PrefabManager.Instance.CurrentPrefab)
