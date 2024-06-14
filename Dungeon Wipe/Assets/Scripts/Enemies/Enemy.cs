@@ -48,6 +48,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     [SerializeField] private ParticleSystem bloodParticles;
 
+    //Delegate to trigger the death event
     public delegate void DeathDelegate();
     public event DeathDelegate OnDeath;
 
