@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
-using UnityEditor;
-using UnityEngine.SceneManagement;
 using TMPro;
 using System.IO;
 
@@ -11,7 +9,6 @@ using System.IO;
 /// </summary>
 public class PlayerPrefsManager : MonoBehaviour
 {
-
     [SerializeField] private Stats playerStats; // Reference to the player's statistics
     [SerializeField] private LevelEditorSO levelEditor; // Reference to the player's statistics
 
@@ -57,7 +54,7 @@ public class PlayerPrefsManager : MonoBehaviour
     /// <param name="time">Time taken to achieve the score.</param>
     public void SaveHighScore(string playerName, float time)
     {
-        levelName = Path.GetFileNameWithoutExtension(levelEditor.SelectedLevelPath);
+        SetCurrentLevelName();
 
         string scoreKey = GetScoreKey(levelName);
         string timeKey = GetTimeKey(levelName);
@@ -80,6 +77,8 @@ public class PlayerPrefsManager : MonoBehaviour
     /// <returns>True if current score is higher than saved high score.</returns>
     public bool IsCurrentScoreHighScore()
     {
+        SetCurrentLevelName();
+
         // Generate the keys for the high score associated with the given number of spawns
         string scoreKey = GetScoreKey(levelName);
 
@@ -179,9 +178,9 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Generates the key string for a high score based on spawn count.
+    /// Generates the key string for a high score based on level name.
     /// </summary>
-    /// <param name="numberOfSpawns">Number of spawns to use for the key.</param>
+    /// <param name="levelName">Name of the level to use for the key.</param>
     /// <returns>A formatted string key.</returns>
     private string GetScoreKey(string levelName)
     {
@@ -189,9 +188,9 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Generates the key string for high score time based on spawn count.
+    /// Generates the key string for high score time based on level name.
     /// </summary>
-    /// <param name="numberOfSpawns">Number of spawns to use for the key.</param>
+    /// <param name="levelName">Name of the level to use for the key.</param>
     /// <returns>A formatted string key.</returns>
     private string GetTimeKey(string levelName)
     {
@@ -199,12 +198,23 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Generates the key string for high score name based on spawn count.
+    /// Generates the key string for high score name based on level name.
     /// </summary>
-    /// <param name="numberOfSpawns">Number of spawns to use for the key.</param>
+    /// <param name="levelName">Name of the level to use for the key.</param>
     /// <returns>A formatted string key.</returns>
     private string GetNameKey(string levelName)
     {
         return "HighScoreName_" + levelName;
+    }
+
+    /// <summary>
+    /// Sets the current level name based on the selected level path in the level editor.
+    /// </summary>
+    private void SetCurrentLevelName()
+    {
+        if (levelEditor != null)
+        {
+            levelName = Path.GetFileNameWithoutExtension(levelEditor.SelectedLevelPath);
+        }
     }
 }
