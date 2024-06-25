@@ -186,7 +186,9 @@ public class MainMenu : MonoBehaviour
 
         while (!levelEditor.LevelLoaded)
         {
-            progressBar.value = asyncOperation.progress;
+            // Progress ranges from 0 to 0.9 while loading, then jumps to 1 when done.
+            float progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
+            progressBar.value = progress;
 
             yield return null;
         }
