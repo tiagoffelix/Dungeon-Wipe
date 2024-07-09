@@ -380,32 +380,35 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="damage">Amount of damage to take.</param>
     public void TakeDamage(float damage)
     {
-        if (blockingTime > 0 && blockingTime < 0.3)
+        if(playerStats.Health > 0) 
         {
-            parrySound.Play();
-            animator.SetTrigger("Blocked");
-        }
-        else
-        {
-            if (isBlocking)
+            if (blockingTime > 0 && blockingTime < 0.3)
             {
-                shieldedSound.Play();
-                blockCounter++;
-                if (blockCounter >= 3)
-                {
-                    shieldBreakSound.Play();
-                    animator.SetBool("Block", false);
-                    isBlocking = false;
-                    blockCounter = 0;
-                    animator.SetTrigger("Hit");
-                    playerStats.TakeDamage(damage);
-                }
+                parrySound.Play();
+                animator.SetTrigger("Blocked");
             }
             else
             {
-                hitSound.Play();
-                animator.SetTrigger("Hit");
-                playerStats.TakeDamage(damage);
+                if (isBlocking)
+                {
+                    shieldedSound.Play();
+                    blockCounter++;
+                    if (blockCounter >= 3)
+                    {
+                        shieldBreakSound.Play();
+                        animator.SetBool("Block", false);
+                        isBlocking = false;
+                        blockCounter = 0;
+                        animator.SetTrigger("Hit");
+                        playerStats.TakeDamage(damage);
+                    }
+                }
+                else
+                {
+                    hitSound.Play();
+                    animator.SetTrigger("Hit");
+                    playerStats.TakeDamage(damage);
+                }
             }
         }
     }
@@ -416,9 +419,12 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="damage">Amount of damage to take.</param>
     public void TakeDamageMage(int damage)
     {
-        hitSound.Play();
-        animator.SetTrigger("Hit");
-        playerStats.TakeDamage(damage);
+        if (playerStats.Health > 0)
+        {
+            hitSound.Play();
+            animator.SetTrigger("Hit");
+            playerStats.TakeDamage(damage);
+        }
     }
 
     /// <summary>
