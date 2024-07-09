@@ -21,6 +21,9 @@ public class ObjectManager : MonoBehaviour
     // Variable to store the index of CubeLayer
     private int cubeLayer;
 
+    // Variable to store the index of CubeLayer
+    private int obstacleLayer;
+
     private void Start()
     {
         deleting = false;
@@ -29,6 +32,7 @@ public class ObjectManager : MonoBehaviour
         // Initialize the deactivatedLayer and cubeLayer indices
         deactivatedLayer = LayerMask.NameToLayer("DeactivatedLayer");
         cubeLayer = LayerMask.NameToLayer("Cube");
+        obstacleLayer = LayerMask.NameToLayer("Obstacle");
     }
 
     void Update()
@@ -40,7 +44,7 @@ public class ObjectManager : MonoBehaviour
             RaycastHit hit;
 
             // Create a mask that excludes the DeactivatedLayer and untagged layer
-            int combinedMask = Physics.DefaultRaycastLayers & ~(1 << deactivatedLayer) & ~(1 << LayerMask.NameToLayer("Default"));
+            int combinedMask = Physics.DefaultRaycastLayers & ~(1 << deactivatedLayer) & ~(1 << obstacleLayer) & ~(1 << LayerMask.NameToLayer("Default"));
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, combinedMask))
             {

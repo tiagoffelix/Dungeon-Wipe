@@ -108,4 +108,16 @@ public class CubeScript : MonoBehaviour
         }
         return false;
     }
+
+    private void OnDrawGizmos()
+    {
+        // Set the Gizmo color to red
+        Gizmos.color = Color.red;
+
+        // Calculate the box size
+        Vector3 boxSize = new Vector3(transform.localScale.x * 0.15f, transform.localScale.y * 0.05f, transform.localScale.z * 0.15f);
+
+        // Draw the wire cube at the object's position with the specified box size
+        Gizmos.DrawWireCube(transform.position, boxSize);
+    }
 }

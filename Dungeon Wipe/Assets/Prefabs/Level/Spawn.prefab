@@ -257,7 +257,7 @@ GameObject:
   - component: {fileID: 2211129788677618095}
   - component: {fileID: 399099324890813614}
   - component: {fileID: 5795183987808898562}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: wall_door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -392,9 +392,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 5463054980248100925}
-  enemyPrefabs: []
-  timeBetweenSpawns: 0
-  spawnTimeVariation: 0
   spawnRate: {fileID: 11400000, guid: 66ecf84b75264dc4c84642e82ff93b0e, type: 2}
 --- !u!65 &5795183987808898562
 BoxCollider:
@@ -430,7 +427,7 @@ GameObject:
   - component: {fileID: 5931024457610297803}
   - component: {fileID: 5915037821361956388}
   - component: {fileID: 358464081628091939}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: wallSingle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -562,7 +559,7 @@ GameObject:
   - component: {fileID: 6422362882624571691}
   - component: {fileID: 3655704478854501485}
   - component: {fileID: 8901182075223787841}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: Enemy Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
