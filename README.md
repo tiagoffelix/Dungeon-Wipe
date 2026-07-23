@@ -77,4 +77,4 @@ The DDA changes potion eligibility and value or type, not the fixed spawn-check 
 
 ## Portfolio Case Study
 
-[View the Dungeon Wipe case study](https://tiagoffelix.com/projects/dungeon-wipe)
+[View the Dungeon Wipe case study](https://tiagoffelix.com/projects/dungeon-wipe/)
