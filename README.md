@@ -19,9 +19,9 @@ The adaptive potion system was the implementation studied for the published ICEC
 ## Enemy and Weapon Design
 
 - Warriors rapidly close distance and create melee pressure.
-- Archers create ranged pressure and inconvenient positioning.
+- Archers restrict safe positioning through sustained ranged pressure.
 - Mages are high-priority long-range threats with attacks that are intentionally difficult to avoid.
-- Mage pressure encourages switching from the sword to the crossbow. Together, the enemy group discourages reliance on one combat approach.
+- Mage pressure encourages switching from the sword to the crossbow. Together, the three archetypes discourage reliance on one combat approach.
 
 The player can use a sword, crossbow, and shield.
 
@@ -65,11 +65,7 @@ The player can use a sword, crossbow, and shield.
 
 ## Known Limitations
 
-Formal historical playtest records are limited. The DDA changes potion eligibility and value or type, not the fixed spawn-check interval. Combat feedback and malformed JSON handling would benefit from further iteration and automated tests.
-
-## Screenshots or Media
-
-The portfolio case study includes existing gameplay and level-editor screenshots.
+The DDA changes potion eligibility and value or type, not the fixed spawn-check interval. Combat feedback and malformed JSON handling would benefit from further iteration and automated tests.
 
 ## Playable Build
 
