@@ -4,7 +4,7 @@
 
 Dungeon Wipe is a solo Unity dungeon-survival project featuring melee and ranged combat, three enemy archetypes, a JSON-based level editor, and a health-responsive Dynamic Difficulty Adjustment system. A playable Windows build is available on Itch.io.
 
-## Solo Role
+## Role
 
 Role: Solo Programmer and Designer
 
@@ -67,14 +67,8 @@ The player can use a sword, crossbow, and shield.
 
 The DDA changes potion eligibility and value or type, not the fixed spawn-check interval. Combat feedback and malformed JSON handling would benefit from further iteration and automated tests.
 
-## Playable Build
+## Links
 
-[Play Dungeon Wipe on Itch.io](https://speazyy.itch.io/dungeon-wipe)
-
-## Publication
-
-[Dungeon Wipe: Exploring Dynamic Difficulty Adjustment with Power-Up Mechanics](https://doi.org/10.1007/978-3-031-74353-5_27)
-
-## Portfolio Case Study
-
-[View the Dungeon Wipe case study](https://tiagoffelix.com/projects/dungeon-wipe/)
+- [Play on itch.io](https://speazyy.itch.io/dungeon-wipe)
+- [Read Paper](https://doi.org/10.1007/978-3-031-74353-5_27)
+- [Case Study](https://tiagoffelix.com/projects/dungeon-wipe/)
