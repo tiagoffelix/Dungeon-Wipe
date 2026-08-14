@@ -2,17 +2,17 @@
 
 ## Overview
 
-Dungeon Wipe is a solo Unity dungeon-survival project featuring melee and ranged combat, three enemy archetypes, a JSON-based level editor, and a health-responsive Dynamic Difficulty Adjustment system. A playable Windows build is available on Itch.io.
+Dungeon Wipe is a solo Unity/C# dungeon-survival project built around combat and an in-game level-authoring pipeline. The editor saves custom multi-floor layouts to JSON and reconstructs them as playable, NavMesh-enabled levels at runtime. A Windows build is available on itch.io.
 
 ## Role
 
 Role: Solo Programmer and Designer
 
-Built as my Bachelor's project, including gameplay, tools, AI, menus, persistence, and the research implementation.
+Built as my Bachelor's project, including gameplay, level-authoring tools, NavMesh enemy systems, menus, persistence, and the research implementation.
 
 ## Research Context
 
-The adaptive potion system was the implementation studied for the published ICEC paper on Dynamic Difficulty Adjustment. Potion eligibility responds to player health, and potion value or type responds to player health. The spawn-check interval remains fixed.
+The adaptive potion system was the implementation studied in **Dungeon Wipe: Exploring Dynamic Difficulty Adjustment with Power-Up Mechanics**, published at ICEC 2024 in Springer LNCS. Potion eligibility responds to player health, and potion value or type responds to player health. The spawn-check interval remains fixed.
 
 [Read the ICEC 2024 publication](https://doi.org/10.1007/978-3-031-74353-5_27)
 
@@ -25,18 +25,26 @@ The adaptive potion system was the implementation studied for the published ICEC
 
 The player can use a sword, crossbow, and shield.
 
-## Level Editor Workflow
+## Level-Authoring Pipeline
 
-1. Place floors, walls, hazards, obstacles, and spawn points on the editor grid.
-2. Save the layout as JSON.
-3. Select the saved level from the menu.
-4. Reconstruct the authored layout at runtime and play it.
+1. Build layouts on an in-game, multi-floor grid.
+2. Validate grid occupancy and placement before adding a prefab.
+3. Save each placed object's prefab name, position, and rotation as JSON.
+4. Discover and select saved level files from the menu.
+5. Resolve each saved prefab name through the runtime prefab registry.
+6. Reconstruct the level incrementally from the saved transforms.
+7. Build the NavMesh after reconstruction so enemies can navigate the loaded layout.
+
+```text
+Editor -> Validation -> JSON -> Level selection -> Runtime prefab registry
+       -> Reconstruction -> NavMesh generation -> Play
+```
 
 ## Main Systems
 
-- JSON level authoring and runtime reconstruction
+- Multi-floor grid authoring, placement validation, JSON persistence, and runtime reconstruction
 - Melee, ranged, and defensive combat
-- Warrior, Archer, and Mage AI using NavMesh navigation
+- Warrior, Archer, and Mage roles using NavMesh movement and role-specific attack logic
 - Health, damage, and speed potions plus scoring coins
 - Health-responsive potion support with fixed spawn checks
 - Menus, settings, pause flow, and per-level high scores
@@ -65,7 +73,7 @@ The player can use a sword, crossbow, and shield.
 
 ## Known Limitations
 
-The DDA changes potion eligibility and value or type, not the fixed spawn-check interval. Combat feedback and malformed JSON handling would benefit from further iteration and automated tests.
+Enemy roles use centralised conditional logic rather than a formal behaviour-tree or AI state-machine framework. Level JSON resolves prefabs by name rather than through a versioned asset-ID schema; malformed-data handling and automated round-trip tests would be useful future work.
 
 ## Links
 
