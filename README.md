@@ -73,7 +73,7 @@ Editor -> Validation -> JSON -> Level selection -> Runtime prefab registry
 
 ## Known Limitations
 
-Enemy roles use centralised conditional logic rather than a formal behaviour-tree or AI state-machine framework. Level JSON resolves prefabs by name rather than through a versioned asset-ID schema; malformed-data handling and automated round-trip tests would be useful future work.
+Enemy behaviour is handled through centralised conditional logic. Level files identify prefabs by name, so renamed assets can break older layouts. Malformed JSON is not validated, and save/load round-trip tests are currently manual.
 
 ## Links
 
