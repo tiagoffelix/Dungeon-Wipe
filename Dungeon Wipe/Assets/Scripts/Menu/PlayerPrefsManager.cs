@@ -97,8 +97,8 @@ public class PlayerPrefsManager : MonoBehaviour
     {
         Dictionary<string, (int score, float time, string name)> highScores = new Dictionary<string, (int score, float time, string name)>();
 
-        levelsFolderPath = Path.Combine(Application.dataPath, "Resources", "Levels");
-        levelFiles = Directory.GetFiles(levelsFolderPath, "*.json");
+        levelsFolderPath = LevelStore.Root;
+        levelFiles = LevelStore.ListPaths();
 
         foreach (var filePath in levelFiles)
         {

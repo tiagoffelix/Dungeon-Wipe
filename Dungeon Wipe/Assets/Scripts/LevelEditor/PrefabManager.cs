@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using System.IO;
 using TMPro;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -286,7 +287,10 @@ public class PrefabManager : MonoBehaviour
         wrapper.prefabData = prefabDataList;
 
         string json = JsonUtility.ToJson(wrapper);
-        File.WriteAllText(levelEditor.SelectedLevelPath, json);
+        if (!LevelStore.Write(levelEditor.SelectedLevelPath, json))
+        {
+            return;
+        }
 #if UNITY_EDITOR
         UnityEditor.AssetDatabase.Refresh();
 #endif
@@ -301,10 +305,8 @@ public class PrefabManager : MonoBehaviour
     /// </summary>
     private void LoadPrefabsFromJson()
     {
-        if (!string.IsNullOrEmpty(levelEditor.SelectedLevelPath) && File.Exists(levelEditor.SelectedLevelPath))
+        if (LevelStore.TryRead(levelEditor.SelectedLevelPath, out string jsonContent))
         {
-            string jsonContent = File.ReadAllText(levelEditor.SelectedLevelPath);
-
             // Deserialize the JSON content into the wrapper class
             PrefabDataList prefabDataWrapper = JsonUtility.FromJson<PrefabDataList>(jsonContent);
 

@@ -30,8 +30,8 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        levelsFolderPath = Path.Combine(Application.dataPath, "Resources", "Levels");
-        levelFiles = Directory.GetFiles(levelsFolderPath, "*.json");
+        levelsFolderPath = LevelStore.Root;
+        levelFiles = LevelStore.ListPaths();
 
         if (PlayerPrefsManager.Instance != null)
         {

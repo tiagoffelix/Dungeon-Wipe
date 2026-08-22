@@ -49,12 +49,59 @@ Editor -> Validation -> JSON -> Level selection -> Runtime prefab registry
 - Health-responsive potion support with fixed spawn checks
 - Menus, settings, pause flow, and per-level high scores
 
+## Platforms and Testing
+
+| Platform | Status | Verified |
+| --- | --- | --- |
+| Windows | Released on itch.io | Played end to end: menus, all three enemy types, sword, crossbow and shield, level loading, scoring, potions, restart and return to menu. |
+| Browser (WebGL) | Builds, not yet published | The project compiles and builds for WebGL. No published browser build has been played through yet. |
+
+Gameplay, the level editor, runtime reconstruction, NavMesh generation and the
+potion behaviour are shared by both platforms. The only platform-specific work
+is where levels are stored and two browser input details.
+
+## Level Storage
+
+The editor, the menu, the high-score list and the runtime loader all read and
+write levels through `LevelStore`, which owns the only file access in the
+project.
+
+- Windows and the Editor keep the original location, `<dataPath>/Resources/Levels`.
+  Existing builds and existing saved levels are unaffected.
+- Browser and Android builds cannot write into the installed game data, so they
+  use `Application.persistentDataPath/Levels`, seeded on first run from the JSON
+  files compiled into `Resources/Levels`. In a browser that path is backed by
+  IndexedDB, so a level authored in the editor survives a page reload.
+
 ## Running the Project
 
 1. Clone this repository.
 2. In Unity Hub, add the `Dungeon Wipe` folder inside the repository.
-3. Use Unity 2022.3.27f1.
+3. Use Unity 2022.3.49f1.
 4. Open `Assets/Scenes/MainMenu.unity` and press Play.
+
+### Building
+
+Both builds run through `Assets/Editor/BuildScript.cs`, so a build from a clean
+checkout matches the published one. From the Editor use the `Build` menu:
+
+- `Build > Dungeon Wipe Windows` writes to `Builds/Windows`.
+- `Build > Dungeon Wipe WebGL` writes to `Builds/WebGL/DungeonWipe`.
+
+From the command line:
+
+```bat
+"<editor>\Unity.exe" -quit -batchmode -nographics -logFile - ^
+  -projectPath "<repo>\Dungeon Wipe" -buildTarget WebGL ^
+  -executeMethod BuildScript.BuildWebGL
+```
+
+The WebGL build needs the WebGL Build Support module for the editor version in
+use. The build script selects Brotli compression with the JavaScript
+decompression fallback disabled, which is what itch.io expects: it serves `.br`
+files with the matching `Content-Encoding` header. Zip the contents of the
+output folder so `index.html` sits at the root of the archive, and serve the
+build over HTTP rather than opening `index.html` from disk.
 
 ## Controls
 
@@ -74,6 +121,12 @@ Editor -> Validation -> JSON -> Level selection -> Runtime prefab registry
 ## Known Limitations
 
 Enemy behaviour is handled through centralised conditional logic. Level files identify prefabs by name, so renamed assets can break older layouts. Malformed JSON is not validated, and save/load round-trip tests are currently manual.
+
+## Credits
+
+Character and environment assets by Kay Lousberg. Some 2D art was produced with
+AI assistance, as disclosed on the itch.io page. All gameplay code, tools,
+systems and level design are my own.
 
 ## Links
 

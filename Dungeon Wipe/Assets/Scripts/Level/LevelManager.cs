@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 /// <summary>
@@ -39,13 +38,12 @@ public class LevelManager : MonoBehaviour
     /// <returns>IEnumerator for the coroutine.</returns>
     IEnumerator LoadLevelAsync(string path)
     {
-        if (string.IsNullOrEmpty(path) || !File.Exists(path))
+        if (!LevelStore.TryRead(path, out string jsonContent))
         {
-            Debug.LogError("Invalid or missing JSON file path.");
+            Debug.LogError($"Level '{LevelStore.ToId(path)}' is missing or unreadable in {LevelStore.Root}.");
             yield break;
         }
 
-        string jsonContent = File.ReadAllText(path);
         yield return null; // Yield to ensure the UI updates
 
         PrefabManager.PrefabDataList prefabDataWrapper = JsonUtility.FromJson<PrefabManager.PrefabDataList>(jsonContent);
@@ -240,13 +238,11 @@ public class LevelManager : MonoBehaviour
     /// <param name="path">The path to the JSON file.</param>
     void LoadLevel(string path)
     {
-        if (string.IsNullOrEmpty(path) || !File.Exists(path))
+        if (!LevelStore.TryRead(path, out string jsonContent))
         {
-            Debug.LogError("Invalid or missing JSON file path.");
+            Debug.LogError($"Level '{LevelStore.ToId(path)}' is missing or unreadable in {LevelStore.Root}.");
             return;
         }
-
-        string jsonContent = File.ReadAllText(path);
 
         PrefabManager.PrefabDataList prefabDataWrapper = JsonUtility.FromJson<PrefabManager.PrefabDataList>(jsonContent);
         if (prefabDataWrapper == null || prefabDataWrapper.prefabData == null)
