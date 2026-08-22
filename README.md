@@ -2,7 +2,7 @@
 
 ## Overview
 
-Dungeon Wipe is a solo Unity/C# dungeon-survival project built around combat and an in-game level-authoring pipeline. The editor saves custom multi-floor layouts to JSON and reconstructs them as playable, NavMesh-enabled levels at runtime. A Windows build is available on itch.io.
+Dungeon Wipe is a solo Unity/C# dungeon-survival project built around combat and an in-game level-authoring pipeline. The editor saves custom multi-floor layouts to JSON and reconstructs them as playable, NavMesh-enabled levels at runtime. It runs in the browser on itch.io, and the Windows build is available there as a download.
 
 ## Editor to Runtime
 
@@ -63,7 +63,7 @@ Editor -> Validation -> JSON -> Level selection -> Runtime prefab registry
 | Platform | Status | Verified |
 | --- | --- | --- |
 | Windows | Released on itch.io | Played end to end: menus, all three enemy types, sword, crossbow and shield, level loading, scoring, potions, restart and return to menu. |
-| Browser (WebGL) | Builds, not yet published | The project compiles and builds for WebGL. No published browser build has been played through yet. |
+| Browser (WebGL) | Playable on itch.io | Played on the published page: the seeded levels list, a level loads from browser storage, and combat runs. |
 
 Gameplay, the level editor, runtime reconstruction, NavMesh generation and the
 potion behaviour are shared by both platforms. The only platform-specific work
@@ -139,6 +139,6 @@ systems and level design are my own.
 
 ## Links
 
-- [Play on itch.io](https://speazyy.itch.io/dungeon-wipe)
+- [Play in your browser on itch.io](https://speazyy.itch.io/dungeon-wipe)
 - [Read Paper](https://doi.org/10.1007/978-3-031-74353-5_27)
 - [Case Study](https://tiagoffelix.com/projects/dungeon-wipe/)
