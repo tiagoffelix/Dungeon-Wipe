@@ -4,6 +4,15 @@
 
 Dungeon Wipe is a solo Unity/C# dungeon-survival project built around combat and an in-game level-authoring pipeline. The editor saves custom multi-floor layouts to JSON and reconstructs them as playable, NavMesh-enabled levels at runtime. A Windows build is available on itch.io.
 
+## Editor to Runtime
+
+![Building a layout on the editor grid in Dungeon Wipe](docs/editor-to-runtime.gif)
+
+A layout is drawn on the in-game grid, saved as JSON, picked from the level
+list, and played as a reconstructed dungeon with navigating enemies; the run's
+score is then kept against that level.
+[Watch the full 35-second clip](https://tiagoffelix.com/projects/dungeon-wipe/).
+
 ## Role
 
 Role: Solo Programmer and Designer
